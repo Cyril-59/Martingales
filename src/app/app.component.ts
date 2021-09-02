@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
   add = false;
   list = true;
   cash: number;
+  startCash: number;
   cashHistory: number[] = [];
   data: any;
   showChart = false;
@@ -76,10 +77,11 @@ export class AppComponent implements OnInit {
 
   initHistory() {
     if (this.cash) {
-    this.start = true;
-    this.cashHistory.length = 0;
-    this.cashHistory.push(this.cash);
-    this.chart();
+      this.startCash = this.cash;
+      this.start = true;
+      this.cashHistory.length = 0;
+      this.cashHistory.push(this.cash);
+      this.chart();
     }
   }
 
@@ -109,7 +111,7 @@ export class AppComponent implements OnInit {
                   borderColor: '#da7070'
               }, {
                   label: 'Cash-in',
-                  data: Array(this.cashHistory.length).fill(this.cashHistory[0]),
+                  data: Array(this.cashHistory.length).fill(this.startCash),
                   fill: false,
                   borderColor: '#8ee070'
               }
@@ -122,6 +124,18 @@ export class AppComponent implements OnInit {
     } else {
       this.showChart = false;
       this.data = null;
+    }
+  }
+
+  getCashClass() {
+    if (this.cash >= this.startCash) {
+      return 'green';
+    } else if (this.cash > this.startCash / 2) {
+      return 'orange';
+    } else if (this.cash > 0) {
+      return 'red';
+    } else {
+      return 'black';
     }
   }
 }

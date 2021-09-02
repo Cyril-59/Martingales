@@ -1,7 +1,7 @@
 <div>
     <div class="flex-between">
-        <h2>{{ martingale.titre }}</h2>
-        <span style="padding-top: 1em">
+        <h2 style="font-size: 1em;">{{ martingale.titre }}</h2>
+        <span style="padding-top: .5em">
             <button class="right" pButton (click)="delete()" label="Sup"></button>
             <button pButton (click)="close()" label="Close"></button>
         </span>
@@ -28,6 +28,8 @@
     </p-table>
     <div class="flex-between top">
         <button pButton (click)="compute()" label="+"></button>
+        <button pButton (click)="generateRandomProba()" [label]="'Prob : ' + randomProba"></button>
+        <button pButton (click)="generateRandomRoulette()" [label]="'Bille : ' + randomRoulette"></button>
         <button pButton (click)="next()" label="Next"></button>
         <button pButton (click)="win()" label="Win"></button>
     </div>

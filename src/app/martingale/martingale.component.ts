@@ -14,6 +14,8 @@ export class MartingaleComponent implements OnInit {
   tab: Roulette[];
   currentIndex: number = -1;
   winIndex: number = -1;
+  randomProba: number = 0;
+  randomRoulette: number = 0;
 
   @Output()
   onDelete: EventEmitter<void> = new EventEmitter();
@@ -82,5 +84,13 @@ export class MartingaleComponent implements OnInit {
   win() {
     this.winIndex = this.currentIndex;
     this.onWin.emit(this.tab[this.currentIndex].mise * this.tab[this.currentIndex].gain);
+  }
+
+  generateRandomProba() {
+    this.randomProba = Math.floor(Math.random() * 100000) + 1;
+  }
+
+  generateRandomRoulette() {
+    this.randomRoulette = Math.floor(Math.random() * 37);
   }
 }

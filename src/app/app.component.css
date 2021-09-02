@@ -1,4 +1,44 @@
-div.cash {
+div.body {
+    height:100vh;
+    margin:0;
+    display:flex; 
+    flex-direction:column;
+}
+
+div.footer {
+    min-height:50px;
+}
+
+div.footer {
+    margin-top:auto; 
+}
+
+div.green {
     font-size: 3em;
     color: green;
+}
+
+div.orange {
+    font-size: 3em;
+    color: orange;
+}
+
+div.red {
+    font-size: 3em;
+    color: red;
+}
+
+div.black {
+    font-size: 3em;
+    color: black;
+}
+
+div.align {
+    height: 100%;
+    align-items: center;
+}
+
+div.evenly {
+    height: 100%;
+    justify-content: space-evenly;
 }
