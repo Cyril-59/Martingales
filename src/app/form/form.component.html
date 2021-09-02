@@ -1,0 +1,39 @@
+<div class="flex-column">
+    <span class="flex-between">
+        <label>Titre : </label>
+        <input type="text" pInputText [(ngModel)]="titre">
+    </span>
+    <span class="flex-between">
+        <label>Mise initiale : </label>
+        <input type="number" pInputText [(ngModel)]="mise">
+    </span>
+    <!--<span>
+        <label>Gain (nb mises) : </label>
+        <input type="number" [(ngModel)]="gain">
+    </span>-->
+    <span class="flex-between">
+        <label>Gain mini / jeu : </label>
+        <input type="number" pInputText [(ngModel)]="mini">
+    </span>
+    <span>
+        <label>Gain croissant : </label>
+        <!--<input type="checkbox" pInputText [(ngModel)]="croissant">-->
+        <p-checkbox [(ngModel)]="croissant" binary="true"></p-checkbox>
+    </span>
+    <span class="flex-between">
+        <label>Gap mise : </label>
+        <input type="number" pInputText [(ngModel)]="gap">
+    </span>
+    <span class="flex-between">
+        <label>Nombre de cases pariees : </label>
+        <input type="number" pInputText [(ngModel)]="luck">
+    </span>
+    <span class="flex-between">
+        <label>Mise max : </label>
+        <input type="number" pInputText [(ngModel)]="maxi" [disabled]="croissant">
+    </span>
+    <span class="flex-between">
+        <button class="p-button-danger" pButton type="button" label="Annuler" (click)="cancel()"></button>
+        <button class="p-button-danger" pButton type="button" label="Ajouter" (click)="click()"></button>
+    </span>
+</div>

@@ -1,0 +1,83 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+    /*background-image: url("assets/roulette.jpg");
+    background-size: 765px;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    height: 70em;*/
+}
+
+/* FLEX */
+.flex {
+    display: flex;
+}
+
+.flex1 {
+    flex: 1;
+}
+
+.flex2 {
+    flex: 2;
+}
+
+.flex3 {
+    flex: 3;
+}
+
+.flex4 {
+    flex: 4;
+}
+
+.flex6 {
+    flex: 6;
+}
+
+.flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flex-column
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-around
+{
+    display: flex;
+    justify-content: space-around;
+}
+
+.flex-between
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-center
+{
+    display: flex;
+    justify-content: center;
+}
+
+.flex-end
+{
+    align-self: flex-end;
+}
+
+.left {
+    margin-left: 1em !important;
+}
+
+.right {
+    margin-right: 1em !important;
+}
+
+.top {
+    margin-top: 1em !important;
+}
+
+.bottom {
+    margin-bottom: 1em !important;
+}

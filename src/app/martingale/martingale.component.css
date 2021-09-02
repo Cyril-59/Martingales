@@ -1,0 +1,11 @@
+table {
+    border-collapse: collapse;
+}
+
+tr.active {
+    background-color: #da7070 !important;
+}
+
+tr.win {
+    background-color: #8ee070 !important;
+}
