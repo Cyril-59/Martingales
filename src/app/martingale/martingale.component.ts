@@ -118,4 +118,10 @@ export class MartingaleComponent implements OnInit {
       }
     }
   }
+
+  multiplay(times: number) {
+    for (let i = 1; i <= times; i++) {
+      this.play();
+    }
+  }
 }

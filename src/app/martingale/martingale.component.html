@@ -42,11 +42,17 @@
         <button pButton (click)="next()" label="Next"></button>
         <button pButton (click)="win()" label="Win"></button>-->
     </div>
-    <div>
-        Max try : {{ loseStreak }}
-    </div>
-    <div>
-        Nb plays : {{ nbJeux }}
+    <div class="flex-between top">
+        <div>
+            <div>
+                Max try : {{ loseStreak }}
+            </div>
+            <div>
+                Nb plays : {{ nbJeux }}
+            </div>
+        </div>
+        <button pButton (click)="multiplay(10)" label="Play 10"></button>
+        <button pButton (click)="multiplay(100)" label="Play 100"></button>
     </div>
 </div>
 <app-roulette [hidden]="ready" (onContinue)="ready = true" (onClose)="close()"></app-roulette>

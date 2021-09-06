@@ -6,8 +6,7 @@
     </div>
     <div class="flex-center bottom align" *ngIf="!start && !showRoulette">
         <input type="number" placeholder="Cash-in" pInputText [(ngModel)]="cash">
-        <button class="left" pButton label="Start" (click)="initHistory()"></button>
-        <!--<button class="left" pButton label="Roulette" (click)="showRoulette = !showRoulette"></button>-->
+        <button class="left" pButton label="Start" (click)="initData()"></button>
     </div>
     <div *ngIf="showRoulette">
         <app-roulette (onClose)="showRoulette = !showRoulette"></app-roulette>
@@ -20,8 +19,10 @@
         </div>
         <div class="flex-center" *ngIf="!add && list" style="margin-top: 2em;">
             <p-dropdown *ngIf="init" placeholder="Choisir une martingale" [options]="options" (onChange)="select($event)"></p-dropdown>
-            <button class="left" pButton label="X" (click)="start = false; minCash = null; maxCash = null"></button>
-            <button class="left" pButton label="+" (click)="plus()"></button>
+            <!--<button class="left" pButton label="X" (click)="start = false; minCash = null; maxCash = null"></button>
+            <button class="left" pButton label="+" (click)="plus()"></button>-->
+            <i style="margin: auto; cursor: pointer;" class="pi pi-plus" (click)="plus()"></i>
+            <i style="margin: auto; cursor: pointer;" class="pi pi-refresh" (click)="start = false; minCash = null; maxCash = null"></i>
         </div>
         <div class="flex-center" *ngIf="!add && !list">
             <app-martingale *ngIf="martingale" class="top" [martingale]="martingale"  (onDelete)="supprimer()" (onClose)="list = true" (onNext)="substract($event)" (onWin)="win($event)"></app-martingale>

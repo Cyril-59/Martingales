@@ -77,13 +77,15 @@ export class AppComponent implements OnInit {
     this.list = true;
   }
 
-  initHistory() {
+  initData() {
     if (this.cash) {
       this.startCash = this.cash;
       this.start = true;
       this.cashHistory.length = 0;
       this.cashHistory.push(this.cash);
       this.chart();
+      this.minCash = this.cash;
+      this.maxCash = this.cash;
     }
   }
 
