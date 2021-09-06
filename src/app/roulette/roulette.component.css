@@ -1,0 +1,19 @@
+button.black {
+    background-color: black;
+    border: 1px solid white;
+
+}
+
+button.red {
+    background-color: red;
+    border: 1px solid white;
+}
+
+.vertical {
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+.tiers {
+    flex-grow: 4;
+}

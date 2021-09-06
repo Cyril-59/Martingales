@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="ready">
     <div class="flex-between">
         <h2 style="font-size: 1em;">{{ martingale.titre }}</h2>
         <span style="padding-top: .5em">
@@ -27,10 +27,26 @@
         </ng-template>
     </p-table>
     <div class="flex-between top">
-        <button pButton (click)="compute()" label="+"></button>
-        <button pButton (click)="generateRandomProba()" [label]="'Prob : ' + randomProba"></button>
-        <button pButton (click)="generateRandomRoulette()" [label]="'Bille : ' + randomRoulette"></button>
+        <!--<button pButton (click)="compute()" label="+"></button>
+        <button pButton (click)="generateRandomProba()" [label]="'Prob : ' + randomProba"></button>-->
+        <div class="top">
+            <span>
+                Derniers : 
+            </span>
+            <span *ngFor="let i of lastNumbers">
+                {{ i }}
+            </span>
+        </div>
+        <button pButton (click)="play()" label="Play"></button>
+        <!--<button pButton (click)="generateRandomRoulette()" [label]="'Bille : ' + randomRoulette"></button>
         <button pButton (click)="next()" label="Next"></button>
-        <button pButton (click)="win()" label="Win"></button>
+        <button pButton (click)="win()" label="Win"></button>-->
+    </div>
+    <div>
+        Essais Max : {{ loseStreak }}
+    </div>
+    <div>
+        Nb jeux : {{ nbJeux }}
     </div>
 </div>
+<app-roulette [hidden]="ready" (onContinue)="ready = true" (onClose)="close()"></app-roulette>

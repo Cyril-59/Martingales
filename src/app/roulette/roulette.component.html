@@ -1,0 +1,198 @@
+<div class="flex">
+    <i style="margin: auto; cursor: pointer;" class="pi pi-refresh" (click)="reset()"></i>
+    <h2>Roulette</h2>
+    <i style="margin: auto; cursor: pointer;" class="pi pi-times" (click)="close()"></i>
+</div>
+
+<!--<div class=" horizontal flex">
+    <div class="flex-column">
+        <p-toggleButton [ngClass]="{green: !numbers[0]}" class="h-cent" onLabel="0" offLabel="0" [(ngModel)]="numbers[0]"></p-toggleButton>
+        <i style="margin: auto; cursor: pointer;" class="pi pi-refresh" (click)="reset()"></i>
+        <i style="margin: auto; cursor: pointer;" class="pi pi-times" (click)="close()"></i>
+    </div>
+    <div class="flex-column">
+        <div class="flex">
+            <div class="flex-column">
+                <p-toggleButton [ngClass]="{red: !numbers[1]}"  onLabel="1" offLabel="1" [(ngModel)]="numbers[1]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{black: !numbers[2]}"  onLabel="2" offLabel="2" [(ngModel)]="numbers[2]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{red: !numbers[3]}"  onLabel="3" offLabel="3" [(ngModel)]="numbers[3]"></p-toggleButton>
+            </div>
+            <div class="flex-column">
+                <p-toggleButton [ngClass]="{black: !numbers[4]}" onLabel="4" offLabel="4" [(ngModel)]="numbers[4]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{red: !numbers[5]}"  onLabel="5" offLabel="5" [(ngModel)]="numbers[5]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{black: !numbers[6]}"  onLabel="6" offLabel="6" [(ngModel)]="numbers[6]"></p-toggleButton>
+            </div>
+            <div class="flex-column">
+                <p-toggleButton [ngClass]="{red: !numbers[7]}"  onLabel="7" offLabel="7" [(ngModel)]="numbers[7]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{black: !numbers[8]}"  onLabel="8" offLabel="8" [(ngModel)]="numbers[8]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{red: !numbers[9]}"  onLabel="9" offLabel="9" [(ngModel)]="numbers[9]"></p-toggleButton>
+            </div>
+            <div class="flex-column">
+                <p-toggleButton [ngClass]="{black: !numbers[10]}"  onLabel="10" offLabel="10" [(ngModel)]="numbers[10]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{black: !numbers[11]}"  onLabel="11" offLabel="11" [(ngModel)]="numbers[11]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{red: !numbers[12]}"  onLabel="12" offLabel="12" [(ngModel)]="numbers[12]"></p-toggleButton>
+            </div>
+            <div class="flex-column">
+                <p-toggleButton [ngClass]="{black: !numbers[13]}"  onLabel="13" offLabel="13" [(ngModel)]="numbers[13]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{red: !numbers[14]}"  onLabel="14" offLabel="14" [(ngModel)]="numbers[14]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{black: !numbers[15]}"  onLabel="15" offLabel="15" [(ngModel)]="numbers[15]"></p-toggleButton>
+            </div>
+            <div class="flex-column">
+                <p-toggleButton [ngClass]="{red: !numbers[16]}"  onLabel="16" offLabel="16" [(ngModel)]="numbers[16]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{black: !numbers[17]}"  onLabel="17" offLabel="17" [(ngModel)]="numbers[17]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{red: !numbers[18]}"  onLabel="18" offLabel="18" [(ngModel)]="numbers[18]"></p-toggleButton>
+            </div>
+            <div class="flex-column">
+                <p-toggleButton [ngClass]="{red: !numbers[19]}"  onLabel="19" offLabel="19" [(ngModel)]="numbers[19]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{black: !numbers[20]}"  onLabel="20" offLabel="20" [(ngModel)]="numbers[20]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{red: !numbers[21]}"  onLabel="21" offLabel="21" [(ngModel)]="numbers[21]"></p-toggleButton>
+            </div>
+            <div class="flex-column">
+                <p-toggleButton [ngClass]="{black: !numbers[22]}"  onLabel="22" offLabel="22" [(ngModel)]="numbers[22]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{red: !numbers[23]}" onLabel="23" offLabel="23" [(ngModel)]="numbers[23]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{black: !numbers[24]}"  onLabel="24" offLabel="24" [(ngModel)]="numbers[24]"></p-toggleButton>
+            </div>
+            <div class="flex-column">
+                <p-toggleButton [ngClass]="{red: !numbers[25]}"  onLabel="25" offLabel="25" [(ngModel)]="numbers[25]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{black: !numbers[26]}"  onLabel="26" offLabel="26" [(ngModel)]="numbers[26]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{red: !numbers[27]}"  onLabel="27" offLabel="27" [(ngModel)]="numbers[27]"></p-toggleButton>
+            </div>
+            <div class="flex-column">
+                <p-toggleButton [ngClass]="{black: !numbers[28]}"  onLabel="28" offLabel="28" [(ngModel)]="numbers[28]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{black: !numbers[29]}"  onLabel="29" offLabel="29" [(ngModel)]="numbers[29]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{red: !numbers[30]}"  onLabel="30" offLabel="30" [(ngModel)]="numbers[30]"></p-toggleButton>
+            </div>
+            <div class="flex-column">
+                <p-toggleButton [ngClass]="{black: !numbers[31]}"  onLabel="31" offLabel="31" [(ngModel)]="numbers[31]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{red: !numbers[32]}"  onLabel="32" offLabel="32" [(ngModel)]="numbers[32]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{black: !numbers[33]}"  onLabel="33" offLabel="33" [(ngModel)]="numbers[33]"></p-toggleButton>
+            </div>
+            <div class="flex-column">
+                <p-toggleButton [ngClass]="{red: !numbers[34]}" onLabel="34" offLabel="34" [(ngModel)]="numbers[34]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{black: !numbers[35]}"  onLabel="35" offLabel="35" [(ngModel)]="numbers[35]"></p-toggleButton>
+                <p-toggleButton [ngClass]="{red: !numbers[36]}"  onLabel="36" offLabel="36" [(ngModel)]="numbers[36]"></p-toggleButton>
+            </div>
+        </div>
+        <div class="flex">
+            <p-toggleButton [ngClass]="{green: !numbers[40]}" class="w-cent" onLabel="1-12" offLabel="1-12" [(ngModel)]="numbers[40]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[41]}" class="w-cent"  onLabel="13-24" offLabel="13-24" [(ngModel)]="numbers[41]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[42]}" class="w-cent"  onLabel="25-36" offLabel="25-36" [(ngModel)]="numbers[42]"></p-toggleButton>
+        </div>
+        <div class="flex">
+            <p-toggleButton [ngClass]="{green: !numbers[43]}" class="w-cent" onLabel="1-18" offLabel="1-18" [(ngModel)]="numbers[43]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[44]}" class="w-cent"  onLabel="PAIR" offLabel="PAIR" [(ngModel)]="numbers[44]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[45]}" class="w-cent"  onLabel="ROUGE" offLabel="ROUGE" [(ngModel)]="numbers[45]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[46]}" class="w-cent" onLabel="NOIR" offLabel="NOIR" [(ngModel)]="numbers[46]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[47]}" class="w-cent"  onLabel="IMPAIR" offLabel="IMPAIR" [(ngModel)]="numbers[47]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[48]}" class="w-cent"  onLabel="19-36" offLabel="19-36" [(ngModel)]="numbers[48]"></p-toggleButton>
+        </div>
+    </div>
+    <div class="flex-column">
+        <p-toggleButton [ngClass]="{green: !numbers[37]}" onLabel="0%3" offLabel="0%3" [(ngModel)]="numbers[37]"></p-toggleButton>
+        <p-toggleButton [ngClass]="{green: !numbers[38]}" onLabel="2%3" offLabel="2%3" [(ngModel)]="numbers[38]"></p-toggleButton>
+        <p-toggleButton [ngClass]="{green: !numbers[39]}" onLabel="1%3" offLabel="1%3" [(ngModel)]="numbers[39]"></p-toggleButton>
+    </div>
+</div>-->
+
+<div class="vertical">
+    <div class="flex">
+        <div class="flex-column" style="padding-top: 2em; padding-bottom: 2em; justify-content: center">
+            <p-toggleButton [ngClass]="{green: !numbers[43]}" class="tiers" onLabel="1-18" offLabel="1-18" [(ngModel)]="numbers[43]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[44]}" class="tiers"  onLabel="PAIR" offLabel="PAIR" [(ngModel)]="numbers[44]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[45]}" class="tiers"  onLabel="ROUGE" offLabel="ROUGE" [(ngModel)]="numbers[45]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[46]}" class="tiers" onLabel="NOIR" offLabel="NOIR" [(ngModel)]="numbers[46]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[47]}" class="tiers"  onLabel="IMPAIR" offLabel="IMPAIR" [(ngModel)]="numbers[47]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[48]}" class="tiers"  onLabel="19-36" offLabel="19-36" [(ngModel)]="numbers[48]"></p-toggleButton>
+        </div>
+        <div class="flex-column">
+            <div class="flex-column">
+                <div class="flex">
+                    <div class="flex-column">
+                        <p-toggleButton [ngClass]="{green: !numbers[0]}" class="h-cent" onLabel="0" offLabel="0" [(ngModel)]="numbers[0]"></p-toggleButton>
+                        <div class="flex">
+                            <p-toggleButton [ngClass]="{red: !numbers[1]}"  onLabel="1" offLabel="1" [(ngModel)]="numbers[1]"></p-toggleButton>
+                            <p-toggleButton [ngClass]="{black: !numbers[2]}"  onLabel="2" offLabel="2" [(ngModel)]="numbers[2]"></p-toggleButton>
+                            <p-toggleButton [ngClass]="{red: !numbers[3]}"  onLabel="3" offLabel="3" [(ngModel)]="numbers[3]"></p-toggleButton>
+                        </div>
+                        <div class="flex">
+                            <p-toggleButton [ngClass]="{black: !numbers[4]}" onLabel="4" offLabel="4" [(ngModel)]="numbers[4]"></p-toggleButton>
+                            <p-toggleButton [ngClass]="{red: !numbers[5]}"  onLabel="5" offLabel="5" [(ngModel)]="numbers[5]"></p-toggleButton>
+                            <p-toggleButton [ngClass]="{black: !numbers[6]}"  onLabel="6" offLabel="6" [(ngModel)]="numbers[6]"></p-toggleButton>
+                        </div>
+                        <div class="flex">
+                            <p-toggleButton [ngClass]="{red: !numbers[7]}"  onLabel="7" offLabel="7" [(ngModel)]="numbers[7]"></p-toggleButton>
+                            <p-toggleButton [ngClass]="{black: !numbers[8]}"  onLabel="8" offLabel="8" [(ngModel)]="numbers[8]"></p-toggleButton>
+                            <p-toggleButton [ngClass]="{red: !numbers[9]}"  onLabel="9" offLabel="9" [(ngModel)]="numbers[9]"></p-toggleButton>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex">
+                    <p-toggleButton [ngClass]="{black: !numbers[10]}"  onLabel="10" offLabel="10" [(ngModel)]="numbers[10]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{black: !numbers[11]}"  onLabel="11" offLabel="11" [(ngModel)]="numbers[11]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{red: !numbers[12]}"  onLabel="12" offLabel="12" [(ngModel)]="numbers[12]"></p-toggleButton>
+                </div>
+                <div class="flex">
+                    <p-toggleButton [ngClass]="{black: !numbers[13]}"  onLabel="13" offLabel="13" [(ngModel)]="numbers[13]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{red: !numbers[14]}"  onLabel="14" offLabel="14" [(ngModel)]="numbers[14]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{black: !numbers[15]}"  onLabel="15" offLabel="15" [(ngModel)]="numbers[15]"></p-toggleButton>
+                </div>
+                <div class="flex">
+                    <p-toggleButton [ngClass]="{red: !numbers[16]}"  onLabel="16" offLabel="16" [(ngModel)]="numbers[16]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{black: !numbers[17]}"  onLabel="17" offLabel="17" [(ngModel)]="numbers[17]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{red: !numbers[18]}"  onLabel="18" offLabel="18" [(ngModel)]="numbers[18]"></p-toggleButton>
+                </div>
+                <div class="flex">
+                    <p-toggleButton [ngClass]="{red: !numbers[19]}"  onLabel="19" offLabel="19" [(ngModel)]="numbers[19]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{black: !numbers[20]}"  onLabel="20" offLabel="20" [(ngModel)]="numbers[20]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{red: !numbers[21]}"  onLabel="21" offLabel="21" [(ngModel)]="numbers[21]"></p-toggleButton>
+                </div>
+                <div class="flex">
+                    <p-toggleButton [ngClass]="{black: !numbers[22]}"  onLabel="22" offLabel="22" [(ngModel)]="numbers[22]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{red: !numbers[23]}" onLabel="23" offLabel="23" [(ngModel)]="numbers[23]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{black: !numbers[24]}"  onLabel="24" offLabel="24" [(ngModel)]="numbers[24]"></p-toggleButton>
+                </div>
+                <div class="flex">
+                    <p-toggleButton [ngClass]="{red: !numbers[25]}"  onLabel="25" offLabel="25" [(ngModel)]="numbers[25]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{black: !numbers[26]}"  onLabel="26" offLabel="26" [(ngModel)]="numbers[26]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{red: !numbers[27]}"  onLabel="27" offLabel="27" [(ngModel)]="numbers[27]"></p-toggleButton>
+                </div>
+                <div class="flex">
+                    <p-toggleButton [ngClass]="{black: !numbers[28]}"  onLabel="28" offLabel="28" [(ngModel)]="numbers[28]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{black: !numbers[29]}"  onLabel="29" offLabel="29" [(ngModel)]="numbers[29]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{red: !numbers[30]}"  onLabel="30" offLabel="30" [(ngModel)]="numbers[30]"></p-toggleButton>
+                </div>
+                <div class="flex">
+                    <p-toggleButton [ngClass]="{black: !numbers[31]}"  onLabel="31" offLabel="31" [(ngModel)]="numbers[31]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{red: !numbers[32]}"  onLabel="32" offLabel="32" [(ngModel)]="numbers[32]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{black: !numbers[33]}"  onLabel="33" offLabel="33" [(ngModel)]="numbers[33]"></p-toggleButton>
+                </div>
+                <div class="flex">
+                    <p-toggleButton [ngClass]="{red: !numbers[34]}" onLabel="34" offLabel="34" [(ngModel)]="numbers[34]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{black: !numbers[35]}"  onLabel="35" offLabel="35" [(ngModel)]="numbers[35]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{red: !numbers[36]}"  onLabel="36" offLabel="36" [(ngModel)]="numbers[36]"></p-toggleButton>
+                </div>
+                <div class="flex">
+                    <p-toggleButton [ngClass]="{green: !numbers[37]}" onLabel="↑" offLabel="↑" [(ngModel)]="numbers[37]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{green: !numbers[38]}" onLabel="↑" offLabel="↑" [(ngModel)]="numbers[38]"></p-toggleButton>
+                    <p-toggleButton [ngClass]="{green: !numbers[39]}" onLabel="↑" offLabel="↑" [(ngModel)]="numbers[39]"></p-toggleButton>
+                </div>
+            </div>
+        </div>
+        <div class="flex-column" style="padding-top: 2em; padding-bottom: 2em; justify-content: center">
+            <p-toggleButton [ngClass]="{green: !numbers[40]}" class="tiers" onLabel="1-12" offLabel="1-12" [(ngModel)]="numbers[40]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[41]}" class="tiers"  onLabel="13-24" offLabel="13-24" [(ngModel)]="numbers[41]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[42]}" class="tiers"  onLabel="25-36" offLabel="25-36" [(ngModel)]="numbers[42]"></p-toggleButton>
+        </div>
+    </div>
+    <div class="flex-between top">
+        <button pButton label="Test" (click)="play()"></button>
+        <div *ngIf="won">Gagné</div>
+        <div *ngIf="won != undefined && !won">Perdu</div>
+        <div *ngIf="randomRoulette != undefined" style="text-align: center; border: 3px solid black; min-width: 2em; font-size: 1.5em;">
+            {{ randomRoulette }}
+        </div>
+    </div>
+    <div class="flex top">
+        <button pButton label="Continuer" (click)="continue()"></button>
+    </div>
+</div>

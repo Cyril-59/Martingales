@@ -52,6 +52,12 @@ body {
     justify-content: space-between;
 }
 
+.flex-stretch
+{
+    display: flex;
+    justify-content: stretch;
+}
+
 .flex-center
 {
     display: flex;
@@ -77,4 +83,51 @@ body {
 
 .bottom {
     margin-bottom: 1em !important;
+}
+
+p-togglebutton.green div {
+    background-color: green !important;
+    border: 1px solid white !important;
+}
+
+p-togglebutton.black div {
+    background-color: black !important;
+    border: 1px solid white !important;
+}
+
+p-togglebutton.red div {
+    background-color: red !important;
+    border: 1px solid white !important;
+}
+
+.horizontal p-togglebutton.w-cent, p-togglebutton.w-cent > div {
+    width: 100%;
+}
+
+/*p-togglebutton.h-cent, p-togglebutton.h-cent > div {
+    height: 100%;
+}*/
+
+.horizontal p-togglebutton.h-cent > div {
+    display: flex;
+    align-items: center;
+    height: 7em;;
+}
+
+.vertical p-togglebutton.h-cent  > div {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.vertical p-togglebutton  > div {
+    justify-content: center;
+    min-width: 4em;
+}
+
+.vertical .tiers > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
 }

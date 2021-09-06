@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ChartModule } from 'primeng/chart';
 import {CheckboxModule} from 'primeng/checkbox';
+import {ToggleButtonModule} from 'primeng/togglebutton';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MartingaleComponent } from './martingale/martingale.component';
@@ -14,12 +15,14 @@ import { FormComponent } from './form/form.component';
 import { from } from 'rxjs';
 
 import { DropdownModule } from 'primeng/dropdown';
+import { RouletteComponent } from './roulette/roulette.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MartingaleComponent,
-    FormComponent
+    FormComponent,
+    RouletteComponent
   ],
   imports: [
     BrowserModule,
@@ -31,6 +34,7 @@ import { DropdownModule } from 'primeng/dropdown';
     InputTextModule,
     ButtonModule,
     ChartModule,
+    ToggleButtonModule,
     CheckboxModule
   ],
   providers: [],

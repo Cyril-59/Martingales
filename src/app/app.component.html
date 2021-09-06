@@ -4,15 +4,23 @@
         <h1 class="" style="font-family: 'Open Sans'; font-size: 1.5em;">Martingales</h1>
         <img style="height: 60px;" src="/assets/jeton.png"/>
     </div>
-    <div class="flex-center bottom align" *ngIf="!start">
+    <div class="flex-center bottom align" *ngIf="!start && !showRoulette">
         <input type="number" placeholder="Cash-in" pInputText [(ngModel)]="cash">
         <button class="left" pButton label="Start" (click)="initHistory()"></button>
+        <!--<button class="left" pButton label="Roulette" (click)="showRoulette = !showRoulette"></button>-->
+    </div>
+    <div *ngIf="showRoulette">
+        <app-roulette (onClose)="showRoulette = !showRoulette"></app-roulette>
     </div>
     <div *ngIf="start" class="flex-column evenly">
-        <div class="flex-center" [ngClass]="getCashClass()">{{ cash }} €</div>
+        <div class="flex-between">
+            <div>Min: {{ minCash }}</div>
+            <div class="flex-center" [ngClass]="getCashClass()">{{ cash }} €</div>
+            <div>Max: {{ maxCash }}</div>
+        </div>
         <div class="flex-center" *ngIf="!add && list">
             <p-dropdown *ngIf="init" placeholder="Choisir une martingale" [options]="options" (onChange)="select($event)"></p-dropdown>
-            <button class="left" pButton label="X" (click)="start = false"></button>
+            <button class="left" pButton label="X" (click)="start = false; minCash = null; maxCash = null"></button>
             <button class="left" pButton label="+" (click)="plus()"></button>
         </div>
         <div class="flex-center" *ngIf="!add && !list">

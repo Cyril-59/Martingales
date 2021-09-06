@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Roulette } from '../roulette';
+import { RouletteComponent } from '../roulette/roulette.component';
 
 @Component({
   selector: 'app-martingale',
@@ -13,9 +14,16 @@ export class MartingaleComponent implements OnInit {
 
   tab: Roulette[];
   currentIndex: number = -1;
+  nbJeux = 0;
   winIndex: number = -1;
   randomProba: number = 0;
   randomRoulette: number = 0;
+  ready = false;
+  lastNumbers: number[] = [];
+  loseStreak: number = 0;
+
+  @ViewChild(RouletteComponent)
+  childRoulette: RouletteComponent;
 
   @Output()
   onDelete: EventEmitter<void> = new EventEmitter();
@@ -72,6 +80,7 @@ export class MartingaleComponent implements OnInit {
   }
 
   next() {
+    this.nbJeux++;
     if (this.winIndex != undefined && this.winIndex != null) {
       this.currentIndex = 0;
       this.winIndex = null;
@@ -92,5 +101,21 @@ export class MartingaleComponent implements OnInit {
 
   generateRandomRoulette() {
     this.randomRoulette = Math.floor(Math.random() * 37);
+  }
+
+  play() {
+    this.childRoulette.play();
+    this.next();
+    this.randomRoulette = this.childRoulette.randomRoulette;
+    this.lastNumbers.unshift(this.randomRoulette);
+    this.lastNumbers.length = 12;
+    this.loseStreak = Math.max(this.loseStreak, this.currentIndex + 1);
+    if (this.childRoulette.won) {
+      this.win();
+    } else {
+      if (this.currentIndex + 1 == this.tab.length) {
+        this.compute();
+      }
+    }
   }
 }

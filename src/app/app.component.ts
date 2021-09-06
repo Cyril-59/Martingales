@@ -17,11 +17,14 @@ export class AppComponent implements OnInit {
   add = false;
   list = true;
   cash: number;
+  minCash: number;
+  maxCash: number;
   startCash: number;
   cashHistory: number[] = [];
   data: any;
   showChart = false;
   start = false;
+  showRoulette = false;
 
   ngOnInit() {
     this.ajouter(new Roulette(2, 3, 25/37, 'Tiers'));
@@ -87,12 +90,18 @@ export class AppComponent implements OnInit {
 
   substract(mise: number) {
     this.cash -= mise;
+    if (!this.minCash || this.minCash > this.cash) {
+      this.minCash = this.cash;
+    }
     this.cashHistory.push(this.cash);
     this.chart();
   }
 
   win(gain: number) {
     this.cash += gain;
+    if (!this.maxCash || this.maxCash < this.cash) {
+      this.maxCash = this.cash;
+    }
     this.cashHistory.push(this.cash);
     this.chart();
   }
