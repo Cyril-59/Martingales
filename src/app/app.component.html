@@ -12,13 +12,13 @@
     <div *ngIf="showRoulette">
         <app-roulette (onClose)="showRoulette = !showRoulette"></app-roulette>
     </div>
-    <div *ngIf="start" class="flex-column evenly">
+    <div *ngIf="start" class="flex-column evenly" style="margin-top: auto;">
         <div class="flex-between">
-            <div>Min: {{ minCash }}</div>
+            <div style="margin-top: 1.5em">Min: {{ minCash }}</div>
             <div class="flex-center" [ngClass]="getCashClass()">{{ cash }} €</div>
-            <div>Max: {{ maxCash }}</div>
+            <div style="margin-top: 1.5em">Max: {{ maxCash }}</div>
         </div>
-        <div class="flex-center" *ngIf="!add && list">
+        <div class="flex-center" *ngIf="!add && list" style="margin-top: 2em;">
             <p-dropdown *ngIf="init" placeholder="Choisir une martingale" [options]="options" (onChange)="select($event)"></p-dropdown>
             <button class="left" pButton label="X" (click)="start = false; minCash = null; maxCash = null"></button>
             <button class="left" pButton label="+" (click)="plus()"></button>
@@ -26,14 +26,8 @@
         <div class="flex-center" *ngIf="!add && !list">
             <app-martingale *ngIf="martingale" class="top" [martingale]="martingale"  (onDelete)="supprimer()" (onClose)="list = true" (onNext)="substract($event)" (onWin)="win($event)"></app-martingale>
         </div>
-        <div class="flex-center">
-            <div *ngIf="!add">
-                <!--<i *ngIf="list" class="pi pi-plus" style="font-size: 7em;margin: auto;" (click)="plus()"></i>-->
-                <!--<i *ngIf="!showChart" class="pi pi-chart-line" style="font-size: 7em;margin: auto;" (click)="chart()"></i>-->
-            </div>
-            <div *ngIf="add">
-                <app-form *ngIf="add" (roulette)="ajouter($event, true)" (onCancel)="add = false"></app-form>
-            </div>
+        <div *ngIf="add" class="flex-center" style="margin-top: 2em;">
+            <app-form (roulette)="ajouter($event, true)" (onCancel)="add = false"></app-form>
         </div>
         <p-chart *ngIf="showChart" class="top" type="line" [data]="data"></p-chart>
     </div>

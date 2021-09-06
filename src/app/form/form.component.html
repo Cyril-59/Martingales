@@ -1,4 +1,5 @@
 <div class="flex-column">
+    <h2>Nouvelle martingale</h2>
     <span class="flex-between">
         <label>Titre : </label>
         <input type="text" pInputText [(ngModel)]="titre">
@@ -32,7 +33,7 @@
         <label>Mise max : </label>
         <input type="number" pInputText [(ngModel)]="maxi" [disabled]="croissant">
     </span>
-    <span class="flex-between">
+    <span class="flex-between top">
         <button class="p-button-danger" pButton type="button" label="Annuler" (click)="cancel()"></button>
         <button class="p-button-danger" pButton type="button" label="Ajouter" (click)="click()"></button>
     </span>

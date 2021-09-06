@@ -39,6 +39,5 @@ div.align {
 }
 
 div.evenly {
-    height: 100%;
     justify-content: space-evenly;
 }

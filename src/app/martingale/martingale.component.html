@@ -31,7 +31,7 @@
         <button pButton (click)="generateRandomProba()" [label]="'Prob : ' + randomProba"></button>-->
         <div class="top">
             <span>
-                Derniers : 
+                Lasts : 
             </span>
             <span *ngFor="let i of lastNumbers">
                 {{ i }}
@@ -43,10 +43,10 @@
         <button pButton (click)="win()" label="Win"></button>-->
     </div>
     <div>
-        Essais Max : {{ loseStreak }}
+        Max try : {{ loseStreak }}
     </div>
     <div>
-        Nb jeux : {{ nbJeux }}
+        Nb plays : {{ nbJeux }}
     </div>
 </div>
 <app-roulette [hidden]="ready" (onContinue)="ready = true" (onClose)="close()"></app-roulette>

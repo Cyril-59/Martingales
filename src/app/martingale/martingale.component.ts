@@ -108,7 +108,7 @@ export class MartingaleComponent implements OnInit {
     this.next();
     this.randomRoulette = this.childRoulette.randomRoulette;
     this.lastNumbers.unshift(this.randomRoulette);
-    this.lastNumbers.length = 12;
+    this.lastNumbers.length = 11;
     this.loseStreak = Math.max(this.loseStreak, this.currentIndex + 1);
     if (this.childRoulette.won) {
       this.win();
