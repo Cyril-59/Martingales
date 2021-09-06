@@ -13,6 +13,7 @@ export class RouletteComponent implements OnInit {
   won: boolean;
   reds: number[] = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
   blacks: number[] = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
+  randomShow = false;
 
   @Output()
   onClose: EventEmitter<void> = new EventEmitter();
@@ -74,6 +75,10 @@ export class RouletteComponent implements OnInit {
 
   generateRandomRoulette() {
     this.randomRoulette = Math.floor(Math.random() * 37);
+    this.randomShow = false;
+    setTimeout(() => {
+      this.randomShow = true;
+    }, 500)
   }
 
   continue() {

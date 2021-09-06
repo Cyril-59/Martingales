@@ -9,6 +9,31 @@ button.red {
     border: 1px solid white;
 }
 
+div.black {
+    background-color: black;
+
+}
+
+div.red {
+    background-color: red;
+}
+
+div.green {
+    background-color: green;
+}
+
 .tiers {
     flex-grow: 4;
+}
+
+.random {
+    transform: translateY(-500px);
+    opacity: 0;
+    transition: all 0.25s ease-in;
+}
+
+.random-show {
+    transform: translateY(0px);
+    opacity: 1;
+    transition: all 0.5s ease-out;
 }
