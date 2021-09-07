@@ -39,8 +39,12 @@ export class RouletteComponent implements OnInit {
     this.onClose.emit();
   }
 
-  play() {
-    this.generateRandomRoulette();
+  play(live: number = null) {
+    if (live == null) {
+      this.generateRandomRoulette();
+    } else {
+      this.randomRoulette = live;
+    }
     const n = this.randomRoulette;
     if (this.numbers[n]) {
       this.won = true;

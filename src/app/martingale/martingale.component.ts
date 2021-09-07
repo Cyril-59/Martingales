@@ -21,6 +21,8 @@ export class MartingaleComponent implements OnInit {
   ready = false;
   lastNumbers: number[] = [];
   loseStreak: number = 0;
+  liveDialog = false;
+  liveValue: number;
 
   @ViewChild(RouletteComponent)
   childRoulette: RouletteComponent;
@@ -103,8 +105,17 @@ export class MartingaleComponent implements OnInit {
     this.randomRoulette = Math.floor(Math.random() * 37);
   }
 
-  play() {
-    this.childRoulette.play();
+  playLive() {
+    this.liveDialog = false;
+    this.play(true);
+  }
+
+  play(live = false) {
+    if (live) {
+      this.childRoulette.play(this.liveValue);
+    } else {
+      this.childRoulette.play();
+    }
     this.next();
     this.randomRoulette = this.childRoulette.randomRoulette;
     this.lastNumbers.unshift(this.randomRoulette);
@@ -123,5 +134,10 @@ export class MartingaleComponent implements OnInit {
     for (let i = 1; i <= times; i++) {
       this.play();
     }
+  }
+
+  live() {
+    this.liveValue = null;
+    this.liveDialog = true;
   }
 }

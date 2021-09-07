@@ -37,7 +37,7 @@
                 {{ i }}
             </span>
         </div>
-        <button pButton (click)="play()" label="Play"></button>
+        <button pButton (click)="live()" label="Live"></button>
         <!--<button pButton (click)="generateRandomRoulette()" [label]="'Bille : ' + randomRoulette"></button>
         <button pButton (click)="next()" label="Next"></button>
         <button pButton (click)="win()" label="Win"></button>-->
@@ -51,8 +51,13 @@
                 Nb plays : {{ nbJeux }}
             </div>
         </div>
+        <button pButton (click)="play()" label="Play"></button>
         <button pButton (click)="multiplay(10)" label="Play 10"></button>
         <button pButton (click)="multiplay(100)" label="Play 100"></button>
     </div>
 </div>
 <app-roulette [hidden]="ready" (onContinue)="ready = true" (onClose)="close()"></app-roulette>
+<p-dialog [(visible)]="liveDialog" header="Roulette live">
+    <input type="number" placeholder="Live value" pInputText [(ngModel)]="liveValue" autofocus>
+    <p-button (click)="playLive()" label="Play" styleClass="p-button-text" style="margin-left: 1em;"></p-button>
+</p-dialog>
