@@ -8,8 +8,9 @@ export class Roulette {
   titre: string;
   gap: number;
   miseMax: number;
+  maxTry: number;
 
-  constructor(mise, gain, proba, titre = '', gainMini = 0, gap = 2, gainCroissant = false, miseMax = 1000000) {
+  constructor(mise, gain, proba, titre = '', gainMini = 0, gap = 2, gainCroissant = false, miseMax = 1000000, maxTry = 100) {
     this.mise = mise;
     this.gain = gain;
     this.proba = proba;
@@ -19,5 +20,6 @@ export class Roulette {
     this.titre = titre;
     this.gainCroissant = gainCroissant;
     this.miseMax = miseMax;
+    this.maxTry = maxTry;
   }
 }

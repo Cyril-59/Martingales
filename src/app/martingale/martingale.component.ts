@@ -23,6 +23,7 @@ export class MartingaleComponent implements OnInit {
   loseStreak: number = 0;
   liveDialog = false;
   liveValue: number;
+  maxTryReached = false;
 
   @ViewChild(RouletteComponent)
   childRoulette: RouletteComponent;
@@ -87,7 +88,12 @@ export class MartingaleComponent implements OnInit {
       this.currentIndex = 0;
       this.winIndex = null;
     } else {
-      this.currentIndex++;
+      if (this.maxTryReached) {
+        this.maxTryReached = false;
+        this.currentIndex = 0;
+      } else {
+        this.currentIndex++;
+      }
     }
     this.onNext.emit(this.tab[this.currentIndex].mise);
   }
@@ -124,6 +130,9 @@ export class MartingaleComponent implements OnInit {
     if (this.childRoulette.won) {
       this.win();
     } else {
+      if (this.currentIndex + 1 >= this.martingale.maxTry) {
+        this.maxTryReached = true;
+      }
       if (this.currentIndex + 1 == this.tab.length) {
         this.compute();
       }

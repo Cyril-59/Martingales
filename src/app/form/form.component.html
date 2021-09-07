@@ -33,6 +33,10 @@
         <label>Mise max : </label>
         <input type="number" pInputText [(ngModel)]="maxi" [disabled]="croissant">
     </span>
+    <span class="flex-between">
+        <label>Max try : </label>
+        <input type="number" pInputText [(ngModel)]="try">
+    </span>
     <span class="flex-between top">
         <button class="p-button-danger" pButton type="button" label="Annuler" (click)="cancel()"></button>
         <button class="p-button-danger" pButton type="button" label="Ajouter" (click)="click()"></button>
