@@ -57,7 +57,7 @@
     </div>
 </div>
 <app-roulette [hidden]="ready" (onContinue)="ready = true" (onClose)="close()"></app-roulette>
-<p-dialog [(visible)]="liveDialog" header="Roulette live">
+<p-dialog [(visible)]="liveDialog" header="Roulette live" [modal]="true">
     <input type="number" placeholder="Live value" pInputText [(ngModel)]="liveValue" autofocus>
     <p-button (click)="playLive()" label="Play" styleClass="p-button-text" style="margin-left: 1em;"></p-button>
 </p-dialog>

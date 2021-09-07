@@ -131,3 +131,31 @@ p-togglebutton.red div {
     justify-content: center;
     height: 100%;
 }
+
+body .ui-button {
+    background-color: #0ab3af !important;
+    border: 1px solid #0ab3af !important;
+}
+
+body .ui-togglebutton.ui-state-active {
+    background-color: #0ab3af !important;
+    border-color: #0ab3af !important;
+}
+
+body .ui-inputtext:enabled:focus:not(.ui-state-error) {
+    border-color: #0ab3af !important;
+}
+
+body .ui-button:enabled:focus {
+    box-shadow: 0 0 0 0.2em #0ab3af42 !important;
+}
+
+body .ui-inputtext:enabled:focus:not(.ui-state-error) {
+    box-shadow: 0 0 0 0.2em #0ab3af42 !important;
+    border-color: #0ab3af !important;
+}
+
+body .ui-dropdown:not(.ui-state-disabled).ui-state-focus {
+    box-shadow: 0 0 0 0.2em #0ab3af42 !important;
+    border-color: #0ab3af !important;
+}
