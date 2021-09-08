@@ -20,10 +20,10 @@
             <div class="flex-center" [ngClass]="getCashClass()">{{ cash }} €</div>
             <div style="margin-top: 1.5em">Max: {{ maxCash }}</div>
         </div>
-        <div class="flex-center" *ngIf="!add && list" style="margin-top: 2em;">
-            <p-dropdown *ngIf="init" placeholder="Choisir une martingale" [options]="options" (onChange)="select($event)"></p-dropdown>
-            <i style="margin: auto; cursor: pointer;" class="pi pi-plus" (click)="plus()"></i>
-            <i style="margin: auto; cursor: pointer;" class="pi pi-refresh" (click)="refresh()"></i>
+        <div class="flex-center flex-column" *ngIf="!add && list" style="margin-top: 2em;">
+            <p-dropdown *ngIf="init" class="flex-center" placeholder="Choisir une martingale" [options]="options" (onChange)="select($event)"></p-dropdown>
+            <i style="margin: auto; cursor: pointer; margin-top: 1em" class="pi pi-plus" (click)="plus()"></i>
+            <i style="margin: auto; cursor: pointer; margin-top: 1em" class="pi pi-refresh" (click)="refresh()"></i>
         </div>
         <div class="flex-center" *ngIf="!add && !list">
             <app-martingale *ngIf="martingale" class="top" [cash]="cash" [martingale]="martingale"  (onDelete)="supprimer()" (onClose)="list = true" (onNext)="substract($event)" (onWin)="win($event)"></app-martingale>
@@ -40,8 +40,7 @@
     </div>
     <router-outlet></router-outlet>
 </div>
-<p-dialog [(visible)]="!!state" [header]="state == 'VICTORY' ? 'Objectif atteint' : 'Objectif perdu'" [closable]="false" position="top">
-    <h2>{{ state }}</h2>
+<p-dialog [(visible)]="!!state" [header]="state" [closable]="false" position="top">
     <p>Victoires : {{ nbVictory }}</p>
     <p>Banqueroutes : {{ nbBankruptcy }}</p>
     <p-button (click)="refresh()" label="Stop" styleClass="p-button-text" style="margin-left: 1em; margin-top: 1em;"></p-button>

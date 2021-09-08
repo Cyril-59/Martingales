@@ -8,12 +8,16 @@ import { Roulette } from '../roulette';
 })
 export class RouletteComponent implements OnInit {
 
+  @Input()
+  martingale: Roulette;
+
   numbers: boolean[] = [];
   randomRoulette: number;
   won: boolean;
   reds: number[] = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
   blacks: number[] = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
   randomShow = false;
+  weights: number[] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 12, 12, 12, 12, 12, 12, 18, 18, 18, 18, 18, 18];
 
   @Output()
   onClose: EventEmitter<void> = new EventEmitter();
@@ -86,11 +90,14 @@ export class RouletteComponent implements OnInit {
   }
 
   continue() {
+    let cpt = 0;
     for (let i = 0; i <= 48; i++) {
       if (this.numbers[i]) {
-        this.onContinue.emit();
-        break;
+        cpt += this.weights[i];
       }
+    }
+    if (cpt == 36 / this.martingale.gain) {
+      this.onContinue.emit();
     }
   }
 }

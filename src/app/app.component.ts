@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Roulette } from './roulette';
 import { SelectItem } from 'primeng/api/selectitem';
+import { UIChart } from 'primeng/chart';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +31,9 @@ export class AppComponent implements OnInit {
   nbVictory: number = 0;
   nbBankruptcy: number = 0;
   prevMartingale: Roulette;
+
+  @ViewChild(UIChart)
+  chartComp: UIChart;
 
   ngOnInit() {
     this.ajouter(new Roulette(2, 3, 25/37, 'Tiers'));
@@ -103,7 +107,7 @@ export class AppComponent implements OnInit {
     }
     this.cashHistory.push(this.cash);
     this.chart();
-    if (this.cash <= 0) {
+    if (!!this.objectif && this.cash <= 0) {
       this.state = 'BANKRUPTCY';
       this.prevMartingale = this.martingale;
       this.martingale = null;
@@ -123,7 +127,7 @@ export class AppComponent implements OnInit {
     }
     this.cashHistory.push(this.cash);
     this.chart();
-    if (this.cash >= this.objectif) {
+    if (!!this.objectif && this.cash >= this.objectif) {
       this.state = 'VICTORY';
       this.prevMartingale = this.martingale;
       this.martingale = null;
@@ -155,6 +159,9 @@ export class AppComponent implements OnInit {
         ]
       }
       this.showChart = true;
+      setTimeout(() => {
+        this.chartComp.el.nativeElement.scrollIntoView();
+      });
     } else {
       this.showChart = false;
       this.data = null;
@@ -177,6 +184,7 @@ export class AppComponent implements OnInit {
     this.start = false;
     this.minCash = null;
     this.maxCash = null;
+    this.cash = this.startCash;
     this.objectif = null;
     this.state = null;
     this.nbBankruptcy = 0;

@@ -56,7 +56,7 @@
         <button pButton (click)="multiplay(100)" label="Play 100"></button>
     </div>
 </div>
-<app-roulette [hidden]="ready" (onContinue)="ready = true" (onClose)="close()"></app-roulette>
+<app-roulette [hidden]="ready" [martingale]="martingale" (onContinue)="ready = true" (onClose)="close()"></app-roulette>
 <p-dialog [(visible)]="liveDialog" header="Roulette live" [modal]="true">
     <input type="number" placeholder="Live value" pInputText [(ngModel)]="liveValue" autofocus>
     <p-button (click)="playLive()" label="Play" styleClass="p-button-text" style="margin-left: 1em;"></p-button>
