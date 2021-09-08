@@ -12,6 +12,9 @@ export class MartingaleComponent implements OnInit {
   @Input()
   martingale: Roulette;
 
+  @Input()
+  cash: number;
+
   tab: Roulette[];
   currentIndex: number = -1;
   nbJeux = 0;
@@ -21,9 +24,11 @@ export class MartingaleComponent implements OnInit {
   ready = false;
   lastNumbers: number[] = [];
   loseStreak: number = 0;
+  prevLoseStreak: number = 0;
   liveDialog = false;
   liveValue: number;
   maxTryReached = false;
+  firstMaxTry: number;
 
   @ViewChild(RouletteComponent)
   childRoulette: RouletteComponent;
@@ -49,6 +54,7 @@ export class MartingaleComponent implements OnInit {
     while(i++ <= 10) {
       this.compute();
     }
+    this.firstMaxTry = this.martingale.maxTry;
   }
 
   compute() {
@@ -89,6 +95,9 @@ export class MartingaleComponent implements OnInit {
       this.winIndex = null;
     } else {
       if (this.maxTryReached) {
+        if (this.martingale.dynamic) {
+          this.martingale.maxTry = this.firstMaxTry;
+        }
         this.maxTryReached = false;
         this.currentIndex = 0;
       } else {
@@ -99,6 +108,7 @@ export class MartingaleComponent implements OnInit {
   }
 
   win() {
+    this.prevLoseStreak = 0;
     this.winIndex = this.currentIndex;
     this.onWin.emit(this.tab[this.currentIndex].mise * this.tab[this.currentIndex].gain);
   }
@@ -126,15 +136,20 @@ export class MartingaleComponent implements OnInit {
     this.randomRoulette = this.childRoulette.randomRoulette;
     this.lastNumbers.unshift(this.randomRoulette);
     this.lastNumbers.length = 11;
-    this.loseStreak = Math.max(this.loseStreak, this.currentIndex + 1);
+    this.loseStreak = Math.max(this.loseStreak, this.currentIndex + 1 + this.prevLoseStreak);
     if (this.childRoulette.won) {
       this.win();
     } else {
-      if (this.currentIndex + 1 >= this.martingale.maxTry) {
-        this.maxTryReached = true;
-      }
       if (this.currentIndex + 1 == this.tab.length) {
         this.compute();
+      }
+      if (this.currentIndex + 1 >= this.martingale.maxTry) {
+        if (this.martingale.dynamic && this.cash - this.tab[this.currentIndex].mise > this.tab[this.currentIndex + 1].mise) {
+          this.martingale.maxTry++;
+        } else {
+          this.maxTryReached = true;
+          this.prevLoseStreak += this.martingale.maxTry;
+        }
       }
     }
   }

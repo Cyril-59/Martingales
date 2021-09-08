@@ -18,7 +18,6 @@
     </span>
     <span>
         <label>Gain croissant : </label>
-        <!--<input type="checkbox" pInputText [(ngModel)]="croissant">-->
         <p-checkbox [(ngModel)]="croissant" binary="true"></p-checkbox>
     </span>
     <span class="flex-between">
@@ -36,6 +35,10 @@
     <span class="flex-between">
         <label>Max try : </label>
         <input type="number" pInputText [(ngModel)]="try">
+    </span>
+    <span>
+        <label>Dynamic try : </label>
+        <p-checkbox [(ngModel)]="dynamic" binary="true"></p-checkbox>
     </span>
     <span class="flex-between top">
         <button class="p-button-danger" pButton type="button" label="Annuler" (click)="cancel()"></button>

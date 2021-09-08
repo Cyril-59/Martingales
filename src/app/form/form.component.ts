@@ -17,6 +17,7 @@ export class FormComponent implements OnInit {
   croissant = false;
   maxi = 1000000;
   try = 100;
+  dynamic = false;
 
   @Output()
   roulette = new EventEmitter<Roulette>();
@@ -31,8 +32,8 @@ export class FormComponent implements OnInit {
 
   click() {
     const gain = 36 / this.luck
-    this.roulette.emit(new Roulette(this.mise, gain, 1 - this.luck / 37, this.titre, this.mini, this.gap, this.croissant, this.maxi, this.try));
-    console.log("this.martingales.push(new Roulette(" + this.mise + ", " + gain + ", " + (1 - this.luck / 37) + ", '" + this.titre + "', " + this.mini +  "', " + this.gap + "', " + this.croissant + "', " + this.maxi + "', " + this.try +"));");
+    this.roulette.emit(new Roulette(this.mise, gain, 1 - this.luck / 37, this.titre, this.mini, this.gap, this.croissant, this.maxi, this.try, this.dynamic));
+    console.log("this.martingales.push(new Roulette(" + this.mise + ", " + gain + ", " + (1 - this.luck / 37) + ", '" + this.titre + "', " + this.mini +  "', " + this.gap + "', " + this.croissant + "', " + this.maxi + "', " + this.try + "', " + this.dynamic + "));");
   }
 
   cancel() {
