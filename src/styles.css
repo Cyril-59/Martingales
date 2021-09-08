@@ -159,3 +159,7 @@ body .ui-dropdown:not(.ui-state-disabled).ui-state-focus {
     box-shadow: 0 0 0 0.2em #0ab3af42 !important;
     border-color: #0ab3af !important;
 }
+
+.ui-dialog-top {
+    margin-top: 8em;
+}

@@ -5,8 +5,11 @@
         <img style="height: 60px;" src="/assets/jeton.png"/>
     </div>
     <div class="flex-center bottom align" *ngIf="!start && !showRoulette">
-        <input type="number" placeholder="Cash-in" pInputText [(ngModel)]="cash">
-        <button class="left" pButton label="Start" (click)="initData()"></button>
+        <div class="flex-column">
+            <input type="number" placeholder="Cash-in" pInputText [(ngModel)]="cash">
+            <input class="top"type="number" placeholder="Objectif" pInputText [(ngModel)]="objectif">
+            <button class="top" pButton label="Start" (click)="initData()"></button>
+        </div>
     </div>
     <div *ngIf="showRoulette">
         <app-roulette (onClose)="showRoulette = !showRoulette"></app-roulette>
@@ -19,10 +22,8 @@
         </div>
         <div class="flex-center" *ngIf="!add && list" style="margin-top: 2em;">
             <p-dropdown *ngIf="init" placeholder="Choisir une martingale" [options]="options" (onChange)="select($event)"></p-dropdown>
-            <!--<button class="left" pButton label="X" (click)="start = false; minCash = null; maxCash = null"></button>
-            <button class="left" pButton label="+" (click)="plus()"></button>-->
             <i style="margin: auto; cursor: pointer;" class="pi pi-plus" (click)="plus()"></i>
-            <i style="margin: auto; cursor: pointer;" class="pi pi-refresh" (click)="start = false; minCash = null; maxCash = null"></i>
+            <i style="margin: auto; cursor: pointer;" class="pi pi-refresh" (click)="refresh()"></i>
         </div>
         <div class="flex-center" *ngIf="!add && !list">
             <app-martingale *ngIf="martingale" class="top" [cash]="cash" [martingale]="martingale"  (onDelete)="supprimer()" (onClose)="list = true" (onNext)="substract($event)" (onWin)="win($event)"></app-martingale>
@@ -39,3 +40,10 @@
     </div>
     <router-outlet></router-outlet>
 </div>
+<p-dialog [(visible)]="!!state" [header]="state == 'VICTORY' ? 'Objectif atteint' : 'Objectif perdu'" [closable]="false" position="top">
+    <h2>{{ state }}</h2>
+    <p>Victoires : {{ nbVictory }}</p>
+    <p>Banqueroutes : {{ nbBankruptcy }}</p>
+    <p-button (click)="refresh()" label="Stop" styleClass="p-button-text" style="margin-left: 1em; margin-top: 1em;"></p-button>
+    <p-button (click)="retry()" label="Retry" styleClass="p-button-text" style="margin-left: 1em; margin-top: 1em;"></p-button>
+</p-dialog>

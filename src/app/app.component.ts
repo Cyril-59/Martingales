@@ -25,6 +25,11 @@ export class AppComponent implements OnInit {
   showChart = false;
   start = false;
   showRoulette = false;
+  objectif: number;
+  state: string;
+  nbVictory: number = 0;
+  nbBankruptcy: number = 0;
+  prevMartingale: Roulette;
 
   ngOnInit() {
     this.ajouter(new Roulette(2, 3, 25/37, 'Tiers'));
@@ -32,7 +37,7 @@ export class AppComponent implements OnInit {
     this.ajouter(new Roulette(2, 3, 25/37, 'Tiers Gain', 4, 2, true));
     this.ajouter(new Roulette(4, 3, 25/37, 'Tiers Max 32', 8, 2, false, 32));
     this.ajouter(new Roulette(12, 3, 25/37, 'Tiers Gap 12', 1, 12, false));
-    this.ajouter(new Roulette(12, 3, 25/37, 'Tiers Max Try 8', 1, 12, false, 1000000, 8));
+    this.ajouter(new Roulette(12, 3, 25/37, 'Tiers Max Try 5', 1, 12, false, 1000000, 5));
     this.ajouter(new Roulette(12, 3, 25/37, 'Tiers Dynamic Max Try', 1, 12, false, 1000000, 2, true));
 
     this.ajouter(new Roulette(2, 2, 19/37, 'Demi'));
@@ -98,6 +103,17 @@ export class AppComponent implements OnInit {
     }
     this.cashHistory.push(this.cash);
     this.chart();
+    if (this.cash <= 0) {
+      this.state = 'BANKRUPTCY';
+      this.prevMartingale = this.martingale;
+      this.martingale = null;
+      this.nbBankruptcy++;
+      const tmpCash = this.cash;
+      setTimeout(() => {
+        this.cash = tmpCash;
+        this.minCash = tmpCash;
+      });
+    }
   }
 
   win(gain: number) {
@@ -107,32 +123,38 @@ export class AppComponent implements OnInit {
     }
     this.cashHistory.push(this.cash);
     this.chart();
+    if (this.cash >= this.objectif) {
+      this.state = 'VICTORY';
+      this.prevMartingale = this.martingale;
+      this.martingale = null;
+      this.nbVictory++;
+      const tmpCash = this.cash;
+      setTimeout(() => {
+        this.cash = tmpCash;
+        this.maxCash = tmpCash;
+      });
+    }
   }
 
   chart() {
     if (this.cashHistory.length > 1) {
-      //if (!this.data) {
-        this.data = {
-
-          labels: [...Array(this.cashHistory.length).keys()],
-          datasets: [
-              {
-                  label: this.martingale.titre,
-                  data: this.cashHistory,
-                  fill: false,
-                  borderColor: '#da7070'
-              }, {
-                  label: 'Cash-in',
-                  data: Array(this.cashHistory.length).fill(this.startCash),
-                  fill: false,
-                  borderColor: '#8ee070'
-              }
-          ]
-        }
-        this.showChart = true;
-      /*} else {
-          // TODO
-      }*/
+      this.data = {
+        labels: [...Array(this.cashHistory.length).keys()],
+        datasets: [
+          {
+            label: this.martingale.titre,
+            data: this.cashHistory,
+            fill: false,
+            borderColor: '#da7070'
+          }, {
+              label: 'Cash-in',
+              data: Array(this.cashHistory.length).fill(this.startCash),
+              fill: false,
+              borderColor: '#8ee070'
+          }
+        ]
+      }
+      this.showChart = true;
     } else {
       this.showChart = false;
       this.data = null;
@@ -149,5 +171,26 @@ export class AppComponent implements OnInit {
     } else {
       return 'black';
     }
+  }
+
+  refresh() {
+    this.start = false;
+    this.minCash = null;
+    this.maxCash = null;
+    this.objectif = null;
+    this.state = null;
+    this.nbBankruptcy = 0;
+    this.nbVictory = 0;
+    this.list = true;
+  }
+
+  retry() {
+    this.state = null;
+    this.martingale = this.prevMartingale;
+    this.prevMartingale = null;
+    this.cashHistory.length = 0;
+    this.cash = this.startCash;
+    this.minCash = this.startCash;
+    this.maxCash = this.startCash;
   }
 }
