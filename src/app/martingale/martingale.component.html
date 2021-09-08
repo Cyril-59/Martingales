@@ -45,7 +45,7 @@
     <div class="flex-between top">
         <div>
             <div>
-                Max try : {{ loseStreak }}
+                Max to win : {{ loseStreak }}
             </div>
             <div>
                 Nb plays : {{ nbJeux }}
@@ -56,7 +56,6 @@
         <button pButton (click)="multiplay(100)" label="Play 100"></button>
     </div>
 </div>
-{{ martingale.maxTry }}
 <app-roulette [hidden]="ready" (onContinue)="ready = true" (onClose)="close()"></app-roulette>
 <p-dialog [(visible)]="liveDialog" header="Roulette live" [modal]="true">
     <input type="number" placeholder="Live value" pInputText [(ngModel)]="liveValue" autofocus>

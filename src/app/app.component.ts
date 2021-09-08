@@ -32,7 +32,8 @@ export class AppComponent implements OnInit {
     this.ajouter(new Roulette(2, 3, 25/37, 'Tiers Gain', 4, 2, true));
     this.ajouter(new Roulette(4, 3, 25/37, 'Tiers Max 32', 8, 2, false, 32));
     this.ajouter(new Roulette(12, 3, 25/37, 'Tiers Gap 12', 1, 12, false));
-    this.ajouter(new Roulette(12, 3, 25/37, 'Tiers Max Try 8 Dynamic', 1, 12, false, 1000000, 3, true));
+    this.ajouter(new Roulette(12, 3, 25/37, 'Tiers Max Try 8', 1, 12, false, 1000000, 8));
+    this.ajouter(new Roulette(12, 3, 25/37, 'Tiers Dynamic Max Try', 1, 12, false, 1000000, 2, true));
 
     this.ajouter(new Roulette(2, 2, 19/37, 'Demi'));
     this.ajouter(new Roulette(2, 2, 19/37, 'Demi Min 4', 2));
