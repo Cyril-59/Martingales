@@ -86,6 +86,7 @@ export class AppComponent implements OnInit {
   plus() {
     this.add = true;
     this.list = true;
+    this.showChart = false;
   }
 
   initData() {

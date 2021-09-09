@@ -215,7 +215,6 @@ export class MartingaleComponent implements OnInit {
           indexes[6]++;
         }
       }
-      console.log(indexes);
       let i = indexes.indexOf(Math.max(...indexes));
       if (indexes[i] < 5) {
         this.guessLabel = 'Wait';

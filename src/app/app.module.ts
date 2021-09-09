@@ -18,6 +18,8 @@ import { from } from 'rxjs';
 
 import { DropdownModule } from 'primeng/dropdown';
 import { RouletteComponent } from './roulette/roulette.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,8 @@ import { RouletteComponent } from './roulette/roulette.component';
     ToggleButtonModule,
     CheckboxModule,
     DialogModule,
-    InputSwitchModule
+    InputSwitchModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
