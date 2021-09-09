@@ -191,7 +191,7 @@ export class MartingaleComponent implements OnInit {
 
   guess() {
     if (this.martingale.gain == 3) {
-      let indexes = [0, 0, 0, 0, 0, 0];
+      let indexes = [0, 0, 0, 0, 0, 0, 0];
       for (let i = 0; i < this.lastNumbers.length; i++) {
         if (indexes[0] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 12)) {
           indexes[0]++;
@@ -211,7 +211,11 @@ export class MartingaleComponent implements OnInit {
         if (indexes[5] == i && this.lastNumbers[i] % 3 != 0) {
           indexes[5]++;
         }
+        if (indexes[6] == i && !this.childRoulette.cylindre.includes(this.lastNumbers[i])) {
+          indexes[6]++;
+        }
       }
+      console.log(indexes);
       let i = indexes.indexOf(Math.max(...indexes));
       if (indexes[i] < 5) {
         this.guessLabel = 'Wait';
@@ -234,6 +238,9 @@ export class MartingaleComponent implements OnInit {
             break;
           case 5:
             this.guessLabel = '0%3';
+            break;
+          case 6:
+            this.guessLabel = 'CYL';
             break;
         }
       }

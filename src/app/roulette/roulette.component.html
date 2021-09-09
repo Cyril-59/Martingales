@@ -1,7 +1,9 @@
-<div class="flex">
-    <i style="margin: auto; cursor: pointer;" class="pi pi-refresh" (click)="reset()"></i>
+<div class="flex-between" style="align-items: center;">
+    <i style="cursor: pointer;" class="pi pi-question"    ></i>
+    <i style="cursor: pointer;" class="pi pi-trash" (click)="reset()"></i>
     <h2>Roulette</h2>
-    <i style="margin: auto; cursor: pointer;" class="pi pi-times" (click)="close()"></i>
+    <i style="cursor: pointer;" class="pi pi-refresh" (click)="switchMode()"></i>
+    <i style="cursor: pointer;" class="pi pi-times" (click)="close()"></i>
 </div>
 
 <!--<div class=" horizontal flex">
@@ -95,7 +97,7 @@
 </div>-->
 
 <div class="vertical">
-    <div class="flex">
+    <div *ngIf="!modeZone" class="flex">
         <div class="flex-column" style="padding-top: 2em; padding-bottom: 2em; justify-content: center">
             <p-toggleButton [ngClass]="{green: !numbers[43]}" class="tiers" onLabel="1-18" offLabel="1-18" [(ngModel)]="numbers[43]"></p-toggleButton>
             <p-toggleButton [ngClass]="{green: !numbers[44]}" class="tiers"  onLabel="EVEN" offLabel="EVEN" [(ngModel)]="numbers[44]"></p-toggleButton>
@@ -182,6 +184,15 @@
             <p-toggleButton [ngClass]="{green: !numbers[40]}" class="tiers" onLabel="1-12" offLabel="1-12" [(ngModel)]="numbers[40]"></p-toggleButton>
             <p-toggleButton [ngClass]="{green: !numbers[41]}" class="tiers"  onLabel="13-24" offLabel="13-24" [(ngModel)]="numbers[41]"></p-toggleButton>
             <p-toggleButton [ngClass]="{green: !numbers[42]}" class="tiers"  onLabel="25-36" offLabel="25-36" [(ngModel)]="numbers[42]"></p-toggleButton>
+        </div>
+    </div>
+    <div *ngIf="modeZone">
+        <img src="/assets/zones_small.png">
+        <div class="flex-between top">
+            <p-toggleButton [ngClass]="{green: !numbers[49]}" onLabel="Jeu 0" offLabel="Jeu 0" [(ngModel)]="numbers[49]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[50]}" onLabel="Voisins 0" offLabel="Voisins 0" [(ngModel)]="numbers[50]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[51]}" onLabel="Orphelins" offLabel="Orphelins" [(ngModel)]="numbers[51]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[52]}" onLabel="Cylindre" offLabel="Cylindre" [(ngModel)]="numbers[52]"></p-toggleButton>
         </div>
     </div>
     <div class="flex-between top">
