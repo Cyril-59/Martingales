@@ -29,6 +29,8 @@ export class MartingaleComponent implements OnInit {
   liveValue: number;
   maxTryReached = false;
   firstMaxTry: number;
+  modeLive = false;
+  guessLabel: string = 'Wait';
 
   @ViewChild(RouletteComponent)
   childRoulette: RouletteComponent;
@@ -135,8 +137,11 @@ export class MartingaleComponent implements OnInit {
     this.next();
     this.randomRoulette = this.childRoulette.randomRoulette;
     this.lastNumbers.unshift(this.randomRoulette);
-    this.lastNumbers.length = 11;
+    if (this.lastNumbers.length > 14) {
+      this.lastNumbers.length = 14;
+    }
     this.loseStreak = Math.max(this.loseStreak, this.currentIndex + 1 + this.prevLoseStreak);
+    this.guess();
     if (this.childRoulette.won) {
       this.win();
     } else {
@@ -154,6 +159,25 @@ export class MartingaleComponent implements OnInit {
     }
   }
 
+  simulateLive() {
+    this.liveDialog = false;
+    this.simulate(true);
+  }
+
+  simulate(live = false) {
+    if (live) {
+      this.childRoulette.play(this.liveValue);
+    } else {
+      this.childRoulette.play();
+    }
+    this.randomRoulette = this.childRoulette.randomRoulette;
+    this.lastNumbers.unshift(this.randomRoulette);
+    if (this.lastNumbers.length > 14) {
+      this.lastNumbers.length = 14;
+    }
+    this.guess();
+  }
+
   multiplay(times: number) {
     for (let i = 1; i <= times; i++) {
       this.play();
@@ -163,5 +187,103 @@ export class MartingaleComponent implements OnInit {
   live() {
     this.liveValue = null;
     this.liveDialog = true;
+  }
+
+  guess() {
+    if (this.martingale.gain == 3) {
+      let indexes = [0, 0, 0, 0, 0, 0];
+      for (let i = 0; i < this.lastNumbers.length; i++) {
+        if (indexes[0] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 12)) {
+          indexes[0]++;
+        }
+        if (indexes[1] == i && !(this.lastNumbers[i] > 12 && this.lastNumbers[i] <= 24)) {
+          indexes[1]++;
+        }
+        if (indexes[2] == i && !(this.lastNumbers[i] > 24 && this.lastNumbers[i] <= 36)) {
+          indexes[2]++;
+        }
+        if (indexes[3] == i && this.lastNumbers[i] % 3 != 1) {
+          indexes[3]++;
+        }
+        if (indexes[4] == i && this.lastNumbers[i] % 3 != 2) {
+          indexes[4]++;
+        }
+        if (indexes[5] == i && this.lastNumbers[i] % 3 != 0) {
+          indexes[5]++;
+        }
+      }
+      let i = indexes.indexOf(Math.max(...indexes));
+      if (indexes[i] < 5) {
+        this.guessLabel = 'Wait';
+      } else {
+        switch(i) {
+          case 0:
+            this.guessLabel = '1-12';
+            break;
+          case 1:
+              this.guessLabel = '13-24';
+              break;
+          case 2:
+            this.guessLabel = '25-36';
+            break;
+          case 3:
+            this.guessLabel = '1%3';
+            break;
+          case 4:
+            this.guessLabel = '2%3';
+            break;
+          case 5:
+            this.guessLabel = '0%3';
+            break;
+        }
+      }
+    } else if (this.martingale.gain == 2) {
+      let indexes = [0, 0, 0, 0, 0, 0];
+      for (let i = 0; i < this.lastNumbers.length; i++) {
+        if (indexes[0] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 18)) {
+          indexes[0]++;
+        }
+        if (indexes[1] == i && !(this.lastNumbers[i] > 18 && this.lastNumbers[i] <= 36)) {
+          indexes[1]++;
+        }
+        if (indexes[2] == i && this.lastNumbers[i] % 2 != 0) {
+          indexes[2]++;
+        }
+        if (indexes[3] == i && this.lastNumbers[i] % 2 != 1) {
+          indexes[3]++;
+        }
+        if (indexes[4] == i && !this.childRoulette.reds.includes(this.lastNumbers[i])) {
+          indexes[4]++;
+        }
+        if (indexes[5] == i && !this.childRoulette.blacks.includes(this.lastNumbers[i])) {
+          indexes[5]++;
+        }
+      }
+      let i = indexes.indexOf(Math.max(...indexes));
+      if (indexes[i] < 5) {
+        this.guessLabel = 'Wait';
+      } else {
+        switch(i) {
+          case 0:
+            this.guessLabel = '1-18';
+            break;
+          case 1:
+              this.guessLabel = '19-36';
+              break;
+          case 2:
+            this.guessLabel = 'EVEN';
+            break;
+          case 3:
+            this.guessLabel = 'ODD';
+            break;
+          case 4:
+            this.guessLabel = 'RED';
+            break;
+          case 5:
+            this.guessLabel = 'BLACK';
+            break;
+        }
+      }
+    }
   }
 }

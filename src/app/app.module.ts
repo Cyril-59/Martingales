@@ -9,6 +9,7 @@ import { ChartModule } from 'primeng/chart';
 import {CheckboxModule} from 'primeng/checkbox';
 import {ToggleButtonModule} from 'primeng/togglebutton';
 import {DialogModule} from 'primeng/dialog';
+import {InputSwitchModule} from 'primeng/inputswitch';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MartingaleComponent } from './martingale/martingale.component';
@@ -37,7 +38,8 @@ import { RouletteComponent } from './roulette/roulette.component';
     ChartModule,
     ToggleButtonModule,
     CheckboxModule,
-    DialogModule
+    DialogModule,
+    InputSwitchModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,8 +2,11 @@
     <div class="flex-between">
         <h2 style="font-size: 1em;">{{ martingale.titre }}</h2>
         <span style="padding-top: .5em">
-            <button class="right" pButton (click)="delete()" label="Sup"></button>
-            <button pButton (click)="close()" label="Close"></button>
+            <!--<button class="right" pButton (click)="delete()" label="Sup"></button>-->
+            <!--<button pButton (click)="close()" label="Close"></button>-->
+            <p-inputSwitch class="right" [(ngModel)]="modeLive"></p-inputSwitch>
+            <i class="pi pi-backward" (click)="ready = false"></i>
+            <i class="pi pi-times" (click)="close()"></i>
         </span>
     </div>
     <p-table [value]="tab" responsiveLayout="scroll">
@@ -37,7 +40,8 @@
                 {{ i }}
             </span>
         </div>
-        <button pButton (click)="live()" label="Live"></button>
+        <button *ngIf="modeLive" style="margin-right: .5em;" pButton (click)="live()" label="Live"></button>
+        <button *ngIf="!modeLive" style="margin-right: .5em;" pButton (click)="simulate()" label="Pass"></button>
         <!--<button pButton (click)="generateRandomRoulette()" [label]="'Bille : ' + randomRoulette"></button>
         <button pButton (click)="next()" label="Next"></button>
         <button pButton (click)="win()" label="Win"></button>-->
@@ -50,14 +54,20 @@
             <div>
                 Nb plays : {{ nbJeux }}
             </div>
+            <div>
+                Guess : {{ guessLabel }}
+            </div>
         </div>
-        <button pButton (click)="play()" label="Play"></button>
-        <button pButton (click)="multiplay(10)" label="Play 10"></button>
-        <button pButton (click)="multiplay(100)" label="Play 100"></button>
+        <ng-container *ngIf="!modeLive">
+            <button style="max-height: 2.5em;" pButton (click)="play()" label="Play"></button>
+            <button style="max-height: 2.5em;" pButton (click)="multiplay(10)" label="Play 10"></button>
+            <button style="max-height: 2.5em; margin-right: .5em;" pButton (click)="multiplay(100)" label="Play 100"></button>
+        </ng-container>
     </div>
 </div>
 <app-roulette [hidden]="ready" [martingale]="martingale" (onContinue)="ready = true" (onClose)="close()"></app-roulette>
 <p-dialog [(visible)]="liveDialog" header="Roulette live" [modal]="true">
     <input type="number" placeholder="Live value" pInputText [(ngModel)]="liveValue" autofocus>
+    <p-button (click)="simulateLive()" label="Pass" styleClass="p-button-text" style="margin-left: 1em;"></p-button>
     <p-button (click)="playLive()" label="Play" styleClass="p-button-text" style="margin-left: 1em;"></p-button>
 </p-dialog>

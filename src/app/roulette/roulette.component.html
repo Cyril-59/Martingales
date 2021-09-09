@@ -98,10 +98,10 @@
     <div class="flex">
         <div class="flex-column" style="padding-top: 2em; padding-bottom: 2em; justify-content: center">
             <p-toggleButton [ngClass]="{green: !numbers[43]}" class="tiers" onLabel="1-18" offLabel="1-18" [(ngModel)]="numbers[43]"></p-toggleButton>
-            <p-toggleButton [ngClass]="{green: !numbers[44]}" class="tiers"  onLabel="PAIR" offLabel="PAIR" [(ngModel)]="numbers[44]"></p-toggleButton>
-            <p-toggleButton [ngClass]="{green: !numbers[45]}" class="tiers"  onLabel="ROUGE" offLabel="ROUGE" [(ngModel)]="numbers[45]"></p-toggleButton>
-            <p-toggleButton [ngClass]="{green: !numbers[46]}" class="tiers" onLabel="NOIR" offLabel="NOIR" [(ngModel)]="numbers[46]"></p-toggleButton>
-            <p-toggleButton [ngClass]="{green: !numbers[47]}" class="tiers"  onLabel="IMPAIR" offLabel="IMPAIR" [(ngModel)]="numbers[47]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[44]}" class="tiers"  onLabel="EVEN" offLabel="EVEN" [(ngModel)]="numbers[44]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[45]}" class="tiers"  onLabel="RED" offLabel="RED" [(ngModel)]="numbers[45]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[46]}" class="tiers" onLabel="BLACK" offLabel="BLACK" [(ngModel)]="numbers[46]"></p-toggleButton>
+            <p-toggleButton [ngClass]="{green: !numbers[47]}" class="tiers"  onLabel="ODD" offLabel="ODD" [(ngModel)]="numbers[47]"></p-toggleButton>
             <p-toggleButton [ngClass]="{green: !numbers[48]}" class="tiers"  onLabel="19-36" offLabel="19-36" [(ngModel)]="numbers[48]"></p-toggleButton>
         </div>
         <div class="flex-column">
@@ -191,8 +191,6 @@
         <div *ngIf="randomRoulette != undefined" [ngClass]="{'random-show': randomShow, 'green': randomRoulette == 0, 'red': reds.includes(randomRoulette), 'black': blacks.includes(randomRoulette)}" class="random" style="color: white; text-align: center; border: 3px solid white; min-width: 2em; font-size: 1em; border-radius: 50%; padding: 4px;">
             {{ randomRoulette }}
         </div>
-    </div>
-    <div class="flex top" style="justify-content: flex-end">
         <button pButton label="Continuer" (click)="continue()"></button>
     </div>
 </div>

@@ -9,3 +9,8 @@ tr.active {
 tr.win {
     background-color: #8ee070 !important;
 }
+
+.pi {
+    font-size: 1.5em;
+    margin-right: .5em;
+}
