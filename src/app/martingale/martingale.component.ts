@@ -31,6 +31,7 @@ export class MartingaleComponent implements OnInit {
   firstMaxTry: number;
   modeLive = false;
   guessLabel: string = 'Wait';
+  historySize = 13;
 
   @ViewChild(RouletteComponent)
   childRoulette: RouletteComponent;
@@ -137,8 +138,8 @@ export class MartingaleComponent implements OnInit {
     this.next();
     this.randomRoulette = this.childRoulette.randomRoulette;
     this.lastNumbers.unshift(this.randomRoulette);
-    if (this.lastNumbers.length > 14) {
-      this.lastNumbers.length = 14;
+    if (this.lastNumbers.length > this.historySize) {
+      this.lastNumbers.length = this.historySize;
     }
     this.loseStreak = Math.max(this.loseStreak, this.currentIndex + 1 + this.prevLoseStreak);
     this.guess();
@@ -172,8 +173,8 @@ export class MartingaleComponent implements OnInit {
     }
     this.randomRoulette = this.childRoulette.randomRoulette;
     this.lastNumbers.unshift(this.randomRoulette);
-    if (this.lastNumbers.length > 14) {
-      this.lastNumbers.length = 14;
+    if (this.lastNumbers.length > this.historySize) {
+      this.lastNumbers.length = this.historySize;
     }
     this.guess();
   }
