@@ -188,7 +188,7 @@
         <button pButton label="Test" (click)="play()"></button>
         <div *ngIf="won" style="justify-content: center; display: flex; flex-direction: column;">Gagné</div>
         <div *ngIf="won != undefined && !won" style="justify-content: center; display: flex; flex-direction: column;">Perdu</div>
-        <div *ngIf="randomRoulette != undefined" [ngClass]="{'random-show': randomShow, 'green': randomRoulette == 0, 'red': reds.includes(randomRoulette), 'black': blacks.includes(randomRoulette)}" class="random" style="color: white; text-align: center; border: 3px solid white; min-width: 2em; font-size: 1.5em; border-radius: 50%; padding: 8px;">
+        <div *ngIf="randomRoulette != undefined" [ngClass]="{'random-show': randomShow, 'green': randomRoulette == 0, 'red': reds.includes(randomRoulette), 'black': blacks.includes(randomRoulette)}" class="random" style="color: white; text-align: center; border: 3px solid white; min-width: 2em; font-size: 1em; border-radius: 50%; padding: 4px;">
             {{ randomRoulette }}
         </div>
     </div>

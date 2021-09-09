@@ -1,7 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 
 body {
-    background-color: #918fa0a1;
+    background-color: #918fa050;
+    margin: 0.25em 0;
+}
+
+.background {
+    background-image: url("/assets/background.png");
+    background-position-x: center;
+    background-repeat: no-repeat;
+    background-position: cover;
+    height: 57em !important;
 }
 
 /* FLEX */
