@@ -10,7 +10,8 @@ body {
     background-position-x: center;
     background-repeat: no-repeat;
     background-position: cover;
-    height: 57em !important;
+    background-size: 47em;
+    height: 50em !important;
 }
 
 /* FLEX */

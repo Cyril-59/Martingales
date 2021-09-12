@@ -54,7 +54,11 @@ export class MartingaleComponent implements OnInit {
     this.tab = [];
     this.tab.push(this.martingale);
     let i = 1;
-    while(i++ <= 10) {
+    let maxCompute = 5;
+    if (this.martingale.maxTry && this.martingale.maxTry < maxCompute) {
+      maxCompute = this.martingale.maxTry;
+    }
+    while(i++ < maxCompute) {
       this.compute();
     }
     this.firstMaxTry = this.martingale.maxTry;

@@ -15,20 +15,20 @@
         <app-roulette (onClose)="showRoulette = !showRoulette"></app-roulette>
     </div>
     <div *ngIf="start" class="flex-column evenly" style="margin-top: auto;">
-        <div class="flex-between">
-            <div style="margin-top: 1.5em">Min: {{ minCash }}</div>
+        <div [ngClass]="{ 'flex-between': !add, 'flex-center': add }">
+            <div *ngIf="!add" style="margin-top: 1.5em">Min: {{ minCash }}</div>
             <div class="flex-center" [ngClass]="getCashClass()">{{ cash }} €</div>
-            <div style="margin-top: 1.5em">Max: {{ maxCash }}</div>
+            <div *ngIf="!add" style="margin-top: 1.5em">Max: {{ maxCash }}</div>
         </div>
-        <div class="flex-center flex-column" *ngIf="!add && list" style="margin-top: 2em;">
+        <div class="flex-between" *ngIf="!add && list" style="margin-top: 2em;">
+            <i style="margin: auto; cursor: pointer;" class="pi pi-plus" (click)="plus()"></i>
             <p-dropdown *ngIf="init" class="flex-center" placeholder="Choisir une martingale" [options]="options" (onChange)="select($event)"></p-dropdown>
-            <i style="margin: auto; cursor: pointer; margin-top: 1em" class="pi pi-plus" (click)="plus()"></i>
-            <i style="margin: auto; cursor: pointer; margin-top: 1em" class="pi pi-refresh" (click)="refresh()"></i>
+            <i style="margin: auto; cursor: pointer;" class="pi pi-refresh" (click)="refresh()"></i>
         </div>
         <div class="flex-center" *ngIf="!add && !list">
             <app-martingale *ngIf="martingale" class="top" [cash]="cash" [martingale]="martingale"  (onDelete)="supprimer()" (onClose)="list = true" (onNext)="substract($event)" (onWin)="win($event)"></app-martingale>
         </div>
-        <div *ngIf="add" class="flex-center" style="margin-top: 2em;">
+        <div *ngIf="add" class="flex-center">
             <app-form (roulette)="ajouter($event, true)" (onCancel)="add = false"></app-form>
         </div>
         <p-chart *ngIf="showChart" class="top" type="line" [data]="data"></p-chart>
@@ -40,7 +40,7 @@
     </div>
     <router-outlet></router-outlet>
 </div>
-<p-dialog [(visible)]="!!state" [header]="state" [closable]="false" position="top">
+<p-dialog *ngIf="!!state" [(visible)]="!!state" [header]="state" [closable]="false" position="top">
     <p>Victoires : {{ nbVictory }}</p>
     <p>Banqueroutes : {{ nbBankruptcy }}</p>
     <p-button (click)="refresh()" label="Stop" styleClass="p-button-text" style="margin-left: 1em; margin-top: 1em;"></p-button>
