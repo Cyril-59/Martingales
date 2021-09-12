@@ -65,6 +65,8 @@ export class AppComponent implements OnInit {
     this.ajouter(new Roulette(RouletteType.ZONE, 18, 2, 20/37, 'Voisins Zéro', 1, 18, false));
     this.ajouter(new Roulette(RouletteType.ZONE, 8, 3.5, 30/37, 'Jeu Zéro', 1, 8, false));
 
+    this.ajouter(new Roulette(RouletteType.AUTRE, 2, 36, 36/37, 'Single', 2, 2, false));
+
     // TODO : ZONES (autres ?)
   }
 

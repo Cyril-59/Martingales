@@ -73,9 +73,9 @@ export class RouletteComponent implements OnInit {
         this.won = true;
       } else if (n%3 == 2 && this.numbers[38]) {
         this.won = true;
-      } else if (n%3 == 0 && this.numbers[39]) {
+      } else if (n > 0 && n%3 == 0 && this.numbers[39]) {
         this.won = true;
-      } else if (n%2 == 0 && this.numbers[44]) {
+      } else if (n > 0 && n%2 == 0 && this.numbers[44]) {
         this.won = true;
       } else if (n%2 == 1 && this.numbers[47]) {
         this.won = true;
