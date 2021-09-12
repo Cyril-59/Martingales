@@ -32,6 +32,8 @@ export class MartingaleComponent implements OnInit {
   modeLive = false;
   guessLabel: string = 'Wait';
   historySize = 13;
+  showChangeCash = false;
+  newCash = this.cash;
 
   @ViewChild(RouletteComponent)
   childRoulette: RouletteComponent;
@@ -47,6 +49,9 @@ export class MartingaleComponent implements OnInit {
 
   @Output()
   onWin: EventEmitter<number> = new EventEmitter();
+
+  @Output()
+  onChangeCash: EventEmitter<number> = new EventEmitter();
 
   constructor() { }
 
@@ -338,5 +343,15 @@ export class MartingaleComponent implements OnInit {
             break;
       }
     }
+  }
+
+  changeCash() {
+    this.showChangeCash = true;
+    this.newCash = this.cash;
+  }
+
+  validCash() {
+    this.onChangeCash.emit(this.newCash);
+    this.showChangeCash = false;
   }
 }

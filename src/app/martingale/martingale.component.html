@@ -5,6 +5,7 @@
             <!--<button class="right" pButton (click)="delete()" label="Sup"></button>-->
             <!--<button pButton (click)="close()" label="Close"></button>-->
             <p-inputSwitch class="right" [(ngModel)]="modeLive"></p-inputSwitch>
+            <i class="pi pi-dollar" (click)="changeCash()"></i>
             <i class="pi pi-backward" (click)="ready = false"></i>
             <i class="pi pi-times" (click)="close()"></i>
         </span>
@@ -70,4 +71,9 @@
     <input type="number" placeholder="Live value" pInputText [(ngModel)]="liveValue" autofocus>
     <p-button class="left" (click)="simulateLive()" label="Pass" styleClass="p-button-text"></p-button>
     <p-button class="left" (click)="playLive()" label="Play" styleClass="p-button-text"></p-button>
+</p-dialog>
+<p-dialog [(visible)]="showChangeCash" header="Change cash" [modal]="true">
+    <input type="number" placeholder="New value" pInputText [(ngModel)]="newCash" autofocus>
+    <p-button class="left" (click)="showChangeCash = false;" label="Cancel" styleClass="p-button-text"></p-button>
+    <p-button class="left" (click)="validCash()" label="Valid" styleClass="p-button-text"></p-button>
 </p-dialog>

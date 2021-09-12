@@ -112,7 +112,6 @@ initCascade() {
   ajouter(roulette: Roulette, select = false) {
     this.init = false;
     this.martingales.push(roulette);
-    console.log(roulette.type)
     switch (roulette.type) {
       case RouletteType.TIERS:
         this.groupedOptions[0].items.push({value: roulette.titre, label: roulette.titre});
@@ -133,7 +132,6 @@ initCascade() {
         this.groupedOptions[5].items.push({value: roulette.titre, label: roulette.titre});
         break;
     }
-    //this.options.push({value: roulette.titre, label: roulette.titre});
     this.add = false;
     if (select) {
       this.select({ value: this.martingales[this.martingales.length - 1].titre });
