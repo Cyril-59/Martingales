@@ -20,17 +20,38 @@
             <div class="flex-center" [ngClass]="getCashClass()">{{ cash }} €</div>
             <div *ngIf="!add" style="margin-top: 1.5em">Max: {{ maxCash }}</div>
         </div>
-        <div class="flex-between" *ngIf="!add && list" style="margin-top: 2em;">
+        <div class="flex-between" *ngIf="!add && list && !showParams" style="margin-top: 2em;">
+            <i style="margin: auto; cursor: pointer;" class="pi pi-question" (click)="showInfo = true;"></i>
             <i style="margin: auto; cursor: pointer;" class="pi pi-plus" (click)="plus()"></i>
-            <!--<p-dropdown *ngIf="init" class="flex-center" placeholder="Choisir une martingale" [options]="options" (onChange)="select($event)"></p-dropdown>-->
             <p-dropdown *ngIf="init" class="flex-center" placeholder="Choisir une martingale" [options]="groupedOptions" [group]="true" (onChange)="select($event)"></p-dropdown>
             <i style="margin: auto; cursor: pointer;" class="pi pi-refresh" (click)="refresh()"></i>
+            <i style="margin: auto; cursor: pointer;" class="pi pi-cog" (click)="params()"></i>
         </div>
-        <div class="flex-center" *ngIf="!add && !list">
-            <app-martingale *ngIf="martingale" class="top" [cash]="cash" [martingale]="martingale"  (onDelete)="supprimer()" (onClose)="list = true" (onNext)="substract($event)" (onWin)="win($event)" (onChangeCash)="cash=$event"></app-martingale>
+        <div class="flex-center" *ngIf="!add && !list && !showParams">
+            <app-martingale *ngIf="martingale" class="top" [cash]="cash" [martingale]="martingale" [historySize]="historySize" [guessSize]="guessSize" [tabSize]="tabSize" (onDelete)="supprimer()" (onClose)="list = true" (onNext)="substract($event)" (onWin)="win($event)" (onChangeCash)="cash=$event"></app-martingale>
         </div>
         <div *ngIf="add" class="flex-center">
             <app-form (roulette)="ajouter($event, true)" (onCancel)="add = false"></app-form>
+        </div>
+        <div *ngIf="showParams" class="flex-center">
+            <div class="flex-column">
+                <h2>Paramètres</h2>
+                <span class="flex-between align-center">
+                    <label>Tab Size : </label>
+                    <input type="number" pInputText [(ngModel)]="tabSize">
+                </span>
+                <span class="flex-between align-center">
+                    <label>History Size : </label>
+                    <input type="number" pInputText [(ngModel)]="historySize">
+                </span>
+                <span class="flex-between align-center">
+                    <label>Guess Size : </label>
+                    <input type="number" pInputText [(ngModel)]="guessSize">
+                </span>
+                <span class="flex-end top">
+                    <button class="p-button-danger" pButton type="button" label="Valider" (click)="showParams = false"></button>
+                </span>
+            </div>
         </div>
         <p-chart *ngIf="showChart" class="top" type="line" [data]="data"></p-chart>
     </div>
@@ -46,4 +67,7 @@
     <p>Banqueroutes : {{ nbBankruptcy }}</p>
     <p-button (click)="refresh()" label="Stop" styleClass="p-button-text" style="margin-left: 1em; margin-top: 1em;"></p-button>
     <p-button (click)="retry()" label="Retry" styleClass="p-button-text" style="margin-left: 1em; margin-top: 1em;"></p-button>
+</p-dialog>
+<p-dialog [(visible)]="showInfo" header="Informations" [modal]="true">
+    <p>TODO INFOS</p>
 </p-dialog>

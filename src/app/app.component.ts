@@ -33,13 +33,19 @@ export class AppComponent implements OnInit {
   nbVictory: number = 0;
   nbBankruptcy: number = 0;
   prevMartingale: Roulette;
-  cascade: any[];
+  showInfo = false;
+  
+  showParams = false;
+  historySize = 13;
+  guessSize = null;
+  tabSize = 5;
 
   @ViewChild(UIChart)
   chartComp: UIChart;
 
   ngOnInit() {
-    this.initCascade();
+    this.initGroup();
+
     this.ajouter(new Roulette(RouletteType.TIERS, 2, 3, 25/37, 'Tiers Min 4', 4));
     this.ajouter(new Roulette(RouletteType.TIERS, 2, 3, 25/37, 'Tiers Croissant', 4, 2, true));
     this.ajouter(new Roulette(RouletteType.TIERS, 4, 3, 25/37, 'Tiers Max 32', 8, 2, false, 32));
@@ -65,12 +71,10 @@ export class AppComponent implements OnInit {
     this.ajouter(new Roulette(RouletteType.ZONE, 18, 2, 20/37, 'Voisins Zéro', 1, 18, false));
     this.ajouter(new Roulette(RouletteType.ZONE, 8, 3.5, 30/37, 'Jeu Zéro', 1, 8, false));
 
-    this.ajouter(new Roulette(RouletteType.AUTRE, 2, 36, 36/37, 'Single', 2, 2, false));
-
-    // TODO : ZONES (autres ?)
+    this.ajouter(new Roulette(RouletteType.AUTRE, 2, 36, 36/37, 'Single', 2, 2, false, 100, 1000));
   }
 
-initCascade() {
+  initGroup() {
   this.groupedOptions = [
     {
       label: 'Tiers',
@@ -259,7 +263,6 @@ initCascade() {
     this.minCash = null;
     this.maxCash = null;
     this.cash = this.startCash;
-    this.objectif = null;
     this.state = null;
     this.nbBankruptcy = 0;
     this.nbVictory = 0;
@@ -274,5 +277,10 @@ initCascade() {
     this.cash = this.startCash;
     this.minCash = this.startCash;
     this.maxCash = this.startCash;
+    this.showChart = false;
+  }
+
+  params() {
+    this.showParams = true;
   }
 }

@@ -1,5 +1,5 @@
 <div class="flex-between" style="align-items: center;">
-    <i style="cursor: pointer;" class="pi pi-question"    ></i>
+    <i style="cursor: pointer;" class="pi pi-question" (click)="showInfo = true"></i>
     <i style="cursor: pointer;" class="pi pi-trash" (click)="reset()"></i>
     <h2>Roulette</h2>
     <i style="cursor: pointer;" class="pi pi-refresh" (click)="switchMode()"></i>
@@ -205,3 +205,41 @@
         <button pButton label="Continuer" (click)="continue()"></button>
     </div>
 </div>
+<p-dialog [(visible)]="showInfo" header="Informations" [modal]="true">
+    <p *ngIf="!modeZone">TODO INFO MODE NORMAL</p>
+    <div *ngIf="modeZone">
+        <p>Tiers du cylindre :</p>
+        <ul>
+            <li>5 et 8 à cheval</li>
+            <li>10 et 11 à cheval</li>
+            <li>13 et 16 à cheval</li>
+            <li>23 et 24 à cheval</li>
+            <li>27 et 30 à cheval</li>
+            <li>33 et 36 à cheval</li>
+        </ul>
+        <p>Jeu zéro :</p>
+        <ul>
+            <li>0, 2 et 3 en transversale</li>
+            <li>4 et 7 à cheval</li>
+            <li>12 et 15 à cheval</li>
+            <li>18 et 21 à cheval</li>
+            <li>25, 26, 28 et 29 en carré (X2)</li>
+            <li>32 et 35 à cheval</li>
+        </ul>
+        <p>Voisins du zéro :</p>
+        <ul>
+            <li>0 et 3 à cheval</li>
+            <li>12 et 15 à cheval</li>
+            <li>18 et 21 à cheval</li>
+            <li>26 en plein</li>
+            <li>32 et 35 à cheval</li>
+        </ul>
+        <p>Orphelins :</p>
+        <ul>
+            <li>1 en plein</li>
+            <li>14 et 17 à cheval</li>
+            <li>17 et 20 à cheval</li>
+            <li>31 et 34 à cheval</li>
+        </ul>
+    </div>
+</p-dialog>

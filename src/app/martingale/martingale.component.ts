@@ -15,6 +15,15 @@ export class MartingaleComponent implements OnInit {
   @Input()
   cash: number;
 
+  @Input()
+  historySize = 13;
+
+  @Input()
+  tabSize = 5;
+
+  @Input()
+  guessSize: number;
+
   tab: Roulette[];
   currentIndex: number = -1;
   nbJeux = 0;
@@ -31,7 +40,6 @@ export class MartingaleComponent implements OnInit {
   firstMaxTry: number;
   modeLive = false;
   guessLabel: string = 'Wait';
-  historySize = 13;
   showChangeCash = false;
   newCash = this.cash;
 
@@ -59,7 +67,7 @@ export class MartingaleComponent implements OnInit {
     this.tab = [];
     this.tab.push(this.martingale);
     let i = 1;
-    let maxCompute = 5;
+    let maxCompute = this.tabSize;
     if (this.martingale.maxTry && this.martingale.maxTry < maxCompute) {
       maxCompute = this.martingale.maxTry;
     }
@@ -201,15 +209,15 @@ export class MartingaleComponent implements OnInit {
 
   guess() {
     if (this.martingale.gain == 3) {
-      this.guessTiers();
+      this.guessTiers(this.guessSize != null ? this.guessSize : 5);
     } else if (this.martingale.gain == 2) {
-      this.guessDemi();
+      this.guessDemi(this.guessSize != null ? this.guessSize : 4);
     } else if (this.martingale.gain == 1.5) {
-      this.guessDeuxTiers();
+      this.guessDeuxTiers(this.guessSize != null ? this.guessSize : 3);
     }
   }
 
-  guessDemi() {
+  guessDemi(guessSize) {
     let indexes = [0, 0, 0, 0, 0, 0];
       for (let i = 0; i < this.lastNumbers.length; i++) {
         if (indexes[0] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 18)) {
@@ -232,7 +240,7 @@ export class MartingaleComponent implements OnInit {
         }
       }
       let i = indexes.indexOf(Math.max(...indexes));
-      if (indexes[i] < 4) {
+      if (indexes[i] < guessSize) {
         this.guessLabel = 'Wait';
       } else {
         switch(i) {
@@ -258,7 +266,7 @@ export class MartingaleComponent implements OnInit {
       }
   }
 
-  guessTiers() {
+  guessTiers(guessSize) {
     let indexes = [0, 0, 0, 0, 0, 0, 0];
     for (let i = 0; i < this.lastNumbers.length; i++) {
       if (indexes[0] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 12)) {
@@ -284,7 +292,7 @@ export class MartingaleComponent implements OnInit {
       }
     }
     let i = indexes.indexOf(Math.max(...indexes));
-    if (indexes[i] < 5) {
+    if (indexes[i] < guessSize) {
       this.guessLabel = 'Wait';
     } else {
         switch(i) {
@@ -313,7 +321,7 @@ export class MartingaleComponent implements OnInit {
     }
   }
 
-  guessDeuxTiers() {
+  guessDeuxTiers(guessSize) {
     let indexes = [0, 0, 0];
     for (let i = 0; i < this.lastNumbers.length; i++) {
       if (indexes[0] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 24)) {
@@ -328,7 +336,7 @@ export class MartingaleComponent implements OnInit {
     
     }
     let i = indexes.indexOf(Math.max(...indexes));
-    if (indexes[i] < 3) {
+    if (indexes[i] < guessSize) {
       this.guessLabel = 'Wait';
     } else {
         switch(i) {
