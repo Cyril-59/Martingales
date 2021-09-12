@@ -68,6 +68,6 @@
 <app-roulette [hidden]="ready" [martingale]="martingale" (onContinue)="ready = true" (onClose)="close()"></app-roulette>
 <p-dialog [(visible)]="liveDialog" header="Roulette live" [modal]="true">
     <input type="number" placeholder="Live value" pInputText [(ngModel)]="liveValue" autofocus>
-    <p-button (click)="simulateLive()" label="Pass" styleClass="p-button-text" style="margin-left: 1em;"></p-button>
-    <p-button (click)="playLive()" label="Play" styleClass="p-button-text" style="margin-left: 1em;"></p-button>
+    <p-button class="left" (click)="simulateLive()" label="Pass" styleClass="p-button-text"></p-button>
+    <p-button class="left" (click)="playLive()" label="Play" styleClass="p-button-text"></p-button>
 </p-dialog>

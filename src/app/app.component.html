@@ -22,7 +22,8 @@
         </div>
         <div class="flex-between" *ngIf="!add && list" style="margin-top: 2em;">
             <i style="margin: auto; cursor: pointer;" class="pi pi-plus" (click)="plus()"></i>
-            <p-dropdown *ngIf="init" class="flex-center" placeholder="Choisir une martingale" [options]="options" (onChange)="select($event)"></p-dropdown>
+            <!--<p-dropdown *ngIf="init" class="flex-center" placeholder="Choisir une martingale" [options]="options" (onChange)="select($event)"></p-dropdown>-->
+            <p-dropdown *ngIf="init" class="flex-center" placeholder="Choisir une martingale" [options]="groupedOptions" [group]="true" (onChange)="select($event)"></p-dropdown>
             <i style="margin: auto; cursor: pointer;" class="pi pi-refresh" (click)="refresh()"></i>
         </div>
         <div class="flex-center" *ngIf="!add && !list">

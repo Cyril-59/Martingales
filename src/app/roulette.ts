@@ -1,3 +1,7 @@
+export enum RouletteType {
+  TIERS, DEMI, DOUBLE_TIERS, CARRE, ZONE, AUTRE
+}
+
 export class Roulette {
   mise: number;
   gain: number;
@@ -10,8 +14,10 @@ export class Roulette {
   miseMax: number;
   maxTry: number;
   dynamic: boolean;
+  type: RouletteType;
 
-  constructor(mise, gain, proba, titre = '', gainMini = 0, gap = 2, gainCroissant = false, miseMax = 1000000, maxTry = 100, dynamic = false) {
+  constructor(type: RouletteType, mise, gain, proba, titre = '', gainMini = 0, gap = 2, gainCroissant = false, miseMax = 1000000, maxTry = 100, dynamic = false) {
+    this.type = type
     this.mise = mise;
     this.gain = gain;
     this.proba = proba;

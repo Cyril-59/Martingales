@@ -75,7 +75,7 @@ export class MartingaleComponent implements OnInit {
         break;
       }
     }
-    const newRoulette = new Roulette(newMise, lastRoulette.gain, lastRoulette.proba * this.martingale.proba);
+    const newRoulette = new Roulette(this.martingale.type, newMise, lastRoulette.gain, lastRoulette.proba * this.martingale.proba);
     newRoulette.perte = perte;
     if (this.martingale.gainCroissant) {
       this.martingale.gainMini = this.martingale.gainMini + 2;
@@ -196,60 +196,16 @@ export class MartingaleComponent implements OnInit {
 
   guess() {
     if (this.martingale.gain == 3) {
-      let indexes = [0, 0, 0, 0, 0, 0, 0];
-      for (let i = 0; i < this.lastNumbers.length; i++) {
-        if (indexes[0] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 12)) {
-          indexes[0]++;
-        }
-        if (indexes[1] == i && !(this.lastNumbers[i] > 12 && this.lastNumbers[i] <= 24)) {
-          indexes[1]++;
-        }
-        if (indexes[2] == i && !(this.lastNumbers[i] > 24 && this.lastNumbers[i] <= 36)) {
-          indexes[2]++;
-        }
-        if (indexes[3] == i && this.lastNumbers[i] % 3 != 1) {
-          indexes[3]++;
-        }
-        if (indexes[4] == i && this.lastNumbers[i] % 3 != 2) {
-          indexes[4]++;
-        }
-        if (indexes[5] == i && this.lastNumbers[i] % 3 != 0) {
-          indexes[5]++;
-        }
-        if (indexes[6] == i && !this.childRoulette.cylindre.includes(this.lastNumbers[i])) {
-          indexes[6]++;
-        }
-      }
-      let i = indexes.indexOf(Math.max(...indexes));
-      if (indexes[i] < 5) {
-        this.guessLabel = 'Wait';
-      } else {
-        switch(i) {
-          case 0:
-            this.guessLabel = '1-12';
-            break;
-          case 1:
-              this.guessLabel = '13-24';
-              break;
-          case 2:
-            this.guessLabel = '25-36';
-            break;
-          case 3:
-            this.guessLabel = '1%3';
-            break;
-          case 4:
-            this.guessLabel = '2%3';
-            break;
-          case 5:
-            this.guessLabel = '0%3';
-            break;
-          case 6:
-            this.guessLabel = 'CYL';
-            break;
-        }
-      }
+      this.guessTiers();
     } else if (this.martingale.gain == 2) {
-      let indexes = [0, 0, 0, 0, 0, 0];
+      this.guessDemi();
+    } else if (this.martingale.gain == 1.5) {
+      this.guessDeuxTiers();
+    }
+  }
+
+  guessDemi() {
+    let indexes = [0, 0, 0, 0, 0, 0];
       for (let i = 0; i < this.lastNumbers.length; i++) {
         if (indexes[0] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 18)) {
           indexes[0]++;
@@ -271,7 +227,7 @@ export class MartingaleComponent implements OnInit {
         }
       }
       let i = indexes.indexOf(Math.max(...indexes));
-      if (indexes[i] < 5) {
+      if (indexes[i] < 4) {
         this.guessLabel = 'Wait';
       } else {
         switch(i) {
@@ -294,6 +250,92 @@ export class MartingaleComponent implements OnInit {
             this.guessLabel = 'BLACK';
             break;
         }
+      }
+  }
+
+  guessTiers() {
+    let indexes = [0, 0, 0, 0, 0, 0, 0];
+    for (let i = 0; i < this.lastNumbers.length; i++) {
+      if (indexes[0] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 12)) {
+        indexes[0]++;
+      }
+      if (indexes[1] == i && !(this.lastNumbers[i] > 12 && this.lastNumbers[i] <= 24)) {
+        indexes[1]++;
+      }
+      if (indexes[2] == i && !(this.lastNumbers[i] > 24 && this.lastNumbers[i] <= 36)) {
+        indexes[2]++;
+      }
+      if (indexes[3] == i && this.lastNumbers[i] % 3 != 1) {
+        indexes[3]++;
+      }
+      if (indexes[4] == i && this.lastNumbers[i] % 3 != 2) {
+        indexes[4]++;
+      }
+      if (indexes[5] == i && this.lastNumbers[i] % 3 != 0) {
+        indexes[5]++;
+      }
+      if (indexes[6] == i && !this.childRoulette.cylindre.includes(this.lastNumbers[i])) {
+        indexes[6]++;
+      }
+    }
+    let i = indexes.indexOf(Math.max(...indexes));
+    if (indexes[i] < 5) {
+      this.guessLabel = 'Wait';
+    } else {
+        switch(i) {
+          case 0:
+            this.guessLabel = '1-12';
+            break;
+          case 1:
+            this.guessLabel = '13-24';
+            break;
+          case 2:
+            this.guessLabel = '25-36';
+            break;
+          case 3:
+            this.guessLabel = '1%3';
+            break;
+          case 4:
+            this.guessLabel = '2%3';
+            break;
+          case 5:
+            this.guessLabel = '0%3';
+            break;
+          case 6:
+            this.guessLabel = 'CYL';
+            break;
+      }
+    }
+  }
+
+  guessDeuxTiers() {
+    let indexes = [0, 0, 0];
+    for (let i = 0; i < this.lastNumbers.length; i++) {
+      if (indexes[0] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 24)) {
+        indexes[0]++;
+      }
+      if (indexes[1] == i && !(this.lastNumbers[i] > 12 && this.lastNumbers[i] <= 36)) {
+        indexes[1]++;
+      }
+      if (indexes[2] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 12) && !(this.lastNumbers[i] > 24 && this.lastNumbers[i] <= 36)) {
+        indexes[2]++;
+      }
+    
+    }
+    let i = indexes.indexOf(Math.max(...indexes));
+    if (indexes[i] < 3) {
+      this.guessLabel = 'Wait';
+    } else {
+        switch(i) {
+          case 0:
+            this.guessLabel = '1-24';
+            break;
+          case 1:
+            this.guessLabel = '13-36';
+            break;
+          case 2:
+            this.guessLabel = '1-12/25-36';
+            break;
       }
     }
   }

@@ -79,6 +79,11 @@ body {
     align-self: flex-end;
 }
 
+.align-center
+{
+    align-items: center;
+}
+
 .left {
     margin-left: 1em !important;
 }

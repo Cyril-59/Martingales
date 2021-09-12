@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Roulette } from './roulette';
+import { Roulette, RouletteType } from './roulette';
 import { SelectItem } from 'primeng/api/selectitem';
 import { UIChart } from 'primeng/chart';
+import { SelectItemGroup } from 'primeng/api/public_api';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +12,9 @@ import { UIChart } from 'primeng/chart';
 export class AppComponent implements OnInit {
   title = 'Martingale';
 
-  martingales = [];
+  martingales: Roulette[] = [];
   options: SelectItem[] = [];
+  groupedOptions: SelectItemGroup[];
   martingale: Roulette;
   init = false;
   add = false;
@@ -31,41 +33,112 @@ export class AppComponent implements OnInit {
   nbVictory: number = 0;
   nbBankruptcy: number = 0;
   prevMartingale: Roulette;
+  cascade: any[];
 
   @ViewChild(UIChart)
   chartComp: UIChart;
 
   ngOnInit() {
-    this.ajouter(new Roulette(2, 3, 25/37, 'Tiers'));
-    this.ajouter(new Roulette(2, 3, 25/37, 'Tiers Min 4', 4));
-    this.ajouter(new Roulette(2, 3, 25/37, 'Tiers Gain', 4, 2, true));
-    this.ajouter(new Roulette(4, 3, 25/37, 'Tiers Max 32', 8, 2, false, 32));
-    this.ajouter(new Roulette(12, 3, 25/37, 'Tiers Gap 12', 1, 12, false));
-    this.ajouter(new Roulette(12, 3, 25/37, 'Tiers Max Try 5', 1, 12, false, 1000000, 5));
-    this.ajouter(new Roulette(12, 3, 25/37, 'Tiers Dynamic Max Try', 1, 12, false, 1000000, 2, true));
+    this.initCascade();
+    this.ajouter(new Roulette(RouletteType.TIERS, 2, 3, 25/37, 'Tiers Min 4', 4));
+    this.ajouter(new Roulette(RouletteType.TIERS, 2, 3, 25/37, 'Tiers Croissant', 4, 2, true));
+    this.ajouter(new Roulette(RouletteType.TIERS, 4, 3, 25/37, 'Tiers Max 32', 8, 2, false, 32));
+    this.ajouter(new Roulette(RouletteType.TIERS, 12, 3, 25/37, 'Tiers Gap 12', 1, 12, false));
+    this.ajouter(new Roulette(RouletteType.TIERS, 12, 3, 25/37, 'Tiers Max Try 5', 1, 12, false, 100, 5));
+    this.ajouter(new Roulette(RouletteType.TIERS, 12, 3, 25/37, 'Tiers Dynamic', 1, 12, false, 100, 2, true));
 
-    this.ajouter(new Roulette(2, 2, 19/37, 'Demi'));
-    this.ajouter(new Roulette(2, 2, 19/37, 'Demi Min 4', 2));
-    this.ajouter(new Roulette(2, 2, 19/37, 'Demi Gain', 1, 2, true));
+    this.ajouter(new Roulette(RouletteType.DEMI, 4, 2, 19/37, 'Demi Min 4', 4));
+    this.ajouter(new Roulette(RouletteType.DEMI, 2, 2, 19/37, 'Demi Gain', 1, 2, true));
+    this.ajouter(new Roulette(RouletteType.DEMI, 12, 2, 19/37, 'Demi Gap 12', 1, 12, false));
 
-    this.ajouter(new Roulette(4, 1.5, 13/37, 'Deux-Tiers', 0, 4));
-    this.ajouter(new Roulette(4, 1.5, 13/37, 'Deux-Tiers Min 4', 4, 4));
-    this.ajouter(new Roulette(4, 1.5, 13/37, 'Deux-Tiers Gain', 1, 4, true));
+    this.ajouter(new Roulette(RouletteType.DOUBLE_TIERS, 4, 1.5, 13/37, 'Deux-Tiers Min 4', 4, 4));
+    this.ajouter(new Roulette(RouletteType.DOUBLE_TIERS, 4, 1.5, 13/37, 'Deux-Tiers Gain', 1, 4, true));
+    this.ajouter(new Roulette(RouletteType.DOUBLE_TIERS, 12, 1.5, 13/37, 'Deux-Tiers Gap 12', 1, 12, false));
 
-    this.ajouter(new Roulette(2, 9, 33/37, 'Carre', 8, 2, false));
-    this.ajouter(new Roulette(4, 4.5, 29/37, 'DoubleCarre', 8, 4, false));
-    this.ajouter(new Roulette(6, 3, 25/37, 'TripleCarre', 2, 6, false));
-    this.ajouter(new Roulette(8, 2.25, 21/37, 'QuadriCarre', 4, 8, false));
-    this.init = true;
+    this.ajouter(new Roulette(RouletteType.CARRE, 2, 9, 33/37, 'Carre', 8, 2, false));
+    this.ajouter(new Roulette(RouletteType.CARRE, 4, 4.5, 29/37, 'DoubleCarre', 8, 4, false));
+    this.ajouter(new Roulette(RouletteType.CARRE, 6, 3, 25/37, 'TripleCarre', 2, 6, false));
+    this.ajouter(new Roulette(RouletteType.CARRE, 8, 2.25, 21/37, 'QuadriCarre', 4, 8, false));
+
+    this.ajouter(new Roulette(RouletteType.ZONE, 12, 3, 25/37, 'Tiers Cylindre', 1, 12, false));
+    this.ajouter(new Roulette(RouletteType.ZONE, 10, 2.6, 29/37, 'Orphelins', 1, 10, false));
+    this.ajouter(new Roulette(RouletteType.ZONE, 18, 2, 20/37, 'Voisins Zéro', 1, 18, false));
+    this.ajouter(new Roulette(RouletteType.ZONE, 8, 3.5, 30/37, 'Jeu Zéro', 1, 8, false));
+
+    // TODO : ZONES (autres ?)
   }
 
-  ajouter(roulette, select = false) {
+initCascade() {
+  this.groupedOptions = [
+    {
+      label: 'Tiers',
+      value: RouletteType.TIERS,
+      items: [
+      ]
+    },
+    {
+      label: 'Demi',
+      value: RouletteType.DEMI,
+      items: [
+      ]
+    },
+    {
+      label: 'Double Tiers',
+      value: RouletteType.DOUBLE_TIERS,
+      items: [
+      ]
+    },
+    {
+      label: 'Carrés',
+      value: RouletteType.CARRE,
+      items: [
+      ]
+    },
+    {
+      label: 'Zones',
+      value: RouletteType.ZONE,
+      items: [
+      ]
+    },
+    {
+      label: 'Autres',
+      value: RouletteType.AUTRE,
+      items: [
+      ]
+    }
+  ];
+}
+
+  ajouter(roulette: Roulette, select = false) {
+    this.init = false;
     this.martingales.push(roulette);
-    this.options.push({value: roulette.titre, label: roulette.titre});
+    console.log(roulette.type)
+    switch (roulette.type) {
+      case RouletteType.TIERS:
+        this.groupedOptions[0].items.push({value: roulette.titre, label: roulette.titre});
+        break;
+      case RouletteType.DEMI:
+        this.groupedOptions[1].items.push({value: roulette.titre, label: roulette.titre});
+        break;
+      case RouletteType.DOUBLE_TIERS:
+        this.groupedOptions[2].items.push({value: roulette.titre, label: roulette.titre});
+        break;
+      case RouletteType.CARRE:
+        this.groupedOptions[3].items.push({value: roulette.titre, label: roulette.titre});
+        break;
+      case RouletteType.ZONE:
+        this.groupedOptions[4].items.push({value: roulette.titre, label: roulette.titre});
+        break;
+      case RouletteType.AUTRE:
+        this.groupedOptions[5].items.push({value: roulette.titre, label: roulette.titre});
+        break;
+    }
+    //this.options.push({value: roulette.titre, label: roulette.titre});
     this.add = false;
     if (select) {
       this.select({ value: this.martingales[this.martingales.length - 1].titre });
     }
+    setTimeout(() => this.init = true);
   }
 
   supprimer() {

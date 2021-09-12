@@ -1,43 +1,39 @@
 <div class="flex-column">
     <h2>Nouvelle martingale</h2>
-    <span class="flex-between">
+    <span class="flex-between align-center">
+        <label>Type : </label>
+        <p-dropdown [options]="options" (onChange)="selectType($event)"></p-dropdown>
+    </span>
+    <span class="flex-between align-center">
         <label>Titre : </label>
         <input type="text" pInputText [(ngModel)]="titre">
     </span>
-    <span class="flex-between">
-        <label>Mise initiale : </label>
+    <span class="flex-between align-center">
+        <label>Mise min : </label>
         <input type="number" pInputText [(ngModel)]="mise">
     </span>
-    <!--<span>
-        <label>Gain (nb mises) : </label>
-        <input type="number" [(ngModel)]="gain">
-    </span>-->
-    <span class="flex-between">
-        <label>Gain mini / jeu : </label>
-        <input type="number" pInputText [(ngModel)]="mini">
-    </span>
-    <span>
-        <label>Gain croissant : </label>
-        <p-checkbox [(ngModel)]="croissant" binary="true"></p-checkbox>
-    </span>
-    <span class="flex-between">
-        <label>Gap mise : </label>
-        <input type="number" pInputText [(ngModel)]="gap">
-    </span>
-    <span class="flex-between">
-        <label>Nombre de cases pariees : </label>
-        <input type="number" pInputText [(ngModel)]="luck">
-    </span>
-    <span class="flex-between">
+    <span class="flex-between align-center">
         <label>Mise max : </label>
         <input type="number" pInputText [(ngModel)]="maxi" [disabled]="croissant">
     </span>
-    <span class="flex-between">
-        <label>Max try : </label>
-        <input type="number" pInputText [(ngModel)]="try">
+    <span class="flex-between align-center">
+        <label>Gain mini : </label>
+        <input style="max-width: 3em;" type="number" pInputText [(ngModel)]="mini">
+        <label>Croissant : </label>
+        <p-checkbox [(ngModel)]="croissant" binary="true"></p-checkbox>
     </span>
-    <span>
-        <label>Dynamic try : </label>
+    <span class="flex-between align-center">
+        <label>Gap mise : </label>
+        <input type="number" pInputText [(ngModel)]="gap">
+    </span>
+    <span class="flex-between align-center" *ngIf="type >= 3">
+        <label>Nb cases : </label>
+        <input type="number" pInputText [(ngModel)]="luck">
+    </span>
+    <span class="flex-between align-center">
+        <label>Essais max : </label>
+        <input type="number" style="max-width: 3em;" pInputText [(ngModel)]="try">
+        <label>Dynamique : </label>
         <p-checkbox [(ngModel)]="dynamic" binary="true"></p-checkbox>
     </span>
     <span class="flex-end top">

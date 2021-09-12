@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Roulette } from '../roulette';
+import { Roulette, RouletteType } from '../roulette';
+import { SelectItem } from 'primeng/api/selectitem';
 
 @Component({
   selector: 'app-form',
@@ -15,9 +16,11 @@ export class FormComponent implements OnInit {
   gap = 2;
   titre = '';
   croissant = false;
-  maxi = 1000000;
+  maxi = 1000;
   try = 100;
   dynamic = false;
+  type: RouletteType = RouletteType.TIERS;
+  options: SelectItem[] = [];
 
   @Output()
   roulette = new EventEmitter<Roulette>();
@@ -28,11 +31,31 @@ export class FormComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    let cpt = 0;
+    for (const rouletteType of  Object.keys(RouletteType).filter((item) => { return isNaN(Number(item));})) {
+      this.options.push({value: cpt, label: rouletteType.toString()});
+      cpt++;
+    }
+  }
+
+  selectType(type) {
+    this.type = type.value;
+    switch(type) {
+      case 0:
+        this.luck = 12;
+        break;
+      case 1:
+        this.luck = 18;
+        break;
+      case 2:
+        this.luck = 24;
+        break;
+    }
   }
 
   click() {
     const gain = 36 / this.luck
-    this.roulette.emit(new Roulette(this.mise, gain, 1 - this.luck / 37, this.titre, this.mini, this.gap, this.croissant, this.maxi, this.try, this.dynamic));
+    this.roulette.emit(new Roulette(this.type, this.mise, gain, 1 - this.luck / 37, this.titre, this.mini, this.gap, this.croissant, this.maxi, this.try, this.dynamic));
     console.log("this.martingales.push(new Roulette(" + this.mise + ", " + gain + ", " + (1 - this.luck / 37) + ", '" + this.titre + "', " + this.mini +  "', " + this.gap + "', " + this.croissant + "', " + this.maxi + "', " + this.try + "', " + this.dynamic + "));");
   }
 
