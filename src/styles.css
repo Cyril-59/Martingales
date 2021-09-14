@@ -79,6 +79,11 @@ body {
     align-self: flex-end;
 }
 
+.flex-start
+{
+    align-self: flex-start;
+}
+
 .align-center
 {
     align-items: center;
@@ -94,6 +99,10 @@ body {
 
 .top {
     margin-top: 1em !important;
+}
+
+.smalltop {
+    margin-top: .25em !important;
 }
 
 .bottom {

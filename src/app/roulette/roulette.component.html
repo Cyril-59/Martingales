@@ -126,6 +126,14 @@
                             <p-toggleButton [ngClass]="{black: !numbers[8]}"  onLabel="8" offLabel="8" [(ngModel)]="numbers[8]"></p-toggleButton>
                             <p-toggleButton [ngClass]="{red: !numbers[9]}"  onLabel="9" offLabel="9" [(ngModel)]="numbers[9]"></p-toggleButton>
                         </div>
+                        <ng-container *ngIf="martingale.type == 3 || martingale.type == 5">
+                            <button *ngFor="let i of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]" [ngStyle]="{'margin-top': i%2 == 0 ? (4.4 + 1.25*i) + 'em' : (4.4 + 1.25*(i-1)) + 'em', 'margin-left': i%2 == 0 ? '3.6em' : '7.8em'}" style="z-index: 1; position: absolute; min-height: 1em; width: 1em; background-color: #75ff75;" (click)="carre(i)"></button>
+                        </ng-container>
+                        <ng-container *ngIf="martingale.type == 0 || martingale.type == 5">
+                            <button *ngFor="let i of [0, 1]" [ngStyle]="{'margin-top': '2em', 'margin-left':  i%2 == 0 ? '3.6em' : '7.8em'}" style="z-index: 1; position: absolute; min-height: 1em; width: 1em; background-color: #75ff75;" (click)="transversale0(i)"></button>
+                            <button *ngFor="let i of [0,1,2,3,4,5,6,7,8,9,10,11]" [ngStyle]="{'margin-top':(3.2 + 2.48*i) + 'em', 'margin-left': '-0.5em'}" style="z-index: 1; position: absolute; min-height: 1em; width: 1em; background-color: #75ff75;" (click)="transversale(i)"></button>
+                            <button *ngFor="let i of [0,1,2,3,4,5,6,7,8,9,10]" [ngStyle]="{'margin-top':(4.4 + 2.48*i) + 'em', 'margin-left': '12em'}" style="z-index: 1; position: absolute; min-height: 1em; width: 1em; background-color: #75ff75;" (click)="sixain(i)"></button>
+                        </ng-container>
                     </div>
                 </div>
                 <div class="flex">
@@ -205,8 +213,29 @@
         <button pButton label="Continuer" (click)="continue()"></button>
     </div>
 </div>
+<p-dialog [(visible)]="showError" header="Erreur" [modal]="true">
+    <p>Votre martingale nécessite de miser sur {{ nbCases }} case(s).</p>
+    <p>Vous avez misé sur {{ nbCasesActives }} cases.</p>
+</p-dialog>
 <p-dialog [(visible)]="showInfo" header="Informations" [modal]="true">
-    <p *ngIf="!modeZone">TODO INFO MODE NORMAL</p>
+    <div *ngIf="!modeZone">
+        <p>Paris extérieurs :</p>
+        <ul>
+            <li>Rouge ou Noir</li>
+            <li>Pair ou Impair</li>
+            <li>Manque ou Passe (1-18/19-36)</li>
+            <li>Douzaine (1-12/13-24/25-36)</li>
+            <li>Colonne (1%3/2%3/0%3)</li>
+        </ul>
+        <p>Paris intérieurs :</p>
+        <ul>
+            <li>1 numéro : Droit/Simple/Plein</li>
+            <li>2 numéros : A cheval/Double</li>
+            <li>3 numéros : Transversale/Triple</li>
+            <li>4 numéros : Carré/Coin/Angle</li>
+            <li>6 numéros : Sixain/Ligne</li>
+        </ul>
+    </div>
     <div *ngIf="modeZone">
         <p>Tiers du cylindre :</p>
         <ul>

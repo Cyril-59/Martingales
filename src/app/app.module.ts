@@ -10,6 +10,7 @@ import {CheckboxModule} from 'primeng/checkbox';
 import {ToggleButtonModule} from 'primeng/togglebutton';
 import {DialogModule} from 'primeng/dialog';
 import {InputSwitchModule} from 'primeng/inputswitch';
+import {TooltipModule} from 'primeng/tooltip';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MartingaleComponent } from './martingale/martingale.component';
@@ -42,6 +43,7 @@ import { environment } from '../environments/environment';
     CheckboxModule,
     DialogModule,
     InputSwitchModule,
+    TooltipModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],

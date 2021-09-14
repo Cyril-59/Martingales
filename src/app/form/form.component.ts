@@ -12,7 +12,7 @@ export class FormComponent implements OnInit {
   mise = 2;
   // gain = 1;
   mini = 0;
-  luck = 0;
+  luck = 12;
   gap = 2;
   titre = '';
   croissant = false;
@@ -40,7 +40,7 @@ export class FormComponent implements OnInit {
 
   selectType(type) {
     this.type = type.value;
-    switch(type) {
+    switch(this.type) {
       case 0:
         this.luck = 12;
         break;
@@ -54,7 +54,10 @@ export class FormComponent implements OnInit {
   }
 
   click() {
-    const gain = 36 / this.luck
+    const gain = 36 / this.luck;
+    if (this.croissant) {
+      this.maxi = 1000000;
+    }
     this.roulette.emit(new Roulette(this.type, this.mise, gain, 1 - this.luck / 37, this.titre, this.mini, this.gap, this.croissant, this.maxi, this.try, this.dynamic));
     console.log("this.martingales.push(new Roulette(" + this.mise + ", " + gain + ", " + (1 - this.luck / 37) + ", '" + this.titre + "', " + this.mini +  "', " + this.gap + "', " + this.croissant + "', " + this.maxi + "', " + this.try + "', " + this.dynamic + "));");
   }

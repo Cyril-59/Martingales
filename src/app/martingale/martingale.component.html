@@ -1,14 +1,14 @@
 <div *ngIf="ready">
-    <div class="flex-between">
+    <div class="flex-between align-center">
         <h2 style="font-size: 1em;">{{ martingale.titre }}</h2>
-        <span style="padding-top: .5em">
-            <!--<button class="right" pButton (click)="delete()" label="Sup"></button>-->
-            <!--<button pButton (click)="close()" label="Close"></button>-->
-            <p-inputSwitch class="right" [(ngModel)]="modeLive"></p-inputSwitch>
+        <p-inputSwitch [(ngModel)]="modeLive"></p-inputSwitch>
+        <div *ngIf="lastNumbers.length > 0" [ngClass]="{'green': lastNumbers[0] == 0, 'red': childRoulette.reds.includes(lastNumbers[0]), 'black': childRoulette.blacks.includes(lastNumbers[0])}" class="random" style="color: white; text-align: center; border: 3px solid white; min-width: 2em; font-size: 1em; border-radius: 50%; padding: 4px; max-height: 2em">
+            {{ randomRoulette }}
+        </div>
             <i class="pi pi-dollar" (click)="changeCash()"></i>
+            <span>{{ getMiseCourante() }}</span>
             <i class="pi pi-backward" (click)="ready = false"></i>
             <i class="pi pi-times" (click)="close()"></i>
-        </span>
     </div>
     <p-table [value]="tab" responsiveLayout="scroll">
         <ng-template pTemplate="header">
@@ -30,14 +30,14 @@
             </tr>
         </ng-template>
     </p-table>
-    <div class="flex-between top">
+    <div class="flex-between align-center smalltop">
         <!--<button pButton (click)="compute()" label="+"></button>
         <button pButton (click)="generateRandomProba()" [label]="'Prob : ' + randomProba"></button>-->
-        <div class="top">
+        <div>
             <span>
                 Lasts : 
             </span>
-            <span *ngFor="let i of lastNumbers">
+            <span *ngFor="let i of lastNumbers" [ngClass]="{'red': childRoulette.reds.includes(i), 'green': i == 0}">
                 {{ i }}
             </span>
         </div>
@@ -47,22 +47,23 @@
         <button pButton (click)="next()" label="Next"></button>
         <button pButton (click)="win()" label="Win"></button>-->
     </div>
-    <div class="flex-between top">
+    <div class="flex smalltop align-center" [ngClass]="{'flex-between': !modeLive}">
         <div>
-            <div>
-                Max to win : {{ loseStreak }}
-            </div>
-            <div>
-                Nb plays : {{ nbJeux }}
-            </div>
             <div>
                 Guess : {{ guessLabel }}
             </div>
+            <!--<div>
+                Max to win : {{ loseStreak }}
+            </div>-->
+            <div>
+                Nb plays : {{ nbJeux }}
+            </div>
         </div>
+        <p-inputSwitch [ngStyle]="{'margin-left': modeLive ? '1.5em' : '0'}" [(ngModel)]="modeGuess" (click)="guessed()"></p-inputSwitch>
         <ng-container *ngIf="!modeLive">
             <button style="max-height: 2.5em;" pButton (click)="play()" label="Play"></button>
-            <button style="max-height: 2.5em;" pButton (click)="multiplay(10)" label="Play 10"></button>
-            <button style="max-height: 2.5em; margin-right: .5em;" pButton (click)="multiplay(100)" label="Play 100"></button>
+            <button style="max-height: 2.5em;" pButton (click)="multiplay(10)" label="x10"></button>
+            <button style="max-height: 2.5em; margin-right: .5em;" pButton (click)="multiplay(100)" label="x100"></button>
         </ng-container>
     </div>
 </div>

@@ -3,38 +3,46 @@
     <span class="flex-between align-center">
         <label>Type : </label>
         <p-dropdown [options]="options" (onChange)="selectType($event)"></p-dropdown>
+        <i class="pi pi-question-circle" pTooltip="Le type de la martingale, permet de valider les mises et de proposer des suggestions." tooltipPosition="left" tabindex="0" tooltipEvent="focus" style="outline: 0;"></i>
     </span>
     <span class="flex-between align-center">
         <label>Titre : </label>
-        <input type="text" pInputText [(ngModel)]="titre">
+        <input type="text" pInputText [(ngModel)]="titre" maxlength="20">
+        <i class="pi pi-question-circle" pTooltip="Comment s'appelle votre création ? 20 caractères maximum." tooltipPosition="left" tabindex="0" tooltipEvent="focus" style="outline: 0;"></i>
     </span>
     <span class="flex-between align-center">
         <label>Mise min : </label>
-        <input type="number" pInputText [(ngModel)]="mise">
+        <input type="number" pInputText [(ngModel)]="mise" (ngModelChange)="gap = mise">
+        <i class="pi pi-question-circle" pTooltip="Mise minimale, doit au moins être égale à la mise inférieure de la roulette multipliée par le nombre de jetons joués pour cette martingale." tooltipPosition="left" tabindex="0" tooltipEvent="focus" style="outline: 0;"></i>
     </span>
     <span class="flex-between align-center">
         <label>Mise max : </label>
         <input type="number" pInputText [(ngModel)]="maxi" [disabled]="croissant">
+        <i class="pi pi-question-circle" pTooltip="Jusqu'à combien êtes-vous prêt à miser ? Ne perdez pas tout sur une mauvaise série." tooltipPosition="left" tabindex="0" tooltipEvent="focus" style="outline: 0;"></i>
+    </span>
+    <span class="flex-between align-center">
+        <label>Gap mise : </label>
+        <input type="number" pInputText [(ngModel)]="gap">
+        <i class="pi pi-question-circle" pTooltip="De combien faut-il augmenter la mise au minimum pour couvrir tous les jetons joués ?" tooltipPosition="left" tabindex="0" tooltipEvent="focus" style="outline: 0;"></i>
+    </span>
+    <span class="flex-between align-center" *ngIf="type >= 3">
+        <label>Nb cases : </label>
+        <input type="number" pInputText [(ngModel)]="luck">
+        <i class="pi pi-question-circle" pTooltip="Sur combien de cases de la roulette allez-vous miser ?" tooltipPosition="left" tabindex="0" tooltipEvent="focus" style="outline: 0;"></i>
     </span>
     <span class="flex-between align-center">
         <label>Gain mini : </label>
         <input style="max-width: 3em;" type="number" pInputText [(ngModel)]="mini">
         <label>Croissant : </label>
         <p-checkbox [(ngModel)]="croissant" binary="true"></p-checkbox>
-    </span>
-    <span class="flex-between align-center">
-        <label>Gap mise : </label>
-        <input type="number" pInputText [(ngModel)]="gap">
-    </span>
-    <span class="flex-between align-center" *ngIf="type >= 3">
-        <label>Nb cases : </label>
-        <input type="number" pInputText [(ngModel)]="luck">
+        <i class="pi pi-question-circle" pTooltip="Combien voulez-vous gagner au minimum à chaque étape de la martingale ? Voulez-vous augmenter le gain avec le risque ?" tooltipPosition="left" tabindex="0" tooltipEvent="focus" style="outline: 0;"></i>
     </span>
     <span class="flex-between align-center">
         <label>Essais max : </label>
         <input type="number" style="max-width: 3em;" pInputText [(ngModel)]="try">
         <label>Dynamique : </label>
         <p-checkbox [(ngModel)]="dynamic" binary="true"></p-checkbox>
+        <i class="pi pi-question-circle" pTooltip="Combien d'essais ratés êtes-vous prêt à tenter ? Celui-ci doit-il s'adapter à votre cash restant ?" tooltipPosition="left" tabindex="0" tooltipEvent="focus" style="outline: 0;"></i>
     </span>
     <span class="flex-end top">
         <button class="p-button-danger right" pButton type="button" label="Annuler" (click)="cancel()"></button>

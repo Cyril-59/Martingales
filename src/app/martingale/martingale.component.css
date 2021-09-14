@@ -12,5 +12,25 @@ tr.win {
 
 .pi {
     font-size: 1.5em;
-    margin-right: .5em;
+}
+
+span.red {
+    color: red;
+}
+
+span.green {
+    color: green;
+}
+
+div.black {
+    background-color: black;
+
+}
+
+div.red {
+    background-color: red;
+}
+
+div.green {
+    background-color: green;
 }

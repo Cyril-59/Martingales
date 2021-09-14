@@ -39,9 +39,11 @@ export class MartingaleComponent implements OnInit {
   maxTryReached = false;
   firstMaxTry: number;
   modeLive = false;
+  modeGuess = false;
   guessLabel: string = 'Wait';
   showChangeCash = false;
   newCash = this.cash;
+  localCash = this.cash;
 
   @ViewChild(RouletteComponent)
   childRoulette: RouletteComponent;
@@ -125,12 +127,14 @@ export class MartingaleComponent implements OnInit {
       }
     }
     this.onNext.emit(this.tab[this.currentIndex].mise);
+    this.localCash -= this.tab[this.currentIndex].mise;
   }
 
   win() {
     this.prevLoseStreak = 0;
     this.winIndex = this.currentIndex;
     this.onWin.emit(this.tab[this.currentIndex].mise * this.tab[this.currentIndex].gain);
+    this.localCash += this.tab[this.currentIndex].mise * this.tab[this.currentIndex].gain;
   }
 
   generateRandomProba() {
@@ -186,6 +190,12 @@ export class MartingaleComponent implements OnInit {
     if (live) {
       this.childRoulette.play(this.liveValue);
     } else {
+      if (this.lastNumbers.length == 0) {
+        for (let i = 1; i < this.historySize; i++) {
+          this.childRoulette.generateRandomRoulette()
+          this.lastNumbers.unshift(this.childRoulette.randomRoulette);
+        }
+      }
       this.childRoulette.play();
     }
     this.randomRoulette = this.childRoulette.randomRoulette;
@@ -197,9 +207,20 @@ export class MartingaleComponent implements OnInit {
   }
 
   multiplay(times: number) {
+    let cpt = 0;
     for (let i = 1; i <= times; i++) {
-      this.play();
+      if (this.modeGuess && this.guessLabel == 'Wait') {
+        this.simulate();
+      } else {
+        cpt++;
+        this.play();
+      }
+      /*console.log(this.cash);
+      if (this.cash < 0) {
+        break;
+      }*/
     }
+    return cpt;
   }
 
   live() {
@@ -243,24 +264,45 @@ export class MartingaleComponent implements OnInit {
       if (indexes[i] < guessSize) {
         this.guessLabel = 'Wait';
       } else {
+        if (this.modeGuess) {
+          this.childRoulette.reset();
+        }
         switch(i) {
           case 0:
             this.guessLabel = '1-18';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[43] = true;
+            }
             break;
           case 1:
               this.guessLabel = '19-36';
+              if (this.modeGuess) {
+                this.childRoulette.numbers[48] = true;
+              }
               break;
           case 2:
             this.guessLabel = 'EVEN';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[44] = true;
+            }
             break;
           case 3:
             this.guessLabel = 'ODD';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[47] = true;
+            }
             break;
           case 4:
             this.guessLabel = 'RED';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[45] = true;
+            }
             break;
           case 5:
             this.guessLabel = 'BLACK';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[46] = true;
+            }
             break;
         }
       }
@@ -295,34 +337,58 @@ export class MartingaleComponent implements OnInit {
     if (indexes[i] < guessSize) {
       this.guessLabel = 'Wait';
     } else {
+        if (this.modeGuess) {
+          this.childRoulette.reset();
+        }
         switch(i) {
           case 0:
             this.guessLabel = '1-12';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[40] = true;
+            }
             break;
           case 1:
             this.guessLabel = '13-24';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[41] = true;
+            }
             break;
           case 2:
             this.guessLabel = '25-36';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[42] = true;
+            }
             break;
           case 3:
             this.guessLabel = '1%3';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[37] = true;
+            }
             break;
           case 4:
             this.guessLabel = '2%3';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[38] = true;
+            }
             break;
           case 5:
             this.guessLabel = '0%3';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[39] = true;
+            }
             break;
           case 6:
             this.guessLabel = 'CYL';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[52] = true;
+            }
             break;
       }
     }
   }
 
   guessDeuxTiers(guessSize) {
-    let indexes = [0, 0, 0];
+    let indexes = [0, 0, 0, 0, 0, 0];
     for (let i = 0; i < this.lastNumbers.length; i++) {
       if (indexes[0] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 24)) {
         indexes[0]++;
@@ -333,21 +399,65 @@ export class MartingaleComponent implements OnInit {
       if (indexes[2] == i && !(this.lastNumbers[i] > 0 && this.lastNumbers[i] <= 12) && !(this.lastNumbers[i] > 24 && this.lastNumbers[i] <= 36)) {
         indexes[2]++;
       }
-    
+      if (indexes[3] == i && this.lastNumbers[i] % 3 == 0) {
+        indexes[3]++;
+      }
+      if (indexes[4] == i && (this.lastNumbers[i] == 0 || this.lastNumbers[i] % 3 == 2)) {
+        indexes[4]++;
+      }
+      if (indexes[5] == i && (this.lastNumbers[i] == 0 || this.lastNumbers[i] % 3 == 1)) {
+        indexes[5]++;
+      }
     }
     let i = indexes.indexOf(Math.max(...indexes));
     if (indexes[i] < guessSize) {
       this.guessLabel = 'Wait';
     } else {
+        if (this.modeGuess) {
+          this.childRoulette.reset();
+        }
         switch(i) {
           case 0:
             this.guessLabel = '1-24';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[40] = true;
+              this.childRoulette.numbers[41] = true;
+            }
             break;
           case 1:
             this.guessLabel = '13-36';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[41] = true;
+              this.childRoulette.numbers[42] = true;
+            }
             break;
           case 2:
             this.guessLabel = '1-12/25-36';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[40] = true;
+              this.childRoulette.numbers[42] = true;
+            }
+            break;
+          case 3:
+            this.guessLabel = '1%3/2%3';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[37] = true;
+              this.childRoulette.numbers[38] = true;
+            }
+            break;
+          case 4:
+            this.guessLabel = '1%3/0%3';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[37] = true;
+              this.childRoulette.numbers[39] = true;
+            }
+            break;
+          case 5:
+            this.guessLabel = '2%3/0%3';
+            if (this.modeGuess) {
+              this.childRoulette.numbers[38] = true;
+              this.childRoulette.numbers[39] = true;
+            }
             break;
       }
     }
@@ -361,5 +471,59 @@ export class MartingaleComponent implements OnInit {
   validCash() {
     this.onChangeCash.emit(this.newCash);
     this.showChangeCash = false;
+  }
+
+  getMiseCourante() {
+    if (this.martingale.type == 0) {
+        if (this.childRoulette.numbers[40]) {
+          return '1-12';
+        } else if (this.childRoulette.numbers[41]) {
+          return '13-24';
+        } else if (this.childRoulette.numbers[42]) {
+          return '25-36';
+        } else if (this.childRoulette.numbers[37]) {
+          return '1%3';
+        } else if (this.childRoulette.numbers[38]) {
+          return '2%3';
+        } else if (this.childRoulette.numbers[39]) {
+          return '0%3';
+        } else if (this.childRoulette.numbers[52]) {
+          return 'CYL';
+        }
+    } else if (this.martingale.type == 1) {
+      if (this.childRoulette.numbers[43]) {
+        return '1-18';
+      } else if (this.childRoulette.numbers[44]) {
+        return 'EVEN';
+      } else if (this.childRoulette.numbers[45]) {
+        return 'RED';
+      } else if (this.childRoulette.numbers[46]) {
+        return 'BLACK';
+      } else if (this.childRoulette.numbers[47]) {
+        return 'ODD';
+      } else if (this.childRoulette.numbers[48]) {
+        return '19-36';
+      }
+    } else if (this.martingale.type == 2) {
+      if (this.childRoulette.numbers[40] && this.childRoulette.numbers[41]) {
+        return '1-24';
+      } else if (this.childRoulette.numbers[41] && this.childRoulette.numbers[42]) {
+        return '13-36';
+      } else if (this.childRoulette.numbers[40] && this.childRoulette.numbers[42]) {
+        return '1-12/25-36';
+      } else if (this.childRoulette.numbers[37] && this.childRoulette.numbers[38]) {
+        return '1%3/2%3';
+      } else if (this.childRoulette.numbers[37] && this.childRoulette.numbers[39]) {
+        return '1%3/0%3';
+      } else if (this.childRoulette.numbers[38] && this.childRoulette.numbers[39]) {
+        return '2%3/0%3';
+      }
+    }
+  }
+
+  guessed() {
+    if (this.modeGuess) {
+      this.guess();
+    }
   }
 }

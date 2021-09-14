@@ -3,6 +3,7 @@ import { Roulette, RouletteType } from './roulette';
 import { SelectItem } from 'primeng/api/selectitem';
 import { UIChart } from 'primeng/chart';
 import { SelectItemGroup } from 'primeng/api/public_api';
+import { MartingaleComponent } from './martingale/martingale.component';
 
 @Component({
   selector: 'app-root',
@@ -39,9 +40,14 @@ export class AppComponent implements OnInit {
   historySize = 13;
   guessSize = null;
   tabSize = 5;
+  guessScore = 0;
+  randomScore = 0;
 
   @ViewChild(UIChart)
   chartComp: UIChart;
+
+  @ViewChild(MartingaleComponent)
+  childMartingale: MartingaleComponent;
 
   ngOnInit() {
     this.initGroup();
@@ -49,7 +55,8 @@ export class AppComponent implements OnInit {
     this.ajouter(new Roulette(RouletteType.TIERS, 2, 3, 25/37, 'Tiers Min 4', 4));
     this.ajouter(new Roulette(RouletteType.TIERS, 2, 3, 25/37, 'Tiers Croissant', 4, 2, true));
     this.ajouter(new Roulette(RouletteType.TIERS, 4, 3, 25/37, 'Tiers Max 32', 8, 2, false, 32));
-    this.ajouter(new Roulette(RouletteType.TIERS, 12, 3, 25/37, 'Tiers Gap 12', 1, 12, false));
+    this.ajouter(new Roulette(RouletteType.TIERS, 12, 3, 25/37, 'Tiers Cylindre', 1, 12, false));
+    this.ajouter(new Roulette(RouletteType.TIERS, 8, 3, 25/37, 'Tiers Transversales', 1, 8, false));
     this.ajouter(new Roulette(RouletteType.TIERS, 12, 3, 25/37, 'Tiers Max Try 5', 1, 12, false, 100, 5));
     this.ajouter(new Roulette(RouletteType.TIERS, 12, 3, 25/37, 'Tiers Dynamic', 1, 12, false, 100, 2, true));
 
@@ -59,7 +66,7 @@ export class AppComponent implements OnInit {
 
     this.ajouter(new Roulette(RouletteType.DOUBLE_TIERS, 4, 1.5, 13/37, 'Deux-Tiers Min 4', 4, 4));
     this.ajouter(new Roulette(RouletteType.DOUBLE_TIERS, 4, 1.5, 13/37, 'Deux-Tiers Gain', 1, 4, true));
-    this.ajouter(new Roulette(RouletteType.DOUBLE_TIERS, 12, 1.5, 13/37, 'Deux-Tiers Gap 12', 1, 12, false));
+    this.ajouter(new Roulette(RouletteType.DOUBLE_TIERS, 24, 1.5, 13/37, 'Deux-Tiers Gap 24', 1, 24, false));
 
     this.ajouter(new Roulette(RouletteType.CARRE, 2, 9, 33/37, 'Carre', 8, 2, false));
     this.ajouter(new Roulette(RouletteType.CARRE, 4, 4.5, 29/37, 'DoubleCarre', 8, 4, false));
@@ -282,5 +289,40 @@ export class AppComponent implements OnInit {
 
   params() {
     this.showParams = true;
+  }
+
+  batch() {
+    const resultGuess = [];
+    const resultRandom = [];
+    for (let i = 0; i < 100; i++) {
+      let cpt = 0;
+      this.childMartingale.modeGuess = i % 2 == 0;
+      this.childMartingale.localCash = 500;
+      this.cash = 500;
+      this.childMartingale.currentIndex = 0;
+      while (true) {
+        let nb = this.childMartingale.multiplay(1);
+        cpt += nb;
+        if (this.childMartingale.localCash < 0) {
+          break;
+        }
+      }
+      if (this.childMartingale.modeGuess) {
+        resultGuess.push(cpt);
+      } else {
+        resultRandom.push(cpt);
+        if (resultRandom[resultRandom.length - 1] < resultGuess[resultGuess.length - 1]) {
+          this.guessScore++;
+        } else {
+          this.randomScore++;
+        }
+      }
+    }
+    console.log('Guess :');
+    console.log(resultGuess);
+    //const guessMean = resultGuess.reduce((partial_sum, a) => partial_sum + a, 0) / 10;
+    console.log('Random :');
+    console.log(resultRandom);
+    //const randomMean = resultRandom.reduce((partial_sum, a) => partial_sum + a, 0) / 10;
   }
 }

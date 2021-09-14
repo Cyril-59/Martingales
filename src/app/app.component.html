@@ -7,7 +7,7 @@
     <div class="flex-center bottom align" *ngIf="!start && !showRoulette">
         <div class="flex-column">
             <input type="number" placeholder="Cash-in" pInputText [(ngModel)]="cash">
-            <input class="top"type="number" placeholder="Objectif" pInputText [(ngModel)]="objectif">
+            <input class="top"type="number" placeholder="Cash-out" pInputText [(ngModel)]="objectif">
             <button class="top" pButton label="Start" (click)="initData()"></button>
         </div>
     </div>
@@ -53,6 +53,11 @@
                 </span>
             </div>
         </div>
+        <!--²<div *ngIf="martingale">
+            <button pButton (click)="batch()" label="Batch"></button>
+            <div>{{ guessScore }}</div>
+            <div>{{ randomScore }}</div>
+        </div>-->
         <p-chart *ngIf="showChart" class="top" type="line" [data]="data"></p-chart>
     </div>
     <div class="footer flex-between bottom">
@@ -68,6 +73,8 @@
     <p-button (click)="refresh()" label="Stop" styleClass="p-button-text" style="margin-left: 1em; margin-top: 1em;"></p-button>
     <p-button (click)="retry()" label="Retry" styleClass="p-button-text" style="margin-left: 1em; margin-top: 1em;"></p-button>
 </p-dialog>
-<p-dialog [(visible)]="showInfo" header="Informations" [modal]="true">
-    <p>TODO INFOS</p>
+<p-dialog [(visible)]="showInfo" header="Bienvenue sur Martingales" [modal]="true">
+    <p>Choisissez une martingale dans la liste ou créez votre propre martingale en appuyant sur le bouton +.</p>
+    <p>Ensuite, sélectionnez les cases sur lesquelles vous pariez 1 jeton en accord avec la martingale choisie.</p>
+    <p>Enfin, jouez en simulation ou en live tout en ayant les chiffres associés à votre martingale et visualisez l'évolution de vos gains.</p>
 </p-dialog>
