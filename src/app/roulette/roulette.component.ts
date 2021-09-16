@@ -37,6 +37,9 @@ export class RouletteComponent implements OnInit {
   @Output()
   onContinue: EventEmitter<void> = new EventEmitter();
 
+  @Output()
+  onBatch: EventEmitter<void> = new EventEmitter();
+
   constructor() { }
 
   ngOnInit(): void {
@@ -161,5 +164,9 @@ export class RouletteComponent implements OnInit {
   sixain(n: number) {
     this.transversale(n);
     this.transversale(n+1);
+  }
+
+  batch() {
+    this.onBatch.emit();
   }
 }

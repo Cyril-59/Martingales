@@ -16,6 +16,9 @@ export class MartingaleComponent implements OnInit {
   cash: number;
 
   @Input()
+  objectif: number;
+
+  @Input()
   historySize = 13;
 
   @Input()
@@ -43,7 +46,14 @@ export class MartingaleComponent implements OnInit {
   guessLabel: string = 'Wait';
   showChangeCash = false;
   newCash = this.cash;
-  localCash = this.cash;
+
+  batchCash: number;
+  batchGoal: number;
+  nbIterations: number = 100;
+  guessScore: number;
+  randomScore: number;
+
+  modeBatch = false;
 
   @ViewChild(RouletteComponent)
   childRoulette: RouletteComponent;
@@ -77,6 +87,9 @@ export class MartingaleComponent implements OnInit {
       this.compute();
     }
     this.firstMaxTry = this.martingale.maxTry;
+
+    this.batchCash = this.cash;
+    this.batchGoal = this.objectif;
   }
 
   compute() {
@@ -126,15 +139,21 @@ export class MartingaleComponent implements OnInit {
         this.currentIndex++;
       }
     }
-    this.onNext.emit(this.tab[this.currentIndex].mise);
-    this.localCash -= this.tab[this.currentIndex].mise;
+    if (!this.modeBatch) {
+      this.onNext.emit(this.tab[this.currentIndex].mise);
+    } else {
+      this.batchCash -= this.tab[this.currentIndex].mise;
+    }
   }
 
   win() {
     this.prevLoseStreak = 0;
     this.winIndex = this.currentIndex;
-    this.onWin.emit(this.tab[this.currentIndex].mise * this.tab[this.currentIndex].gain);
-    this.localCash += this.tab[this.currentIndex].mise * this.tab[this.currentIndex].gain;
+    if (!this.modeBatch) {
+      this.onWin.emit(this.tab[this.currentIndex].mise * this.tab[this.currentIndex].gain);
+    } else {
+      this.batchCash += this.tab[this.currentIndex].mise * this.tab[this.currentIndex].gain;
+    }
   }
 
   generateRandomProba() {
@@ -163,7 +182,6 @@ export class MartingaleComponent implements OnInit {
       this.lastNumbers.length = this.historySize;
     }
     this.loseStreak = Math.max(this.loseStreak, this.currentIndex + 1 + this.prevLoseStreak);
-    this.guess();
     if (this.childRoulette.won) {
       this.win();
     } else {
@@ -179,6 +197,7 @@ export class MartingaleComponent implements OnInit {
         }
       }
     }
+    this.guess();
   }
 
   simulateLive() {
@@ -215,10 +234,9 @@ export class MartingaleComponent implements OnInit {
         cpt++;
         this.play();
       }
-      /*console.log(this.cash);
-      if (this.cash < 0) {
+      if (this.modeBatch && (this.batchCash <= 0 || this.batchCash >= this.batchGoal)) {
         break;
-      }*/
+      }
     }
     return cpt;
   }
@@ -525,5 +543,53 @@ export class MartingaleComponent implements OnInit {
     if (this.modeGuess) {
       this.guess();
     }
+  }
+
+  startBatch() {
+    if (!this.batchCash || !this.batchGoal) {
+      return;
+    }
+    const resultGuess = [];
+    const resultRandom = [];
+    const batchCash = this.batchCash;
+    for (let i = 0; i < this.nbIterations; i++) {
+      this.batchCash = batchCash;
+      this.batchGoalOrNegative(true);
+      resultGuess.push(this.batchCash >= this.batchGoal ? 1 : 0);
+
+      this.batchCash = batchCash;
+      this.batchGoalOrNegative(false);
+      resultRandom.push(this.batchCash >= this.batchGoal ? 1 : 0);
+    }
+    //resultGuess.sort(function(a, b) { return a - b;});
+    this.guessScore = resultGuess.reduce((partial_sum, a) => partial_sum + a, 0);
+    this.randomScore = resultRandom.reduce((partial_sum, a) => partial_sum + a, 0);
+    this.batchCash = batchCash;
+  }
+
+  batchGoalOrNegative(isGuess) {
+    if (isGuess) {
+      this.modeGuess = true;
+      this.guess();
+    } else {
+      this.modeGuess = false;
+      this.childRoulette.reset();
+      if (this.martingale.gain == 3) {
+        this.childRoulette.numbers[Math.floor(Math.random() * 6) + 37] = true;
+      }
+    }
+    this.currentIndex = -1;
+    this.winIndex = -1;
+
+    let cpt = 0;
+    while (true) {
+      cpt += this.multiplay(100);
+      if (this.batchCash >= this.batchGoal || this.batchCash <= 0) {
+        break;
+      }
+    }
+    this.currentIndex = -1;
+    this.winIndex = -1;
+    return cpt;
   }
 }

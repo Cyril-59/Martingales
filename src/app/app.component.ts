@@ -290,39 +290,4 @@ export class AppComponent implements OnInit {
   params() {
     this.showParams = true;
   }
-
-  batch() {
-    const resultGuess = [];
-    const resultRandom = [];
-    for (let i = 0; i < 100; i++) {
-      let cpt = 0;
-      this.childMartingale.modeGuess = i % 2 == 0;
-      this.childMartingale.localCash = 500;
-      this.cash = 500;
-      this.childMartingale.currentIndex = 0;
-      while (true) {
-        let nb = this.childMartingale.multiplay(1);
-        cpt += nb;
-        if (this.childMartingale.localCash < 0) {
-          break;
-        }
-      }
-      if (this.childMartingale.modeGuess) {
-        resultGuess.push(cpt);
-      } else {
-        resultRandom.push(cpt);
-        if (resultRandom[resultRandom.length - 1] < resultGuess[resultGuess.length - 1]) {
-          this.guessScore++;
-        } else {
-          this.randomScore++;
-        }
-      }
-    }
-    console.log('Guess :');
-    console.log(resultGuess);
-    //const guessMean = resultGuess.reduce((partial_sum, a) => partial_sum + a, 0) / 10;
-    console.log('Random :');
-    console.log(resultRandom);
-    //const randomMean = resultRandom.reduce((partial_sum, a) => partial_sum + a, 0) / 10;
-  }
 }

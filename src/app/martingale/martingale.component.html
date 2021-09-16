@@ -67,7 +67,32 @@
         </ng-container>
     </div>
 </div>
-<app-roulette [hidden]="ready" [martingale]="martingale" (onContinue)="ready = true" (onClose)="close()"></app-roulette>
+<app-roulette [hidden]="ready || modeBatch" [martingale]="martingale" (onContinue)="ready = true" (onClose)="close()" (onBatch)="modeBatch = true"></app-roulette>
+<div *ngIf="modeBatch" class="flex-column">
+    <h2>Batch guess vs random</h2>
+    <span class="flex-between align-center">
+        <label>Nb itérations : </label>
+        <input type="number" pInputText [(ngModel)]="nbIterations">
+    </span>
+    <span class="flex-between align-center">
+        <label>Cash : </label>
+        <input type="number" pInputText [(ngModel)]="batchCash">
+    </span>
+    <span class="flex-between align-center">
+        <label>Goal : </label>
+        <input type="number" pInputText [(ngModel)]="batchGoal">
+    </span>
+    <div class="flex-between top">
+        <button (click)="modeBatch = false" pButton label="Back"></button>
+        <button (click)="startBatch()" pButton label="Start"></button>
+    </div>
+    <span>
+        <label>Guess Score : </label>{{ guessScore }}
+    </span>
+    <span>
+        <label>Random Score : </label>{{ randomScore }}
+    </span>
+</div>
 <p-dialog [(visible)]="liveDialog" header="Roulette live" [modal]="true">
     <input type="number" placeholder="Live value" pInputText [(ngModel)]="liveValue" autofocus>
     <p-button class="left" (click)="simulateLive()" label="Pass" styleClass="p-button-text"></p-button>

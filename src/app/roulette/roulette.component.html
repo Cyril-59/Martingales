@@ -210,6 +210,7 @@
         <div *ngIf="randomRoulette != undefined" [ngClass]="{'random-show': randomShow, 'green': randomRoulette == 0, 'red': reds.includes(randomRoulette), 'black': blacks.includes(randomRoulette)}" class="random" style="color: white; text-align: center; border: 3px solid white; min-width: 2em; font-size: 1em; border-radius: 50%; padding: 4px;">
             {{ randomRoulette }}
         </div>
+        <button pButton (click)="batch()" label="Batch"></button>
         <button pButton label="Continuer" (click)="continue()"></button>
     </div>
 </div>

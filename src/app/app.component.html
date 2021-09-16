@@ -28,7 +28,7 @@
             <i style="margin: auto; cursor: pointer;" class="pi pi-cog" (click)="params()"></i>
         </div>
         <div class="flex-center" *ngIf="!add && !list && !showParams">
-            <app-martingale *ngIf="martingale" class="top" [cash]="cash" [martingale]="martingale" [historySize]="historySize" [guessSize]="guessSize" [tabSize]="tabSize" (onDelete)="supprimer()" (onClose)="list = true" (onNext)="substract($event)" (onWin)="win($event)" (onChangeCash)="cash=$event"></app-martingale>
+            <app-martingale *ngIf="martingale" class="top" [cash]="cash" [objectif]="objectif" [martingale]="martingale" [historySize]="historySize" [guessSize]="guessSize" [tabSize]="tabSize" (onDelete)="supprimer()" (onClose)="list = true" (onNext)="substract($event)" (onWin)="win($event)" (onChangeCash)="cash=$event"></app-martingale>
         </div>
         <div *ngIf="add" class="flex-center">
             <app-form (roulette)="ajouter($event, true)" (onCancel)="add = false"></app-form>
@@ -53,11 +53,6 @@
                 </span>
             </div>
         </div>
-        <!--²<div *ngIf="martingale">
-            <button pButton (click)="batch()" label="Batch"></button>
-            <div>{{ guessScore }}</div>
-            <div>{{ randomScore }}</div>
-        </div>-->
         <p-chart *ngIf="showChart" class="top" type="line" [data]="data"></p-chart>
     </div>
     <div class="footer flex-between bottom">
