@@ -54,6 +54,9 @@ export class MartingaleComponent implements OnInit {
   randomScore: number;
 
   modeBatch = false;
+  rngNumber = 100;
+  rngArray: number[] = [];
+  reportResult: string;
 
   @ViewChild(RouletteComponent)
   childRoulette: RouletteComponent;
@@ -591,5 +594,310 @@ export class MartingaleComponent implements OnInit {
     this.currentIndex = -1;
     this.winIndex = -1;
     return cpt;
+  }
+
+  startRNG() {
+    this.rngArray.length = 0;
+    for (let i = 0; i < this.rngNumber; i++) {
+      this.rngArray.push(Math.floor(Math.random() * 37));
+    }
+    this.reportRNG();
+  }
+
+  reportRNG() {
+    if (this.martingale.gain == 3) {
+      this.reportTiers();
+    }
+    if (this.martingale.gain == 2) {
+      this.reportDemi();
+    }
+  }
+
+  reportDemi() {
+    let nbRed = 0, nbBlack = 0, nbEven = 0, nbOdd = 0, nbManque = 0, nbPasse = 0, nbZero = 0;
+    let maxRed = 0, maxBlack = 0, maxEven = 0, maxOdd = 0, maxManque = 0, maxPasse = 0;
+    let maxNotRed = 0, maxNotBlack = 0, maxNotEven = 0, maxNotOdd = 0, maxNotManque = 0, maxNotPasse = 0;
+    let cptRed = 0, cptBlack = 0, cptEven = 0, cptOdd = 0, cptManque = 0, cptPasse = 0;
+    let cptNotRed = 0, cptNotBlack = 0, cptNotEven = 0, cptNotOdd = 0, cptNotManque = 0, cptNotPasse = 0;
+
+    for (let i = 0; i < this.rngArray.length; i++) {
+      const rng = this.rngArray[i];
+      if (rng == 0) {
+        nbZero++;
+        cptRed = cptBlack = cptEven = cptOdd = cptManque = cptPasse = 0;
+        cptNotRed++; cptNotBlack++; cptNotEven++; cptNotOdd++; cptNotManque++; cptNotPasse++;
+      } else if (rng <= 18) {
+        nbManque++;
+        cptManque++;
+        if (cptManque > maxManque) {
+          maxManque = cptManque;
+        }
+        cptPasse = 0;
+        cptNotPasse++;
+        cptNotManque = 0;
+      } else {
+        nbPasse++;
+        cptPasse++;
+        if (cptPasse > maxPasse) {
+          maxPasse = cptPasse;
+        }
+        cptManque = 0;
+        cptNotManque++;
+        cptNotPasse = 0;
+      }
+
+      if (this.childRoulette.blacks.includes(rng)) {
+        nbBlack++;
+        cptBlack++;
+        if (cptBlack > maxBlack) {
+          maxBlack = cptBlack;
+        }
+        cptNotBlack = 0;
+        cptNotRed++;
+        cptRed = 0;
+      } else if (rng != 0) {
+        nbRed++;
+        cptRed++;
+        if (cptRed > maxRed) {
+          maxRed = cptRed;
+        }
+        cptNotRed = 0;
+        cptNotBlack++;
+        cptBlack = 0;
+      }
+
+      if (rng % 2 == 1) {
+        nbOdd++;
+        cptOdd++;
+        if (cptOdd > maxOdd) {
+          maxOdd = cptOdd;
+        }
+        cptNotOdd = 0;
+        cptNotEven++;
+        cptEven = 0;
+      } else if (rng != 0) {
+        nbEven++;
+        cptEven++;
+        if (cptEven > maxEven) {
+          maxEven = cptEven;
+        }
+        cptNotEven = 0;
+        cptNotOdd++;
+        cptOdd = 0;
+      }
+
+      if (cptNotRed > maxNotRed) {
+        maxNotRed = cptNotRed;
+      }
+      if (cptNotBlack > maxNotBlack) {
+        maxNotBlack = cptNotBlack;
+      }
+      if (cptNotManque > maxNotManque) {
+        maxNotManque = cptNotManque;
+      }
+      if (cptNotPasse > maxNotPasse) {
+        maxNotPasse = cptNotPasse;
+      }
+      if (cptNotEven > maxNotEven) {
+        maxNotEven = cptNotEven;
+      }
+      if (cptNotOdd > maxNotOdd) {
+        maxNotOdd = cptNotOdd;
+      }
+    }
+
+    this.reportResult = "<table> \
+    <thead> \
+      <tr> \
+        <th>0 : " + nbZero + " </th> \
+        <th>RED</th> \
+        <th>BLACK</th> \
+        <th>EVEN</th> \
+        <th>ODD</th> \
+        <th>1-18</th> \
+        <th>19-36</th> \
+      </tr> \
+    </thead> \
+    <tbody> \
+      <tr> \
+        <td>Total</td> \
+        <td>" + nbRed + "</td> \
+        <td>" + nbBlack + "</td> \
+        <td>" + nbEven + "</td> \
+        <td>" + nbOdd + "</td> \
+        <td>" + nbManque + "</td> \
+        <td>" + nbPasse + "</td> \
+      </tr> \
+      <tr> \
+        <td>Max Streak</td> \
+        <td>" + maxRed + "</td> \
+        <td>" + maxBlack + "</td> \
+        <td>" + maxEven + "</td> \
+        <td>" + maxOdd + "</td> \
+        <td>" + maxManque + "</td> \
+        <td>" + maxPasse + "</td> \
+      </tr> \
+      <tr> \
+        <td> Max Not Streak</td> \
+        <td>" + maxNotRed + "</td> \
+        <td>" + maxNotBlack + "</td> \
+        <td>" + maxNotEven + "</td> \
+        <td>" + maxNotOdd + "</td> \
+        <td>" + maxNotManque + "</td> \
+        <td>" + maxNotPasse + "</td> \
+      </tr> \
+    </tbody> \
+    </table>";
+  }
+
+  reportTiers() {
+    let nbT1 = 0, nbT2 = 0, nbT3 = 0, nbM1 = 0, nbM2 = 0, nbM3 = 0, nbCy = 0, nbZero = 0;
+    let maxT1 = 0, maxT2 = 0, maxT3 = 0, maxM1 = 0, maxM2 = 0, maxM3 = 0, maxCy = 0;
+    let maxNotT1 = 0, maxNotT2 = 0, maxNotT3 = 0, maxNotM1 = 0, maxNotM2 = 0, maxNotM3 = 0, maxNotCy = 0;
+    let cptT1 = 0, cptT2 = 0, cptT3 = 0, cptM1 = 0, cptM2 = 0, cptM3 = 0, cptCy = 0;
+    let cptNotT1 = 0, cptNotT2 = 0, cptNotT3 = 0, cptNotM1 = 0, cptNotM2 = 0, cptNotM3 = 0, cptNotCy = 0;
+
+    for (let i = 0; i < this.rngArray.length; i++) {
+      const rng = this.rngArray[i];
+      if (rng == 0) {
+        nbZero++;
+        cptT1 = cptT2 = cptT3 = cptM1 = cptM2 = cptM3 = cptCy = 0;
+        cptNotT1++; cptNotT2++; cptNotT3++; cptNotM1++; cptNotM2++; cptNotM3++; cptNotCy++;
+      } else if (rng <= 12) {
+        nbT1++;
+        cptT1++;
+        if (cptT1 > maxT1) {
+          maxT1 = cptT1;
+        }
+        cptT2 = cptT3 = 0;
+        cptNotT2++; cptNotT3++;
+        cptNotT1 = 0;
+      } else if (rng <= 24) {
+        nbT2++;
+        cptT2++;
+        if (cptT2 > maxT2) {
+          maxT2 = cptT2;
+        }
+        cptT1 = cptT3 = 0;
+        cptNotT1++; cptNotT3++;
+        cptNotT2 = 0;
+      } else {
+        nbT3++;
+        cptT3++;
+        if (cptT3 > maxT3) {
+          maxT3 = cptT3;
+        }
+        cptT1 = cptT2 = 0;
+        cptNotT1++; cptNotT2++;
+        cptNotT3 = 0;
+      }
+      if (rng % 3 == 1) {
+        nbM1++;
+        cptM1++;
+        if (cptM1 > maxM1) {
+          maxM1 = cptM1;
+        }
+        cptM2 = cptM3 = 0;
+        cptNotM2++; cptNotM3++;
+        cptNotM1 = 0;
+      } else if (rng % 3 == 2) {
+        nbM2++;
+        cptM2++;
+        if (cptM2 > maxM2) {
+          maxM2 = cptM2;
+        }
+        cptM1 = cptM3 = 0;
+        cptNotM1++; cptNotM3++;
+        cptNotM2 = 0;
+      } else if (rng != 0) {
+        nbM3++;
+        cptM3++;
+        if (cptM3 > maxM3) {
+          maxM3 = cptM3;
+        }
+        cptM1 = cptM2 = 0;
+        cptNotM1++; cptNotM2++;
+        cptNotM3 = 0;
+      }
+      if (this.childRoulette.cylindre.includes(rng)) {
+        nbCy++;
+        cptCy++;
+        if (cptCy > maxCy) {
+          maxCy = cptCy;
+        }
+        cptNotCy = 0;
+      } else {
+        cptCy = 0;
+        cptNotCy++;
+      }
+      if (cptNotT1 > maxNotT1) {
+        maxNotT1 = cptNotT1;
+      }
+      if (cptNotT2 > maxNotT2) {
+        maxNotT2 = cptNotT2;
+      }
+      if (cptNotT3 > maxNotT3) {
+        maxNotT3 = cptNotT3;
+      }
+      if (cptNotM1 > maxNotM1) {
+        maxNotM1 = cptNotM1;
+      }
+      if (cptNotM2 > maxNotM2) {
+        maxNotM2 = cptNotM2;
+      }
+      if (cptNotM3 > maxNotM3) {
+        maxNotM3 = cptNotM3;
+      }
+      if (cptNotCy > maxNotCy) {
+        maxNotCy = cptNotCy;
+      }
+    }
+
+    this.reportResult = "<table> \
+    <thead> \
+      <tr> \
+        <th>0 : " + nbZero + " </th> \
+        <th>T1</th> \
+        <th>T2</th> \
+        <th>T3</th> \
+        <th>M1</th> \
+        <th>M2</th> \
+        <th>M3</th> \
+        <th>CY</th> \
+      </tr> \
+    </thead> \
+    <tbody> \
+      <tr> \
+        <td>Total</td> \
+        <td>" + nbT1 + "</td> \
+        <td>" + nbT2 + "</td> \
+        <td>" + nbT3 + "</td> \
+        <td>" + nbM1 + "</td> \
+        <td>" + nbM2 + "</td> \
+        <td>" + nbM3 + "</td> \
+        <td>" + nbCy + "</td> \
+      </tr> \
+      <tr> \
+        <td>Max Streak</td> \
+        <td>" + maxT1 + "</td> \
+        <td>" + maxT2 + "</td> \
+        <td>" + maxT3 + "</td> \
+        <td>" + maxM1 + "</td> \
+        <td>" + maxM2 + "</td> \
+        <td>" + maxM3 + "</td> \
+        <td>" + maxCy + "</td> \
+      </tr> \
+      <tr> \
+        <td> Max Not Streak</td> \
+        <td>" + maxNotT1 + "</td> \
+        <td>" + maxNotT2 + "</td> \
+        <td>" + maxNotT3 + "</td> \
+        <td>" + maxNotM1 + "</td> \
+        <td>" + maxNotM2 + "</td> \
+        <td>" + maxNotM3 + "</td> \
+        <td>" + maxNotCy + "</td> \
+      </tr> \
+    </tbody> \
+    </table>";
   }
 }

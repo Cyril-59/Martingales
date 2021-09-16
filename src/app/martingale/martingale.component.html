@@ -69,29 +69,51 @@
 </div>
 <app-roulette [hidden]="ready || modeBatch" [martingale]="martingale" (onContinue)="ready = true" (onClose)="close()" (onBatch)="modeBatch = true"></app-roulette>
 <div *ngIf="modeBatch" class="flex-column">
-    <h2>Batch guess vs random</h2>
-    <span class="flex-between align-center">
-        <label>Nb itérations : </label>
-        <input type="number" pInputText [(ngModel)]="nbIterations">
-    </span>
-    <span class="flex-between align-center">
-        <label>Cash : </label>
-        <input type="number" pInputText [(ngModel)]="batchCash">
-    </span>
-    <span class="flex-between align-center">
-        <label>Goal : </label>
-        <input type="number" pInputText [(ngModel)]="batchGoal">
-    </span>
-    <div class="flex-between top">
-        <button (click)="modeBatch = false" pButton label="Back"></button>
-        <button (click)="startBatch()" pButton label="Start"></button>
+    <div class="flex-column">
+        <div class="flex-between">
+            <h2>Batch guess vs random</h2>
+            <i class="pi pi-times" (click)="modeBatch = false"></i>
+        </div>
+        <span class="flex-between align-center">
+            <label>Nb itérations : </label>
+            <input type="number" pInputText [(ngModel)]="nbIterations">
+        </span>
+        <span class="flex-between align-center">
+            <label>Cash : </label>
+            <input type="number" pInputText [(ngModel)]="batchCash">
+        </span>
+        <span class="flex-between align-center">
+            <label>Goal : </label>
+            <input type="number" pInputText [(ngModel)]="batchGoal">
+        </span>
+        <div class="flex-end top">
+            <button (click)="startBatch()" pButton label="Start"></button>
+        </div>
+        <span>
+            <label>Guess Score : </label>{{ guessScore }}
+        </span>
+        <span>
+            <label>Random Score : </label>{{ randomScore }}
+        </span>
     </div>
-    <span>
-        <label>Guess Score : </label>{{ guessScore }}
-    </span>
-    <span>
-        <label>Random Score : </label>{{ randomScore }}
-    </span>
+    <div>
+        <h2>Random number generator</h2>
+        <span class="flex-between align-center">
+            <label>Nombre : </label>
+            <input type="number" pInputText [(ngModel)]="rngNumber">
+        </span>
+        <div class="flex-end top">
+            <button (click)="startRNG()" pButton label="Generate"></button>
+        </div>
+        <div class="report" [innerHtml]="reportResult"></div>
+        <div class="flex-wrap flex-center rng">
+            <ng-container *ngFor="let rng of rngArray">
+                <div [ngClass]="{'green': rng == 0, 'red': childRoulette.reds.includes(rng), 'black': childRoulette.blacks.includes(rng)}" class="random" style="color: white; text-align: center; border: 3px solid white; min-width: 2em; font-size: 1em; border-radius: 50%; padding: 4px; max-height: 2em">
+                    {{ rng }}
+                </div>
+            </ng-container>
+        </div>
+    </div>
 </div>
 <p-dialog [(visible)]="liveDialog" header="Roulette live" [modal]="true">
     <input type="number" placeholder="Live value" pInputText [(ngModel)]="liveValue" autofocus>

@@ -34,3 +34,8 @@ div.red {
 div.green {
     background-color: green;
 }
+
+.rng {
+    margin: auto;
+    max-width: calc(100% - 50px);
+}

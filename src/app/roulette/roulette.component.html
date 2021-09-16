@@ -205,10 +205,14 @@
     </div>
     <div class="flex-between top">
         <button pButton label="Test" (click)="play()"></button>
-        <div *ngIf="won" style="justify-content: center; display: flex; flex-direction: column;">Gagné</div>
-        <div *ngIf="won != undefined && !won" style="justify-content: center; display: flex; flex-direction: column;">Perdu</div>
         <div *ngIf="randomRoulette != undefined" [ngClass]="{'random-show': randomShow, 'green': randomRoulette == 0, 'red': reds.includes(randomRoulette), 'black': blacks.includes(randomRoulette)}" class="random" style="color: white; text-align: center; border: 3px solid white; min-width: 2em; font-size: 1em; border-radius: 50%; padding: 4px;">
             {{ randomRoulette }}
+        </div>
+        <div *ngIf="won" style="justify-content: center; display: flex; flex-direction: column;">
+            <i class="pi pi-check-circle" style="color: green"></i>
+        </div>
+        <div *ngIf="won != undefined && !won" style="justify-content: center; display: flex; flex-direction: column;">
+            <i class="pi pi-times-circle" style="color: red"></i>
         </div>
         <button pButton (click)="batch()" label="Batch"></button>
         <button pButton label="Continuer" (click)="continue()"></button>
