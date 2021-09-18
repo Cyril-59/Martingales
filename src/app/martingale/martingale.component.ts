@@ -57,6 +57,13 @@ export class MartingaleComponent implements OnInit {
   rngNumber = 100;
   rngArray: number[] = [];
   reportResult: string;
+  tiersBets = ['1-12', '13-24', '25-36', '1%3', '2%3', '0%3', 'CYL'];
+  demiBets = ['RED', 'BLACK', '1-18', '19-36', 'EVEN', 'ODD'];
+  doubleTiersBets = ['1-24', '13-36', '1-12/25-36', '1%3/2%3', '1%3/0%3', '2%3/0%3'];
+  randomBet: string[];
+  betNumber: number = 1;
+  onlyColor = false;
+  onlyTiers = false;
 
   @ViewChild(RouletteComponent)
   childRoulette: RouletteComponent;
@@ -250,11 +257,11 @@ export class MartingaleComponent implements OnInit {
   }
 
   guess() {
-    if (this.martingale.gain == 3) {
+    if (this.martingale.type == 0) {
       this.guessTiers(this.guessSize != null ? this.guessSize : 5);
-    } else if (this.martingale.gain == 2) {
+    } else if (this.martingale.type == 1) {
       this.guessDemi(this.guessSize != null ? this.guessSize : 4);
-    } else if (this.martingale.gain == 1.5) {
+    } else if (this.martingale.type == 2) {
       this.guessDeuxTiers(this.guessSize != null ? this.guessSize : 3);
     }
   }
@@ -577,8 +584,29 @@ export class MartingaleComponent implements OnInit {
     } else {
       this.modeGuess = false;
       this.childRoulette.reset();
-      if (this.martingale.gain == 3) {
+      if (this.martingale.type == 0) {
         this.childRoulette.numbers[Math.floor(Math.random() * 6) + 37] = true;
+      }
+      if (this.martingale.type == 1) {
+        this.childRoulette.numbers[Math.floor(Math.random() * 6) + 43] = true;
+      }
+      if (this.martingale.type == 2) {
+        const j = Math.floor(Math.random() * 6) + 37;
+        if (j < 40) {
+          this.childRoulette.numbers[j] = true;
+          if (j == 39) {
+            this.childRoulette.numbers[37] = true;
+          } else {
+            this.childRoulette.numbers[j + 1] = true;
+          }
+        } else {
+          this.childRoulette.numbers[j] = true;
+          if (j == 42) {
+            this.childRoulette.numbers[40] = true;
+          } else {
+            this.childRoulette.numbers[j + 1] = true;
+          }
+        }
       }
     }
     this.currentIndex = -1;
@@ -596,6 +624,34 @@ export class MartingaleComponent implements OnInit {
     return cpt;
   }
 
+  startRandomBet() {
+    this.randomBet = [];
+    for (let i = 0; i < this.betNumber; i++) {
+      const rng = Math.floor(Math.random() * 37);
+      if (rng == 0) {
+        this.randomBet.push('0');
+      } else {
+        if (this.martingale.type == 0) {
+          if (!this.onlyTiers) {
+            this.randomBet.push(this.tiersBets[Math.floor(Math.random() * 7)]);
+          } else {
+            this.randomBet.push(this.tiersBets[Math.floor(Math.random() * 3)]);
+          }
+        } else if (this.martingale.type == 1) {
+          if (!this.onlyColor) {
+            this.randomBet.push(this.demiBets[Math.floor(Math.random() * 6)]);
+          } else {
+            this.randomBet.push(this.demiBets[Math.floor(Math.random() * 2)]);
+          }
+        } else if (this.martingale.type == 2) {
+          this.randomBet.push(this.doubleTiersBets[Math.floor(Math.random() * 6)]);
+        } else {
+          this.randomBet.length = 0;
+        }
+      }
+    }
+  }
+
   startRNG() {
     this.rngArray.length = 0;
     for (let i = 0; i < this.rngNumber; i++) {
@@ -605,11 +661,14 @@ export class MartingaleComponent implements OnInit {
   }
 
   reportRNG() {
-    if (this.martingale.gain == 3) {
+    if (this.martingale.type == 0) {
       this.reportTiers();
     }
-    if (this.martingale.gain == 2) {
+    if (this.martingale.type == 1) {
       this.reportDemi();
+    }
+    if (this.martingale.type == 2) {
+      this.reportDeuxTiers();
     }
   }
 
@@ -745,6 +804,177 @@ export class MartingaleComponent implements OnInit {
         <td>" + maxNotOdd + "</td> \
         <td>" + maxNotManque + "</td> \
         <td>" + maxNotPasse + "</td> \
+      </tr> \
+    </tbody> \
+    </table>";
+  }
+
+  reportDeuxTiers() {
+    let nbT1T2 = 0, nbT1T3 = 0, nbT2T3 = 0, nbM1M2 = 0, nbM1M3 = 0, nbM2M3 = 0, nbZero = 0;
+    let maxT1T2 = 0, maxT1T3 = 0, maxT2T3 = 0, maxM1M2 = 0, maxM1M3 = 0, maxM2M3 = 0;
+    let maxNotT1T2 = 0, maxNotT1T3 = 0, maxNotT2T3 = 0, maxNotM1M2 = 0, maxNotM1M3 = 0, maxNotM2M3 = 0;
+    let cptT1T2 = 0, cptT1T3 = 0, cptT2T3 = 0, cptM1M2 = 0, cptM1M3 = 0, cptM2M3 = 0;
+    let cptNotT1T2 = 0, cptNotT1T3 = 0, cptNotT2T3 = 0, cptNotM1M2 = 0, cptNotM1M3 = 0, cptNotM2M3 = 0;
+
+    for (let i = 0; i < this.rngArray.length; i++) {
+      const rng = this.rngArray[i];
+      if (rng == 0) {
+        nbZero++;
+        cptT1T2 = cptT2T3 = cptT1T3 = cptM1M2 = cptM2M3 = cptM1M3 = 0;
+        cptNotT1T2++; cptNotT2T3++; cptNotT1T3++; cptNotM1M2++; cptNotM2M3++; cptNotM1M3++;
+      } else if (rng <= 12) {
+        nbT1T2++;
+        nbT1T3++;
+        cptT1T2++;
+        cptT1T3++;
+        if (cptT1T2 > maxT1T2) {
+          maxT1T2 = cptT1T2;
+        }
+        if (cptT1T3 > maxT1T3) {
+          maxT1T3 = cptT1T3;
+        }
+        cptT2T3 = 0;
+        cptNotT2T3++;
+        cptNotT1T2 = 0;
+        cptNotT1T3 = 0;
+      } else if (rng <= 24) {
+        nbT1T2++;
+        nbT2T3++;
+        cptT1T2++;
+        cptT2T3++;
+        if (cptT1T2 > maxT1T2) {
+          maxT1T2 = cptT1T2;
+        }
+        if (cptT2T3 > maxT2T3) {
+          maxT2T3 = cptT2T3;
+        }
+        cptT1T3 = 0;
+        cptNotT1T3++;
+        cptNotT1T2 = 0;
+        cptNotT2T3 = 0;
+      } else if (rng <= 36) {
+        nbT1T3++;
+        nbT2T3++;
+        cptT1T3++;
+        cptT2T3++;
+        if (cptT1T3 > maxT1T3) {
+          maxT1T3 = cptT1T3;
+        }
+        if (cptT2T3 > maxT2T3) {
+          maxT2T3 = cptT2T3;
+        }
+        cptT1T2 = 0;
+        cptNotT1T2++;
+        cptNotT1T3 = 0;
+        cptNotT2T3 = 0;
+      }
+
+      if (rng % 3 == 1) {
+        nbM1M2++;
+        nbM1M3++;
+        cptM1M2++;
+        cptM1M3++;
+        if (cptM1M2 > maxM1M2) {
+          maxM1M2 = cptM1M2;
+        }
+        if (cptM1M3 > maxM1M3) {
+          maxM1M3 = cptM1M3;
+        }
+        cptM2M3 = 0;
+        cptNotM2M3++;
+        cptNotM1M2 = 0;
+        cptNotM1M3 = 0;
+      } else if (rng % 3 == 2) {
+        nbM1M2++;
+        nbM2M3++;
+        cptM1M2++;
+        cptM2M3++;
+        if (cptM1M2 > maxM1M2) {
+          maxM1M2 = cptM1M2;
+        }
+        if (cptM2M3 > maxM2M3) {
+          maxM2M3 = cptM2M3;
+        }
+        cptM1M3 = 0;
+        cptNotM1M3++;
+        cptNotM1M2 = 0;
+        cptNotM2M3 = 0;
+      } else if (rng != 0) {
+        nbM1M3++;
+        nbM2M3++;
+        cptM1M3++;
+        cptM2M3++;
+        if (cptM1M3 > maxM1M3) {
+          maxM1M3 = cptM1M3;
+        }
+        if (cptM2M3 > maxM2M3) {
+          maxM2M3 = cptM2M3;
+        }
+        cptM1M2 = 0;
+        cptNotM1M2++;
+        cptNotM1M3 = 0;
+        cptNotM2M3 = 0;
+      }
+
+      if (cptNotT1T2 > maxNotT1T2) {
+        maxNotT1T2 = cptNotT1T2;
+      }
+      if (cptNotT2T3 > maxNotT2T3) {
+        maxNotT2T3 = cptNotT2T3;
+      }
+      if (cptNotT1T3 > maxNotT1T3) {
+        maxNotT1T3 = cptNotT1T3;
+      }
+      if (cptNotM1M2 > maxNotM1M2) {
+        maxNotM1M2 = cptNotM1M2;
+      }
+      if (cptNotM2M3 > maxNotM2M3) {
+        maxNotM2M3 = cptNotM2M3;
+      }
+      if (cptNotM1M3 > maxNotM1M3) {
+        maxNotM1M3 = cptNotM1M3;
+      }
+    }
+
+    this.reportResult = "<table> \
+    <thead> \
+      <tr> \
+        <th>0 : " + nbZero + " </th> \
+        <th>T1T2</th> \
+        <th>T2T3</th> \
+        <th>T1T3</th> \
+        <th>M1M2</th> \
+        <th>M2M3</th> \
+        <th>M1M3</th> \
+      </tr> \
+    </thead> \
+    <tbody> \
+      <tr> \
+        <td>Total</td> \
+        <td>" + nbT1T2 + "</td> \
+        <td>" + nbT2T3 + "</td> \
+        <td>" + nbT1T3 + "</td> \
+        <td>" + nbM1M2 + "</td> \
+        <td>" + nbM2M3 + "</td> \
+        <td>" + nbM1M3 + "</td> \
+      </tr> \
+      <tr> \
+        <td>Max Streak</td> \
+        <td>" + maxT1T2 + "</td> \
+        <td>" + maxT2T3 + "</td> \
+        <td>" + maxT1T3 + "</td> \
+        <td>" + maxM1M2 + "</td> \
+        <td>" + maxM2M3 + "</td> \
+        <td>" + maxM1M3 + "</td> \
+      </tr> \
+      <tr> \
+        <td> Max Not Streak</td> \
+        <td>" + maxNotT1T2 + "</td> \
+        <td>" + maxNotT2T3 + "</td> \
+        <td>" + maxNotT1T3 + "</td> \
+        <td>" + maxNotM1M2 + "</td> \
+        <td>" + maxNotM2M3 + "</td> \
+        <td>" + maxNotM1M3 + "</td> \
       </tr> \
     </tbody> \
     </table>";

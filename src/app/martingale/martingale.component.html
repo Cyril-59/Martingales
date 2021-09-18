@@ -71,8 +71,11 @@
 <div *ngIf="modeBatch" class="flex-column">
     <div class="flex-column">
         <div class="flex-between">
-            <h2>Batch guess vs random</h2>
+            <h2>{{ martingale.titre }}</h2>
             <i class="pi pi-times" (click)="modeBatch = false"></i>
+        </div>
+        <div class="flex-between">
+            <h2>Batch guess vs random</h2>
         </div>
         <span class="flex-between align-center">
             <label>Nb itérations : </label>
@@ -99,7 +102,7 @@
     <div>
         <h2>Random number generator</h2>
         <span class="flex-between align-center">
-            <label>Nombre : </label>
+            <label>Number : </label>
             <input type="number" pInputText [(ngModel)]="rngNumber">
         </span>
         <div class="flex-end top">
@@ -113,6 +116,29 @@
                 </div>
             </ng-container>
         </div>
+    </div>
+    <div class="flex-column">
+        <h2>Random bet generator</h2>
+        <span class="flex-between align-center">
+            <label>Number : </label>
+            <input type="number" pInputText [(ngModel)]="betNumber">
+        </span>
+        <span *ngIf="martingale.type == 0" class="flex-between align-center">
+            <label>Only consecutives : </label>
+            <p-checkbox [(ngModel)]="onlyTiers" binary="true"></p-checkbox>
+        </span>
+        <span *ngIf="martingale.type == 1" class="flex-between align-center">
+            <label>Only color : </label>
+            <p-checkbox [(ngModel)]="onlyColor" binary="true"></p-checkbox>
+        </span>
+        <div class="flex-end top">
+            <button (click)="startRandomBet()" pButton label="Generate"></button>
+        </div>
+        <span class="flex-start">
+            <div class="flex-column">
+                <div *ngFor="let bet of randomBet">{{ bet }}</div>
+            </div>
+        </span>
     </div>
 </div>
 <p-dialog [(visible)]="liveDialog" header="Roulette live" [modal]="true">

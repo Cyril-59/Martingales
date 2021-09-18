@@ -46,7 +46,7 @@ export class RouletteComponent implements OnInit {
     for (let i = 0; i <= 52; i++) {
       this.numbers.push(false);
     }
-    this.nbCases = 36 / this.martingale.gain;
+    this.nbCases = Math.round(36 / this.martingale.gain);
   }
 
   reset() {
