@@ -1,5 +1,5 @@
 export enum RouletteType {
-  TIERS, DEMI, DOUBLE_TIERS, CARRE, ZONE, AUTRE
+  TIERS, DEMI, DOUBLE_TIERS, CARRE, ZONE, METHODE, AUTRE
 }
 
 export class Roulette {

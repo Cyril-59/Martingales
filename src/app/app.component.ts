@@ -79,6 +79,9 @@ export class AppComponent implements OnInit {
     this.ajouter(new Roulette(RouletteType.ZONE, 8, 3.5, 30/37, 'Jeu Zéro', 1, 8, false));
 
     this.ajouter(new Roulette(RouletteType.AUTRE, 2, 36, 36/37, 'Single', 2, 2, false, 100, 1000));
+
+    this.ajouter(new Roulette(RouletteType.METHODE, 2, 2, 19/37, 'Labouchere', 2, 2, false, 1000, 1000, true));
+    this.ajouter(new Roulette(RouletteType.METHODE, 2, 2, 19/37, 'Fibonacci', 2, 2, false, 1000, 1000, true));
   }
 
   initGroup() {
@@ -114,6 +117,12 @@ export class AppComponent implements OnInit {
       ]
     },
     {
+      label: 'Méthodes',
+      value: RouletteType.METHODE,
+      items: [
+      ]
+    },
+    {
       label: 'Autres',
       value: RouletteType.AUTRE,
       items: [
@@ -141,8 +150,11 @@ export class AppComponent implements OnInit {
       case RouletteType.ZONE:
         this.groupedOptions[4].items.push({value: roulette.titre, label: roulette.titre});
         break;
-      case RouletteType.AUTRE:
+      case RouletteType.METHODE:
         this.groupedOptions[5].items.push({value: roulette.titre, label: roulette.titre});
+        break;
+      case RouletteType.AUTRE:
+        this.groupedOptions[6].items.push({value: roulette.titre, label: roulette.titre});
         break;
     }
     this.add = false;

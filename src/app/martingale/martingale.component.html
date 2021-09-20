@@ -10,7 +10,7 @@
             <i class="pi pi-backward" (click)="ready = false"></i>
             <i class="pi pi-times" (click)="close()"></i>
     </div>
-    <p-table [value]="tab" responsiveLayout="scroll">
+    <p-table *ngIf="tab; else methods" [value]="tab" responsiveLayout="scroll">
         <ng-template pTemplate="header">
             <tr>
                 <th>Essai</th>
@@ -30,6 +30,29 @@
             </tr>
         </ng-template>
     </p-table>
+    <ng-template #methods>
+        <div *ngIf="!isFibo; else fibo">
+            <input style="margin-right: .5em;" type="number" pInputText [(ngModel)]="newMethod">
+            <button style="margin-right: .5em;" pButton (click)="addToMethod()" label="Add"></button>
+            <button style="margin-right: .5em;" pButton (click)="createMethod()" label="Create"></button>
+        </div>
+        <ng-template #fibo>
+            <input style="margin-right: .5em;" type="number" pInputText [(ngModel)]="fiboStart">
+            <button style="margin-right: .5em;" pButton (click)="initFibo()" label="Reset"></button>
+        </ng-template>
+        <div *ngIf="method.length > 1" class="flex-start">
+            <div class="flex-between lab">
+                <span [@inOutAnimation]="'in'" *ngFor="let i of method; let j = index" [ngClass]="{'red': j == 0 || j == method.length - 1}">
+                    {{ i }}
+                </span>
+                <span>/</span>
+                <span class="green">{{ methodValue }}</span>
+            </div>
+        </div>
+        <div>
+            
+        </div>
+    </ng-template>
     <div class="flex-between align-center smalltop">
         <!--<button pButton (click)="compute()" label="+"></button>
         <button pButton (click)="generateRandomProba()" [label]="'Prob : ' + randomProba"></button>-->

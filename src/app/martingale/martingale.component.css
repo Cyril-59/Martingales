@@ -39,3 +39,9 @@ div.green {
     margin: auto;
     max-width: calc(100% - 50px);
 }
+
+.lab {
+    border: black solid 2px;
+    margin: 1em 0;
+    padding: .5em;
+}

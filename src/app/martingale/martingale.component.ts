@@ -1,11 +1,69 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Roulette } from '../roulette';
 import { RouletteComponent } from '../roulette/roulette.component';
+import { state, keyframes, style, animate, trigger, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-martingale',
   templateUrl: './martingale.component.html',
-  styleUrls: ['./martingale.component.css']
+  styleUrls: ['./martingale.component.css'],
+  animations: [
+    trigger("inOutAnimation", [
+      state("in", style({ opacity: 1 })),
+      transition(":enter", [
+        animate(
+          500,
+          keyframes([
+            style({ opacity: 0, offset: 0 }),
+            style({ opacity: 0.25, offset: 0.25 }),
+            style({ opacity: 0.5, offset: 0.5 }),
+            style({ opacity: 0.75, offset: 0.75 }),
+            style({ opacity: 1, offset: 1 }),
+          ])
+        )
+      ]),
+      transition(":leave", [
+        animate(
+          500,
+          keyframes([
+            style({ opacity: 1, offset: 0 }),
+            style({ opacity: 0.75, offset: 0.25 }),
+            style({ opacity: 0.5, offset: 0.5 }),
+            style({ opacity: 0.25, offset: 0.75 }),
+            style({ opacity: 0, offset: 1 }),
+          ])
+        )
+      ])
+    ]),
+    trigger("slideAnimation", [
+      state("in", style({ opacity: 1 })),
+      state("out", style({ opacity: 1 })),
+      transition("in => out", [
+        animate(
+          500,
+          keyframes([
+            style({ opacity: 0, offset: 0 }),
+            style({ opacity: 0.25, offset: 0.25 }),
+            style({ opacity: 0.5, offset: 0.5 }),
+            style({ opacity: 0.75, offset: 0.75 }),
+            style({ opacity: 1, offset: 1 }),
+          ])
+        )
+      ]),
+      transition(":leave", [
+        animate(
+          500,
+          keyframes([
+            style({ opacity: 1, offset: 0 }),
+            style({ opacity: 0.75, offset: 0.25 }),
+            style({ opacity: 0.5, offset: 0.5 }),
+            style({ opacity: 0.25, offset: 0.75 }),
+            style({ opacity: 0, offset: 1 }),
+          ])
+        )
+      ])
+    ])
+  ]
 })
 export class MartingaleComponent implements OnInit {
 
@@ -65,6 +123,12 @@ export class MartingaleComponent implements OnInit {
   onlyColor = false;
   onlyTiers = false;
 
+  method: number[] = [];
+  methodValue: number;
+  newMethod: number = 10;
+  isFibo: boolean;
+  fiboStart: number = 1;
+
   @ViewChild(RouletteComponent)
   childRoulette: RouletteComponent;
 
@@ -86,17 +150,24 @@ export class MartingaleComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.tab = [];
-    this.tab.push(this.martingale);
-    let i = 1;
-    let maxCompute = this.tabSize;
-    if (this.martingale.maxTry && this.martingale.maxTry < maxCompute) {
-      maxCompute = this.martingale.maxTry;
+    if (this.martingale.type != 5) {
+      this.tab = [];
+      this.tab.push(this.martingale);
+      let i = 1;
+      let maxCompute = this.tabSize;
+      if (this.martingale.maxTry && this.martingale.maxTry < maxCompute) {
+        maxCompute = this.martingale.maxTry;
+      }
+      while(i++ < maxCompute) {
+        this.compute();
+      }
+      this.firstMaxTry = this.martingale.maxTry;
+    } else {
+      this.isFibo = this.martingale.titre == 'Fibonacci';
+      if (this.isFibo) {
+        this.initFibo();
+      }
     }
-    while(i++ < maxCompute) {
-      this.compute();
-    }
-    this.firstMaxTry = this.martingale.maxTry;
 
     this.batchCash = this.cash;
     this.batchGoal = this.objectif;
@@ -119,6 +190,56 @@ export class MartingaleComponent implements OnInit {
       this.martingale.gainMini = this.martingale.gainMini + 2;
     }
     this.tab.push(newRoulette);
+  }
+
+  initFibo() {
+    this.method.length = 0;
+    this.method.push(this.fiboStart);
+    this.method.push(this.fiboStart);
+    this.computeMethodValue();
+  }
+
+  createMethod() {
+    if (this.newMethod) {
+      this.method.length = 0;
+      for (let i = 1; i <= this.newMethod; i++) {
+        this.method.push(i);
+      }
+      this.computeMethodValue();
+    }
+  }
+
+  addToMethod() {
+    if (this.newMethod) {
+      this.method.push(this.newMethod);
+      this.computeMethodValue();
+    }
+  }
+
+  computeMethodValue() {
+    if (this.method.length > 1) {
+      if (this.isFibo) {
+        this.methodValue = this.method[this.method.length - 2] + this.method[this.method.length - 1];
+      } else {
+        this.methodValue = this.method[0] + this.method[this.method.length - 1];
+      }
+    }
+  }
+
+  winMethod() {
+    this.onWin.emit(this.methodValue * this.martingale.gain);
+    if (this.isFibo) {
+      this.method.length = this.method.length - 2;
+    } else {
+      this.method.length = this.method.length - 1;
+      this.method.shift();
+    }
+    this.computeMethodValue();
+  }
+
+  loseMethod() {
+    this.method.push(this.methodValue);
+    this.computeMethodValue();
   }
 
   getTotal() {
@@ -150,7 +271,11 @@ export class MartingaleComponent implements OnInit {
       }
     }
     if (!this.modeBatch) {
-      this.onNext.emit(this.tab[this.currentIndex].mise);
+      if (!(this.martingale.type == 5)) {
+        this.onNext.emit(this.tab[this.currentIndex].mise);
+      } else {
+        this.onNext.emit(this.methodValue);
+      }
     } else {
       this.batchCash -= this.tab[this.currentIndex].mise;
     }
@@ -160,7 +285,11 @@ export class MartingaleComponent implements OnInit {
     this.prevLoseStreak = 0;
     this.winIndex = this.currentIndex;
     if (!this.modeBatch) {
-      this.onWin.emit(this.tab[this.currentIndex].mise * this.tab[this.currentIndex].gain);
+      if (!(this.martingale.type == 5)) {
+        this.onWin.emit(this.tab[this.currentIndex].mise * this.tab[this.currentIndex].gain);
+      } else {
+        this.winMethod();
+      }
     } else {
       this.batchCash += this.tab[this.currentIndex].mise * this.tab[this.currentIndex].gain;
     }
@@ -195,16 +324,20 @@ export class MartingaleComponent implements OnInit {
     if (this.childRoulette.won) {
       this.win();
     } else {
-      if (this.currentIndex + 1 == this.tab.length) {
-        this.compute();
-      }
-      if (this.currentIndex + 1 >= this.martingale.maxTry) {
-        if (this.martingale.dynamic && this.cash - this.tab[this.currentIndex].mise > this.tab[this.currentIndex + 1].mise) {
-          this.martingale.maxTry++;
-        } else {
-          this.maxTryReached = true;
-          this.prevLoseStreak += this.martingale.maxTry;
+      if (!(this.martingale.type == 5)) {
+        if (this.currentIndex + 1 == this.tab.length) {
+            this.compute();
         }
+        if (this.currentIndex + 1 >= this.martingale.maxTry) {
+          if (this.martingale.dynamic && this.cash - this.tab[this.currentIndex].mise > this.tab[this.currentIndex + 1].mise) {
+            this.martingale.maxTry++;
+          } else {
+            this.maxTryReached = true;
+            this.prevLoseStreak += this.martingale.maxTry;
+          }
+        }
+      } else {
+        this.loseMethod();
       }
     }
     this.guess();
@@ -259,7 +392,7 @@ export class MartingaleComponent implements OnInit {
   guess() {
     if (this.martingale.type == 0) {
       this.guessTiers(this.guessSize != null ? this.guessSize : 5);
-    } else if (this.martingale.type == 1) {
+    } else if (this.martingale.type == 1 || this.martingale.type == 5) {
       this.guessDemi(this.guessSize != null ? this.guessSize : 4);
     } else if (this.martingale.type == 2) {
       this.guessDeuxTiers(this.guessSize != null ? this.guessSize : 3);
@@ -518,7 +651,7 @@ export class MartingaleComponent implements OnInit {
         } else if (this.childRoulette.numbers[52]) {
           return 'CYL';
         }
-    } else if (this.martingale.type == 1) {
+    } else if (this.martingale.type == 1 || this.martingale.type == 5) {
       if (this.childRoulette.numbers[43]) {
         return '1-18';
       } else if (this.childRoulette.numbers[44]) {
