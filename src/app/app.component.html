@@ -1,5 +1,5 @@
-<div class="body" [ngClass]="{'background': list}">
-    <div class="flex-between header">
+<div class="body" [ngClass]="{'background': list && !quietMode }">
+    <div *ngIf="!quietMode" class="flex-between header">
         <img style="height: 60px;" src="/assets/sevens.png"/>
         <h1 class="" style="font-family: 'Open Sans'; font-size: 1.5em;">Martingales</h1>
         <img style="height: 60px;" src="/assets/jeton.png"/>
@@ -7,28 +7,35 @@
     <div class="flex-center bottom align" *ngIf="!start && !showRoulette">
         <div class="flex-column">
             <input type="number" placeholder="Cash-in" pInputText [(ngModel)]="cash">
-            <input class="top"type="number" placeholder="Cash-out" pInputText [(ngModel)]="objectif">
+            <input class="top" type="number" placeholder="Cash-out" pInputText [(ngModel)]="objectif">
             <button class="top" pButton label="Start" (click)="initData()"></button>
         </div>
     </div>
-    <div *ngIf="showRoulette">
+    <!--<div *ngIf="showRoulette">
         <app-roulette (onClose)="showRoulette = !showRoulette"></app-roulette>
-    </div>
-    <div *ngIf="start" class="flex-column evenly" style="margin-top: auto;">
+    </div>-->
+    <div *ngIf="start" class="flex-column evenly" [ngClass]="{ 'margin-auto' : !quietMode }">
         <div [ngClass]="{ 'flex-between': !add, 'flex-center': add }">
             <div *ngIf="!add" style="margin-top: 1.5em">Min: {{ minCash }}</div>
-            <div class="flex-center" [ngClass]="getCashClass()">{{ cash }} €</div>
+            <div class="flex-center align-center" [ngClass]="getCashClass()">{{ cash }} €</div>
             <div *ngIf="!add" style="margin-top: 1.5em">Max: {{ maxCash }}</div>
         </div>
-        <div class="flex-between" *ngIf="!add && list && !showParams" style="margin-top: 2em;">
-            <i style="margin: auto; cursor: pointer;" class="pi pi-question" (click)="showInfo = true;"></i>
-            <i style="margin: auto; cursor: pointer;" class="pi pi-plus" (click)="plus()"></i>
-            <p-dropdown *ngIf="init" class="flex-center" placeholder="Choisir une martingale" [options]="groupedOptions" [group]="true" (onChange)="select($event)"></p-dropdown>
-            <i style="margin: auto; cursor: pointer;" class="pi pi-refresh" (click)="refresh()"></i>
-            <i style="margin: auto; cursor: pointer;" class="pi pi-cog" (click)="params()"></i>
+        <div *ngIf="!add && list && !showParams" class="flex-column">
+            <div class="flex-between" [ngClass]="{ 'bigtop' : !quietMode }">
+                <i style="margin: auto; cursor: pointer;" class="pi pi-question" (click)="showInfo = true;"></i>
+                <i style="margin: auto; cursor: pointer;" class="pi pi-plus" (click)="plus()"></i>
+                <p-dropdown *ngIf="init && !quietMode" class="flex-center" placeholder="Choisir une martingale" [options]="groupedOptions" [group]="true" (onChange)="select($event)"></p-dropdown>
+                <p-listbox *ngIf="init && quietMode" [options]="listOptions" (onChange)="select($event)"></p-listbox>
+                <i style="margin: auto; cursor: pointer;" class="pi pi-refresh" (click)="refresh()"></i>
+                <i style="margin: auto; cursor: pointer;" class="pi pi-cog" (click)="params()"></i>
+            </div>
+            <div class="flex-center align-center top">
+                <label>Quiet mode : </label>
+                <p-inputSwitch [(ngModel)]="quietMode" (onChange)="onQuiet()" class="left"></p-inputSwitch>
+            </div>
         </div>
         <div class="flex-center" *ngIf="!add && !list && !showParams">
-            <app-martingale *ngIf="martingale" class="top" [cash]="cash" [objectif]="objectif" [martingale]="martingale" [historySize]="historySize" [guessSize]="guessSize" [tabSize]="tabSize" (onDelete)="supprimer()" (onClose)="list = true" (onNext)="substract($event)" (onWin)="win($event)" (onChangeCash)="cash=$event"></app-martingale>
+            <app-martingale *ngIf="martingale" class="top" [cash]="cash" [objectif]="objectif" [martingale]="martingale" [historySize]="historySize" [guessSize]="guessSize" [tabSize]="tabSize" [lastNumbers]="lastNumbers" [quietMode]="quietMode" (onDelete)="supprimer()" (onClose)="list = true" (onNext)="substract($event)" (onWin)="win($event)" (onChangeCash)="cash=$event" (onBack)="back()"></app-martingale>
         </div>
         <div *ngIf="add" class="flex-center">
             <app-form (roulette)="ajouter($event, true)" (onCancel)="add = false"></app-form>
@@ -48,14 +55,14 @@
                     <label>Guess Size : </label>
                     <input type="number" pInputText [(ngModel)]="guessSize">
                 </span>
-                <span class="flex-end top">
+                <span class="align-end top">
                     <button class="p-button-danger" pButton type="button" label="Valider" (click)="showParams = false"></button>
                 </span>
             </div>
         </div>
-        <p-chart *ngIf="showChart" class="top" type="line" [data]="data"></p-chart>
+        <p-chart *ngIf="showChart && !quietMode" class="top" type="line" [data]="data"></p-chart>
     </div>
-    <div class="footer flex-between bottom">
+    <div *ngIf="!quietMode" class="footer flex-between bottom">
         <img style="height: 60px;" src="/assets/cards.png"/>
         <h1 class="" style="font-family: 'Open Sans'; font-size: 1.5em;">Good Luck</h1>
         <img style="height: 60px;" src="/assets/dices.png"/>

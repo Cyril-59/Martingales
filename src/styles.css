@@ -104,6 +104,10 @@ body {
     margin-right: 1em !important;
 }
 
+.bigtop {
+    margin-top: 2em !important;
+}
+
 .top {
     margin-top: 1em !important;
 }
@@ -163,10 +167,11 @@ p-togglebutton.red div {
     height: 100%;
 }
 
-body .ui-button {
+/*body :not(.nostyle) .ui-button {
     background-color: #0ab3af !important;
     border: 1px solid #0ab3af !important;
 }
+
 
 body .ui-togglebutton.ui-state-active {
     background-color: #0ab3af !important;
@@ -189,7 +194,7 @@ body .ui-inputtext:enabled:focus:not(.ui-state-error) {
 body .ui-dropdown:not(.ui-state-disabled).ui-state-focus {
     box-shadow: 0 0 0 0.2em #0ab3af42 !important;
     border-color: #0ab3af !important;
-}
+}*/
 
 .ui-dialog-top {
     margin-top: 3em;
@@ -210,4 +215,13 @@ body .ui-dropdown:not(.ui-state-disabled).ui-state-focus {
     border-style:solid;
     border-width:1px;
     min-width: 2em;
+}
+
+body .ui-slider.ui-slider-horizontal .ui-slider-handle {
+    margin-top: -1em !important;
+}
+
+body .ui-slider .ui-slider-handle {
+    height: 2em !important;
+    width: 2em !important;
 }

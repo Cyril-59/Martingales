@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Roulette, RouletteType } from './roulette';
+import { Roulette, RouletteType, Methode } from './roulette';
 import { SelectItem } from 'primeng/api/selectitem';
 import { UIChart } from 'primeng/chart';
 import { SelectItemGroup } from 'primeng/api/public_api';
@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   martingales: Roulette[] = [];
   options: SelectItem[] = [];
   groupedOptions: SelectItemGroup[];
+  listOptions: SelectItem[] = [];
   martingale: Roulette;
   init = false;
   add = false;
@@ -39,9 +40,12 @@ export class AppComponent implements OnInit {
   showParams = false;
   historySize = 13;
   guessSize = null;
+  quietMode = false;
   tabSize = 5;
+  lastTabSize = 5;
   guessScore = 0;
   randomScore = 0;
+  lastNumbers: number[] = [];
 
   @ViewChild(UIChart)
   chartComp: UIChart;
@@ -56,9 +60,9 @@ export class AppComponent implements OnInit {
     this.ajouter(new Roulette(RouletteType.TIERS, 2, 3, 25/37, 'Tiers Croissant', 4, 2, true));
     this.ajouter(new Roulette(RouletteType.TIERS, 4, 3, 25/37, 'Tiers Max 32', 8, 2, false, 32));
     this.ajouter(new Roulette(RouletteType.TIERS, 12, 3, 25/37, 'Tiers Cylindre', 1, 12, false));
-    this.ajouter(new Roulette(RouletteType.TIERS, 8, 3, 25/37, 'Tiers Transversales', 1, 8, false));
-    this.ajouter(new Roulette(RouletteType.TIERS, 12, 3, 25/37, 'Tiers Max Try 5', 1, 12, false, 100, 5));
-    this.ajouter(new Roulette(RouletteType.TIERS, 12, 3, 25/37, 'Tiers Dynamic', 1, 12, false, 100, 2, true));
+    //this.ajouter(new Roulette(RouletteType.TIERS, 8, 3, 25/37, 'Tiers Transversales', 1, 8, false));
+    //this.ajouter(new Roulette(RouletteType.TIERS, 12, 3, 25/37, 'Tiers Max Try 5', 1, 12, false, 100, 5));
+    //this.ajouter(new Roulette(RouletteType.TIERS, 12, 3, 25/37, 'Tiers Dynamic', 1, 12, false, 100, 2, true));
 
     this.ajouter(new Roulette(RouletteType.DEMI, 4, 2, 19/37, 'Demi Min 4', 4));
     this.ajouter(new Roulette(RouletteType.DEMI, 2, 2, 19/37, 'Demi Gain', 1, 2, true));
@@ -70,7 +74,7 @@ export class AppComponent implements OnInit {
 
     this.ajouter(new Roulette(RouletteType.CARRE, 2, 9, 33/37, 'Carre', 8, 2, false));
     this.ajouter(new Roulette(RouletteType.CARRE, 4, 4.5, 29/37, 'DoubleCarre', 8, 4, false));
-    this.ajouter(new Roulette(RouletteType.CARRE, 6, 3, 25/37, 'TripleCarre', 2, 6, false));
+    //this.ajouter(new Roulette(RouletteType.CARRE, 6, 3, 25/37, 'TripleCarre', 2, 6, false));
     this.ajouter(new Roulette(RouletteType.CARRE, 8, 2.25, 21/37, 'QuadriCarre', 4, 8, false));
 
     this.ajouter(new Roulette(RouletteType.ZONE, 12, 3, 25/37, 'Tiers Cylindre', 1, 12, false));
@@ -80,8 +84,9 @@ export class AppComponent implements OnInit {
 
     this.ajouter(new Roulette(RouletteType.AUTRE, 2, 36, 36/37, 'Single', 2, 2, false, 100, 1000));
 
-    this.ajouter(new Roulette(RouletteType.METHODE, 2, 2, 19/37, 'Labouchere', 2, 2, false, 1000, 1000, true));
-    this.ajouter(new Roulette(RouletteType.METHODE, 2, 2, 19/37, 'Fibonacci', 2, 2, false, 1000, 1000, true));
+    this.ajouter(new Roulette(RouletteType.METHODE, null, 2, 19/37, 'Labouchère').withMethod(Methode.LABOUCHERE));
+    this.ajouter(new Roulette(RouletteType.METHODE, null, 2, 19/37, 'Labouchère inv').withMethod(Methode.LABOUCHERE_INVERSEE));
+    this.ajouter(new Roulette(RouletteType.METHODE, null, 2, 19/37, 'Fibonacci').withMethod(Methode.FIBONACCI));
   }
 
   initGroup() {
@@ -157,6 +162,7 @@ export class AppComponent implements OnInit {
         this.groupedOptions[6].items.push({value: roulette.titre, label: roulette.titre});
         break;
     }
+    this.listOptions.push({value: roulette.titre, label: roulette.titre});
     this.add = false;
     if (select) {
       this.select({ value: this.martingales[this.martingales.length - 1].titre });
@@ -237,6 +243,11 @@ export class AppComponent implements OnInit {
     }
   }
 
+  back() {
+    this.cashHistory.pop();
+    this.chart();
+  }
+
   chart() {
     if (this.cashHistory.length > 1) {
       this.data = {
@@ -246,13 +257,18 @@ export class AppComponent implements OnInit {
             label: this.martingale.titre,
             data: this.cashHistory,
             fill: false,
-            borderColor: '#da7070'
+            borderColor: '#ffa000'
           }, {
               label: 'Cash-in',
               data: Array(this.cashHistory.length).fill(this.startCash),
               fill: false,
-              borderColor: '#8ee070'
-          }
+              borderColor: '#da7070'
+          }, {
+            label: 'Cash-out',
+            data: Array(this.cashHistory.length).fill(this.objectif),
+            fill: false,
+            borderColor: '#8ee070'
+        }
         ]
       }
       this.showChart = true;
@@ -266,15 +282,18 @@ export class AppComponent implements OnInit {
   }
 
   getCashClass() {
-    if (this.cash >= this.startCash) {
-      return 'green';
-    } else if (this.cash > this.startCash / 2) {
-      return 'orange';
-    } else if (this.cash > 0) {
-      return 'red';
-    } else {
-      return 'black';
+    if (!this.quietMode) {
+      if (this.cash >= this.startCash) {
+        return 'green';
+      } else if (this.cash > this.startCash / 2) {
+        return 'orange';
+      } else if (this.cash > 0) {
+        return 'red';
+      } else {
+        return 'black';
+      }
     }
+    return '';
   }
 
   refresh() {
@@ -291,6 +310,9 @@ export class AppComponent implements OnInit {
   retry() {
     this.state = null;
     this.martingale = this.prevMartingale;
+    if (this.martingale.gainCroissant) {
+      this.martingale.gainMini = 4;
+    }
     this.prevMartingale = null;
     this.cashHistory.length = 0;
     this.cash = this.startCash;
@@ -301,5 +323,15 @@ export class AppComponent implements OnInit {
 
   params() {
     this.showParams = true;
+  }
+
+  onQuiet() {
+    if (this.quietMode) {
+      this.lastTabSize = this.tabSize;
+      this.tabSize = 15;
+    } else {
+      this.tabSize = this.lastTabSize;
+    }
+    this.showParams = false;
   }
 }

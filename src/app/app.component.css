@@ -41,3 +41,7 @@ div.align {
 div.evenly {
     justify-content: space-evenly;
 }
+
+.margin-auto {
+    margin-top: auto;
+}

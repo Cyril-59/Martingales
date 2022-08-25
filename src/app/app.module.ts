@@ -6,11 +6,14 @@ import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ChartModule } from 'primeng/chart';
-import {CheckboxModule} from 'primeng/checkbox';
-import {ToggleButtonModule} from 'primeng/togglebutton';
-import {DialogModule} from 'primeng/dialog';
-import {InputSwitchModule} from 'primeng/inputswitch';
-import {TooltipModule} from 'primeng/tooltip';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { ListboxModule } from 'primeng/listbox';
+import { DialogModule } from 'primeng/dialog';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { TooltipModule } from 'primeng/tooltip';
+import { SliderModule } from 'primeng/slider';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MartingaleComponent } from './martingale/martingale.component';
@@ -35,15 +38,18 @@ import { environment } from '../environments/environment';
     AppRoutingModule,
     FormsModule,
     DropdownModule,
+    ListboxModule,
     TableModule,
     InputTextModule,
     ButtonModule,
     ChartModule,
     ToggleButtonModule,
+    SelectButtonModule,
     CheckboxModule,
     DialogModule,
     InputSwitchModule,
     TooltipModule,
+    SliderModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],

@@ -132,6 +132,18 @@ export class RouletteComponent implements OnInit {
     }
   }
 
+  autoContinue() {
+    let cpt = 0;
+    for (let i = 0; i <= 48; i++) {
+      if (this.numbers[i]) {
+        cpt += this.weights[i];
+      }
+    }
+    if (cpt == this.nbCases) {
+      this.onContinue.emit();
+    }
+  }
+
   switchMode() {
     this.modeZone = !this.modeZone;
     this.reset();
@@ -142,6 +154,7 @@ export class RouletteComponent implements OnInit {
     for (let i of tab) {
       this.numbers[i] = true;
     }
+    this.autoContinue();
   }
 
   transversale(n: number) {
@@ -149,6 +162,7 @@ export class RouletteComponent implements OnInit {
     for (let i of tab) {
       this.numbers[i] = true;
     }
+    this.autoContinue();
   }
 
   transversale0(n: number) {
@@ -159,11 +173,13 @@ export class RouletteComponent implements OnInit {
     } else {
       this.numbers[3] = true;
     }
+    this.autoContinue();
   }
 
   sixain(n: number) {
     this.transversale(n);
     this.transversale(n+1);
+    this.autoContinue();
   }
 
   batch() {

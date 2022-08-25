@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { Roulette } from '../roulette';
+import { Roulette, Methode } from '../roulette';
 import { RouletteComponent } from '../roulette/roulette.component';
 import { state, keyframes, style, animate, trigger, transition } from '@angular/animations';
 
@@ -85,6 +85,9 @@ export class MartingaleComponent implements OnInit {
   @Input()
   guessSize: number;
 
+  @Input()
+  quietMode: boolean = false;
+
   tab: Roulette[];
   currentIndex: number = -1;
   nbJeux = 0;
@@ -92,6 +95,7 @@ export class MartingaleComponent implements OnInit {
   randomProba: number = 0;
   randomRoulette: number = 0;
   ready = false;
+  @Input()
   lastNumbers: number[] = [];
   loseStreak: number = 0;
   prevLoseStreak: number = 0;
@@ -99,8 +103,8 @@ export class MartingaleComponent implements OnInit {
   liveValue: number;
   maxTryReached = false;
   firstMaxTry: number;
-  modeLive = false;
-  modeGuess = false;
+  modeLive = true;
+  modeGuess = true;
   guessLabel: string = 'Wait';
   showChangeCash = false;
   newCash = this.cash;
@@ -123,11 +127,19 @@ export class MartingaleComponent implements OnInit {
   onlyColor = false;
   onlyTiers = false;
 
+  methodType: Methode;
   method: number[] = [];
   methodValue: number;
   newMethod: number = 10;
-  isFibo: boolean;
+  newSize: number = 10;
   fiboStart: number = 1;
+  sliderValue: number = 0;
+  playOrPass: boolean = false;
+  playModes = [
+    {label: 'Play', value: 'Play'},
+    {label: 'Pass', value: 'Pass'}
+  ];
+  selectedPlayMode = 'Pass';
 
   @ViewChild(RouletteComponent)
   childRoulette: RouletteComponent;
@@ -143,6 +155,9 @@ export class MartingaleComponent implements OnInit {
 
   @Output()
   onWin: EventEmitter<number> = new EventEmitter();
+
+  @Output()
+  onBack: EventEmitter<void> = new EventEmitter();
 
   @Output()
   onChangeCash: EventEmitter<number> = new EventEmitter();
@@ -163,14 +178,20 @@ export class MartingaleComponent implements OnInit {
       }
       this.firstMaxTry = this.martingale.maxTry;
     } else {
-      this.isFibo = this.martingale.titre == 'Fibonacci';
-      if (this.isFibo) {
+      this.methodType = this.martingale.method;
+      if (this.methodType == Methode.FIBONACCI) {
         this.initFibo();
       }
     }
 
     this.batchCash = this.cash;
     this.batchGoal = this.objectif;
+    if (this.lastNumbers.length > 0) {
+      this.sliderValue = this.lastNumbers[0];
+    }
+    if (this.quietMode) {
+      setTimeout(() => this.ready = true);
+    }
   }
 
   compute() {
@@ -202,11 +223,24 @@ export class MartingaleComponent implements OnInit {
   createMethod() {
     if (this.newMethod) {
       this.method.length = 0;
-      for (let i = 1; i <= this.newMethod; i++) {
+      for (let i = 1; i <= this.newSize; i++) {
         this.method.push(i);
       }
       this.computeMethodValue();
     }
+  }
+
+  createRandomMethod() {
+    this.method.length = 0;
+    const half = this.cash / 2;
+    const tenth = half / 10;
+    let cpt = 0;
+    for (let i = 1; i <= this.newSize; i++) {
+      const rng = Math.floor(Math.random() * tenth) + 1;
+      this.method.push(rng);
+      cpt += rng;
+    }
+    this.computeMethodValue();
   }
 
   addToMethod() {
@@ -218,7 +252,7 @@ export class MartingaleComponent implements OnInit {
 
   computeMethodValue() {
     if (this.method.length > 1) {
-      if (this.isFibo) {
+      if (this.methodType == Methode.FIBONACCI) {
         this.methodValue = this.method[this.method.length - 2] + this.method[this.method.length - 1];
       } else {
         this.methodValue = this.method[0] + this.method[this.method.length - 1];
@@ -228,22 +262,37 @@ export class MartingaleComponent implements OnInit {
 
   winMethod() {
     this.onWin.emit(this.methodValue * this.martingale.gain);
-    if (this.isFibo) {
+    if (this.methodType == Methode.FIBONACCI) {
       this.method.length = this.method.length - 2;
-    } else {
+    } else if (this.methodType == Methode.LABOUCHERE) {
+      this.method.length = this.method.length - 1;
+      this.method.shift();
+    } else if (this.methodType == Methode.LABOUCHERE_INVERSEE) {
+      this.method.push(this.method[0] + this.method[this.method.length - 1]);
+    }
+    this.computeMethodValue();
+  }
+
+  loseMethod() {
+    if (this.methodType == Methode.FIBONACCI || this.methodType == Methode.LABOUCHERE) {
+      this.method.push(this.methodValue);
+    } else if (this.methodType == Methode.LABOUCHERE_INVERSEE) {
       this.method.length = this.method.length - 1;
       this.method.shift();
     }
     this.computeMethodValue();
   }
 
-  loseMethod() {
-    this.method.push(this.methodValue);
-    this.computeMethodValue();
-  }
-
   getTotal() {
-    return this.tab.map(t => t.mise).reduce((s, v) => s += v);
+    if (this.martingale.type != 5) {
+      return this.tab.map(t => t.mise).reduce((s, v) => s += v);
+    } else {
+      if (this.method.length > 0) {
+        return this.method.reduce((s, v) => s += v);
+      } else {
+        return 0;
+      }
+    }
   }
 
   delete() {
@@ -251,6 +300,9 @@ export class MartingaleComponent implements OnInit {
   }
 
   close() {
+    if (this.martingale.gainCroissant) {
+      this.martingale.gainMini = 4;
+    }
     this.onClose.emit();
   }
 
@@ -301,6 +353,39 @@ export class MartingaleComponent implements OnInit {
 
   generateRandomRoulette() {
     this.randomRoulette = Math.floor(Math.random() * 37);
+  }
+
+  slideEnd() {
+    this.liveValue = this.sliderValue;
+    if (this.playOrPass) {
+      this.play(true);
+    } else {
+      this.simulate(true);
+    }
+  }
+
+  playModeChanged() {
+    this.playOrPass = this.selectedPlayMode === 'Play';
+  }
+
+  deleteLast() {
+    if (this.playOrPass && this.currentIndex < 0) {
+      return;
+    }
+    if (this.playOrPass && this.currentIndex >= 0) {
+      if (this.winIndex == this.currentIndex) {
+        this.cash = this.cash - this.tab[this.currentIndex].mise * this.tab[this.currentIndex].gain + this.tab[this.currentIndex].mise;
+        this.winIndex = null;
+      } else {
+        this.cash += this.tab[this.currentIndex].mise;
+      }
+      this.onChangeCash.emit(this.cash);
+      this.onBack.emit();
+      this.currentIndex -= 1;
+    }
+    this.lastNumbers.shift();
+    this.sliderValue = this.lastNumbers[0];
+    this.guess();
   }
 
   playLive() {
@@ -650,7 +735,9 @@ export class MartingaleComponent implements OnInit {
           return '0%3';
         } else if (this.childRoulette.numbers[52]) {
           return 'CYL';
-        }
+        } /*else {
+          return 'Special';
+        }*/
     } else if (this.martingale.type == 1 || this.martingale.type == 5) {
       if (this.childRoulette.numbers[43]) {
         return '1-18';
@@ -664,7 +751,9 @@ export class MartingaleComponent implements OnInit {
         return 'ODD';
       } else if (this.childRoulette.numbers[48]) {
         return '19-36';
-      }
+      } /*else {
+        return 'Special';
+      }*/
     } else if (this.martingale.type == 2) {
       if (this.childRoulette.numbers[40] && this.childRoulette.numbers[41]) {
         return '1-24';
@@ -678,7 +767,9 @@ export class MartingaleComponent implements OnInit {
         return '1%3/0%3';
       } else if (this.childRoulette.numbers[38] && this.childRoulette.numbers[39]) {
         return '2%3/0%3';
-      }
+      } /*else {
+        return 'Special';
+      }*/
     }
   }
 

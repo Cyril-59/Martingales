@@ -2,12 +2,12 @@
     <div class="flex-between align-center">
         <h2 style="font-size: 1em;">{{ martingale.titre }}</h2>
         <p-inputSwitch [(ngModel)]="modeLive"></p-inputSwitch>
-        <div *ngIf="lastNumbers.length > 0" [ngClass]="{'green': lastNumbers[0] == 0, 'red': childRoulette.reds.includes(lastNumbers[0]), 'black': childRoulette.blacks.includes(lastNumbers[0])}" class="random" style="color: white; text-align: center; border: 3px solid white; min-width: 2em; font-size: 1em; border-radius: 50%; padding: 4px; max-height: 2em">
-            {{ randomRoulette }}
+        <div [ngClass]="{'green': sliderValue == 0, 'red': childRoulette.reds.includes(sliderValue), 'black': childRoulette.blacks.includes(sliderValue)}" class="random" style="color: white; text-align: center; border: 3px solid white; min-width: 2em; font-size: 1em; border-radius: 50%; padding: 4px; max-height: 2em">
+            {{ sliderValue }}
         </div>
             <i class="pi pi-dollar" (click)="changeCash()"></i>
             <span>{{ getMiseCourante() }}</span>
-            <i class="pi pi-backward" (click)="ready = false"></i>
+            <i class="pi pi-microsoft" (click)="ready = false"></i>
             <i class="pi pi-times" (click)="close()"></i>
     </div>
     <p-table *ngIf="tab; else methods" [value]="tab" responsiveLayout="scroll">
@@ -31,14 +31,28 @@
         </ng-template>
     </p-table>
     <ng-template #methods>
-        <div *ngIf="!isFibo; else fibo">
-            <input style="margin-right: .5em;" type="number" pInputText [(ngModel)]="newMethod">
-            <button style="margin-right: .5em;" pButton (click)="addToMethod()" label="Add"></button>
-            <button style="margin-right: .5em;" pButton (click)="createMethod()" label="Create"></button>
+        <div *ngIf="methodType != 2; else fibo">
+            <div class="flex-between align-center">
+                <span class="flex-between align-center">
+                    <label>Value : </label>
+                    <input style="margin-right: .5em; max-width: 5em;" type="number" pInputText [(ngModel)]="newMethod">
+                </span>
+                <span class="flex-between align-center">
+                    <label>Size : </label>
+                    <input style="margin-right: .5em; max-width: 5em;" type="number" pInputText [(ngModel)]="newSize">
+                </span>
+                Sum : {{ getTotal() }}
+            </div>
+            <div class="flex-end top">
+                <button style="margin-right: .5em;" pButton (click)="addToMethod()" label="Add"></button>
+                <button style="margin-right: .5em;" pButton (click)="createMethod()" label="Create"></button>
+                <button style="margin-right: .5em;" pButton (click)="createRandomMethod()" label="RNG"></button>
+            </div>
         </div>
         <ng-template #fibo>
             <input style="margin-right: .5em;" type="number" pInputText [(ngModel)]="fiboStart">
             <button style="margin-right: .5em;" pButton (click)="initFibo()" label="Reset"></button>
+            <button style="margin-right: .5em;" pButton (click)="fiboStart = fiboStart * 2" label="Double"></button>
         </ng-template>
         <div *ngIf="method.length > 1" class="flex-start">
             <div class="flex-between lab">
@@ -64,30 +78,37 @@
                 {{ i }}
             </span>
         </div>
-        <button *ngIf="modeLive" style="margin-right: .5em;" pButton (click)="live()" label="Live"></button>
+        <!--<button *ngIf="modeLive" style="margin-right: .5em;" pButton (click)="live()" label="Live"></button>-->
         <button *ngIf="!modeLive" style="margin-right: .5em;" pButton (click)="simulate()" label="Pass"></button>
+        <i *ngIf="modeLive" class="pi pi-backward" style="margin-right: .5em;" (click)="deleteLast()"></i>
+        <!--<button *ngIf="modeLive" style="margin-right: .5em;" pButton (click)="deleteLast()" label="Delete" [disabled]="playOrPass && currentIndex < 0"></button>-->
         <!--<button pButton (click)="generateRandomRoulette()" [label]="'Bille : ' + randomRoulette"></button>
         <button pButton (click)="next()" label="Next"></button>
         <button pButton (click)="win()" label="Win"></button>-->
     </div>
-    <div class="flex smalltop align-center" [ngClass]="{'flex-between': !modeLive}">
-        <div>
+    <div class="flex-between smalltop align-center">
+        <div class="flex-between">
             <div>
                 Guess : {{ guessLabel }}
             </div>
             <!--<div>
                 Max to win : {{ loseStreak }}
             </div>-->
-            <div>
+            <!--<div>
                 Nb plays : {{ nbJeux }}
-            </div>
+            </div>-->
+            <p-inputSwitch [ngStyle]="{'margin-left': modeLive ? '1.5em' : '.5em'}" [(ngModel)]="modeGuess" (click)="guessed()"></p-inputSwitch>
         </div>
-        <p-inputSwitch [ngStyle]="{'margin-left': modeLive ? '1.5em' : '0'}" [(ngModel)]="modeGuess" (click)="guessed()"></p-inputSwitch>
         <ng-container *ngIf="!modeLive">
             <button style="max-height: 2.5em;" pButton (click)="play()" label="Play"></button>
             <button style="max-height: 2.5em;" pButton (click)="multiplay(10)" label="x10"></button>
             <button style="max-height: 2.5em; margin-right: .5em;" pButton (click)="multiplay(100)" label="x100"></button>
         </ng-container>
+        <!--<p-toggleButton *ngIf="modeLive" style="margin-right: .5em;" [(ngModel)]="playOrPass" onLabel="Play" offLabel="Pass" [style]="{'width':'60px'}"></p-toggleButton>-->
+        <p-selectButton class="nostyle" [options]="playModes" [(ngModel)]="selectedPlayMode" (onChange)="playModeChanged()"></p-selectButton>
+    </div>
+    <div *ngIf="modeLive" class="flex left top align-center">
+        <p-slider [(ngModel)]="sliderValue" [style]="{'width':'24em'}" max="36" (onSlideEnd)="slideEnd()" class="right"></p-slider>
     </div>
 </div>
 <app-roulette [hidden]="ready || modeBatch" [martingale]="martingale" (onContinue)="ready = true" (onClose)="close()" (onBatch)="modeBatch = true"></app-roulette>
@@ -165,9 +186,11 @@
     </div>
 </div>
 <p-dialog [(visible)]="liveDialog" header="Roulette live" [modal]="true">
-    <input type="number" placeholder="Live value" pInputText [(ngModel)]="liveValue" autofocus>
-    <p-button class="left" (click)="simulateLive()" label="Pass" styleClass="p-button-text"></p-button>
-    <p-button class="left" (click)="playLive()" label="Play" styleClass="p-button-text"></p-button>
+    <div>
+        <input type="number" placeholder="Live value" pInputText [(ngModel)]="liveValue" autofocus>
+        <p-button class="left" (click)="simulateLive()" label="Pass" styleClass="p-button-text"></p-button>
+        <p-button class="left" (click)="playLive()" label="Play" styleClass="p-button-text"></p-button>
+    </div>
 </p-dialog>
 <p-dialog [(visible)]="showChangeCash" header="Change cash" [modal]="true">
     <input type="number" placeholder="New value" pInputText [(ngModel)]="newCash" autofocus>
